@@ -54,8 +54,8 @@ SpecLoop builds a feedback loop in which an LLM coding agent generates code, a f
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/specloop.git
-cd specloop
+git clone https://github.com/syedhassan13/SpecForge.git
+cd SpecForge
 
 # Create virtual environment
 python -m venv venv
