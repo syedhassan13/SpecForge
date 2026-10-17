@@ -171,9 +171,9 @@ MIT License
 
 ## Team
 
-- [Your Name] — [Your Roll Number]
-- [Member 2] — [Roll Number]
-- [Member 3] — [Roll Number]
+- **Syed Muhammad Hassan** — 23i-0519 (Group Head)
+- **Abdul Majeed** — 23p-3038
+
 
 ## Acknowledgments
 

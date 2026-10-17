@@ -6,6 +6,7 @@ setup(
     name="specloop",
     version="0.1.0",
     description="Specification-Driven Verification Feedback Pipeline for LLM Coding Agents",
+    author="Syed Muhammad Hassan (23i-0519), Abdul Majeed (23p-3038)",
     packages=find_packages(),
     python_requires=">=3.10",
     install_requires=[
