@@ -1,0 +1,10 @@
+{
+    "task_id": "py_005_gcd",
+    "description": "Implement a function that returns the greatest common divisor of two positive integers using Euclid's algorithm. The function has iContract preconditions (both inputs are positive) and postconditions (result divides both inputs, and no larger value divides both).",
+    "language": "python_icontract",
+    "specification": "import icontract\n\n@icontract.require(lambda a: a > 0)\n@icontract.require(lambda b: b > 0)\n@icontract.ensure(lambda a, result: a % result == 0)\n@icontract.ensure(lambda b, result: b % result == 0)\n@icontract.ensure(lambda result: result > 0)\ndef gcd(a: int, b: int) -> int:\n    # IMPLEMENT HERE\n    pass",
+    "reference_solution": "import icontract\n\n@icontract.require(lambda a: a > 0)\n@icontract.require(lambda b: b > 0)\n@icontract.ensure(lambda a, result: a % result == 0)\n@icontract.ensure(lambda b, result: b % result == 0)\n@icontract.ensure(lambda result: result > 0)\ndef gcd(a: int, b: int) -> int:\n    while b != 0:\n        a, b = b, a % b\n    return a",
+    "test_cases": ["assert gcd(12, 8) == 4\nassert gcd(7, 13) == 1\nassert gcd(100, 25) == 25\nassert gcd(17, 17) == 17\nprint('All tests passed!')"],
+    "difficulty": "easy",
+    "source_benchmark": "custom"
+}

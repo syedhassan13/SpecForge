@@ -1,0 +1,10 @@
+{
+    "task_id": "py_002_binary_search",
+    "description": "Implement binary search on a sorted list. The function has iContract preconditions (list is sorted) and postconditions (if result >= 0, element at that index equals the target; if result == -1, target is not in the list).",
+    "language": "python_icontract",
+    "specification": "import icontract\nfrom typing import List\n\n@icontract.require(lambda lst: all(lst[i] <= lst[i+1] for i in range(len(lst)-1)))\n@icontract.ensure(lambda lst, target, result: result == -1 or (0 <= result < len(lst) and lst[result] == target))\n@icontract.ensure(lambda lst, target, result: result != -1 or target not in lst)\ndef binary_search(lst: List[int], target: int) -> int:\n    # IMPLEMENT HERE\n    pass",
+    "reference_solution": "import icontract\nfrom typing import List\n\n@icontract.require(lambda lst: all(lst[i] <= lst[i+1] for i in range(len(lst)-1)))\n@icontract.ensure(lambda lst, target, result: result == -1 or (0 <= result < len(lst) and lst[result] == target))\n@icontract.ensure(lambda lst, target, result: result != -1 or target not in lst)\ndef binary_search(lst: List[int], target: int) -> int:\n    lo, hi = 0, len(lst) - 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if lst[mid] == target:\n            return mid\n        elif lst[mid] < target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return -1",
+    "test_cases": ["assert binary_search([1, 3, 5, 7, 9], 5) == 2\nassert binary_search([1, 3, 5, 7, 9], 4) == -1\nassert binary_search([], 1) == -1\nprint('All tests passed!')"],
+    "difficulty": "medium",
+    "source_benchmark": "custom"
+}

@@ -1,0 +1,10 @@
+{
+    "task_id": "dfy_003_sum_array",
+    "description": "Implement a method that computes the sum of all elements in a Dafny sequence of integers. The method must use a loop with a loop invariant to prove correctness. The postcondition states that the result equals the sum of the sequence (defined via a recursive ghost function).",
+    "language": "dafny",
+    "specification": "function SumSeq(s: seq<int>): int\n{\n  if |s| == 0 then 0\n  else s[0] + SumSeq(s[1..])\n}\n\nmethod SumArray(a: seq<int>) returns (s: int)\n  ensures s == SumSeq(a)\n{\n  // IMPLEMENT HERE\n}",
+    "reference_solution": "function SumSeq(s: seq<int>): int\n{\n  if |s| == 0 then 0\n  else s[0] + SumSeq(s[1..])\n}\n\nmethod SumArray(a: seq<int>) returns (s: int)\n  ensures s == SumSeq(a)\n{\n  s := 0;\n  var i := 0;\n  while i < |a|\n    invariant 0 <= i <= |a|\n    invariant s == SumSeq(a[..i])\n  {\n    s := s + a[i];\n    i := i + 1;\n  }\n  assert a[..|a|] == a;\n}",
+    "test_cases": ["method Main() {\n  var a: seq<int> := [1, 2, 3, 4, 5];\n  var s := SumArray(a);\n  assert s == 15;\n  var b: seq<int> := [];\n  var s2 := SumArray(b);\n  assert s2 == 0;\n}"],
+    "difficulty": "medium",
+    "source_benchmark": "custom"
+}

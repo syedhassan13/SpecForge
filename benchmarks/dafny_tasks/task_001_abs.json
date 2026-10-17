@@ -1,0 +1,10 @@
+{
+    "task_id": "dfy_001_abs",
+    "description": "Implement a method that returns the absolute value of an integer. The method must satisfy the postconditions: (1) the result is non-negative, and (2) the result equals the input if the input is non-negative, or the negation of the input otherwise.",
+    "language": "dafny",
+    "specification": "method Abs(x: int) returns (result: int)\n  ensures result >= 0\n  ensures x >= 0 ==> result == x\n  ensures x < 0 ==> result == -x\n{\n  // IMPLEMENT HERE\n}",
+    "reference_solution": "method Abs(x: int) returns (result: int)\n  ensures result >= 0\n  ensures x >= 0 ==> result == x\n  ensures x < 0 ==> result == -x\n{\n  if x >= 0 {\n    result := x;\n  } else {\n    result := -x;\n  }\n}",
+    "test_cases": ["method Main() {\n  var r1 := Abs(5);\n  assert r1 == 5;\n  var r2 := Abs(-3);\n  assert r2 == 3;\n  var r3 := Abs(0);\n  assert r3 == 0;\n}"],
+    "difficulty": "easy",
+    "source_benchmark": "custom"
+}

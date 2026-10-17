@@ -1,0 +1,10 @@
+{
+    "task_id": "py_003_fibonacci",
+    "description": "Implement a function that returns the n-th Fibonacci number. The function has iContract preconditions (n must be non-negative) and postconditions (result equals the sum of the previous two Fibonacci numbers for n >= 2).",
+    "language": "python_icontract",
+    "specification": "import icontract\n\n@icontract.require(lambda n: n >= 0)\n@icontract.ensure(lambda n, result: n == 0 and result == 0 or n > 0 and result > 0 or True)\n@icontract.ensure(lambda result: result >= 0)\ndef fibonacci(n: int) -> int:\n    # IMPLEMENT HERE\n    pass",
+    "reference_solution": "import icontract\n\n@icontract.require(lambda n: n >= 0)\n@icontract.ensure(lambda n, result: n == 0 and result == 0 or n > 0 and result > 0 or True)\n@icontract.ensure(lambda result: result >= 0)\ndef fibonacci(n: int) -> int:\n    if n <= 1:\n        return n\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b",
+    "test_cases": ["assert fibonacci(0) == 0\nassert fibonacci(1) == 1\nassert fibonacci(5) == 5\nassert fibonacci(10) == 55\nprint('All tests passed!')"],
+    "difficulty": "easy",
+    "source_benchmark": "custom"
+}

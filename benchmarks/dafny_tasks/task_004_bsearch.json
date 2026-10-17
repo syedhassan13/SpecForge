@@ -1,0 +1,10 @@
+{
+    "task_id": "dfy_004_binary_search",
+    "description": "Implement a binary search method on a sorted sequence. The method returns the index of the target if found, or -1 if not found. The precondition requires the sequence to be sorted. The postcondition states that if the result is non-negative, the element at that index equals the target; if -1, the target is not in the sequence.",
+    "language": "dafny",
+    "specification": "predicate Sorted(a: seq<int>)\n{\n  forall i, j :: 0 <= i < j < |a| ==> a[i] <= a[j]\n}\n\nmethod BinarySearch(a: seq<int>, key: int) returns (index: int)\n  requires Sorted(a)\n  ensures 0 <= index < |a| ==> a[index] == key\n  ensures index == -1 ==> forall k :: 0 <= k < |a| ==> a[k] != key\n{\n  // IMPLEMENT HERE\n}",
+    "reference_solution": "predicate Sorted(a: seq<int>)\n{\n  forall i, j :: 0 <= i < j < |a| ==> a[i] <= a[j]\n}\n\nmethod BinarySearch(a: seq<int>, key: int) returns (index: int)\n  requires Sorted(a)\n  ensures 0 <= index < |a| ==> a[index] == key\n  ensures index == -1 ==> forall k :: 0 <= k < |a| ==> a[k] != key\n{\n  var lo, hi := 0, |a|;\n  while lo < hi\n    invariant 0 <= lo <= hi <= |a|\n    invariant forall k :: 0 <= k < lo ==> a[k] != key\n    invariant forall k :: hi <= k < |a| ==> a[k] != key\n  {\n    var mid := (lo + hi) / 2;\n    if a[mid] < key {\n      lo := mid + 1;\n    } else if a[mid] > key {\n      hi := mid;\n    } else {\n      index := mid;\n      return;\n    }\n  }\n  index := -1;\n}",
+    "test_cases": ["method Main() {\n  var a := [1, 3, 5, 7, 9];\n  var r1 := BinarySearch(a, 5);\n  assert r1 == 2;\n  var r2 := BinarySearch(a, 4);\n  assert r2 == -1;\n}"],
+    "difficulty": "hard",
+    "source_benchmark": "custom"
+}

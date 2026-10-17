@@ -1,0 +1,10 @@
+{
+    "task_id": "py_001_abs",
+    "description": "Implement a function that returns the absolute value of an integer. The function uses iContract decorators: precondition (input is an int), and postconditions (result is non-negative, result squared equals input squared).",
+    "language": "python_icontract",
+    "specification": "import icontract\n\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda x, result: result * result == x * x)\ndef absolute_value(x: int) -> int:\n    # IMPLEMENT HERE\n    pass",
+    "reference_solution": "import icontract\n\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda x, result: result * result == x * x)\ndef absolute_value(x: int) -> int:\n    if x >= 0:\n        return x\n    else:\n        return -x",
+    "test_cases": ["assert absolute_value(5) == 5\nassert absolute_value(-3) == 3\nassert absolute_value(0) == 0\nprint('All tests passed!')"],
+    "difficulty": "easy",
+    "source_benchmark": "custom"
+}

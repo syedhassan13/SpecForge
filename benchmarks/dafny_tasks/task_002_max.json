@@ -1,0 +1,10 @@
+{
+    "task_id": "dfy_002_max",
+    "description": "Implement a method that returns the maximum of two integers. The method must satisfy the postconditions: the result is greater than or equal to both inputs, and the result equals one of the inputs.",
+    "language": "dafny",
+    "specification": "method Max(a: int, b: int) returns (result: int)\n  ensures result >= a\n  ensures result >= b\n  ensures result == a || result == b\n{\n  // IMPLEMENT HERE\n}",
+    "reference_solution": "method Max(a: int, b: int) returns (result: int)\n  ensures result >= a\n  ensures result >= b\n  ensures result == a || result == b\n{\n  if a >= b {\n    result := a;\n  } else {\n    result := b;\n  }\n}",
+    "test_cases": ["method Main() {\n  var r1 := Max(3, 5);\n  assert r1 == 5;\n  var r2 := Max(7, 2);\n  assert r2 == 7;\n  var r3 := Max(4, 4);\n  assert r3 == 4;\n}"],
+    "difficulty": "easy",
+    "source_benchmark": "custom"
+}
