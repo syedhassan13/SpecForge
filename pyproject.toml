@@ -1,0 +1,11 @@
+[project]
+name = "specloop"
+version = "0.2.0"
+description = "Specification-driven verification feedback loop for LLM coding agents (AI4015 G1 project)"
+requires-python = ">=3.10"
+authors = [{name = "Syed Muhammad Hassan"}, {name = "Abdul Majeed"}]
+readme = "README.md"
+license = {text = "MIT"}
+
+[tool.setuptools.packages.find]
+include = ["src*", "experiments*"]

@@ -1,15 +1,31 @@
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
 .env
 venv/
 .venv/
 *.egg-info/
 dist/
 build/
-results/*.json
 .idea/
 .vscode/
 *.swp
-*.swo
+.pytest_cache/
+
+# raw downloads (recreate with data/scripts/download_data.py)
+data/raw/
+
+# LLM response cache is shipped separately as a release asset (large)
+cache/
+
+# LaTeX build files
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.bbl
+paper/*.blg
+paper/*.synctex.gz
+
+# run console logs and helper scripts (trajectories in logs/trajectories are kept)
+logs/*.log
+logs/*.py
+paper/*.xdv
