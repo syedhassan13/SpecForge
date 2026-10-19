@@ -1,133 +1,168 @@
 """
 Core data schemas for the SpecLoop pipeline.
 
-Defines the structured data contracts used across all pipeline stages:
-task definitions, verification results, agent interactions, and evaluation metrics.
+These dataclasses are the contracts passed between the loader, the backends,
+the agent controller and the evaluator. Phase 1 had a single binary test
+result per task; Phase 2 keeps per-test-case outcomes and structured
+diagnostics so that feedback can be routed and failures can be analysed.
 """
 
+from __future__ import annotations
+
+import math
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
+from typing import Any, Optional
 
 
 class VerificationStatus(Enum):
-    """Result of a formal verification check."""
     VERIFIED = "verified"
     FAILED = "failed"
     TIMEOUT = "timeout"
-    ERROR = "error"
+    ERROR = "error"          # tool missing / crashed, not the candidate's fault
 
 
 class TestStatus(Enum):
-    """Result of a runtime test execution."""
     PASSED = "passed"
     FAILED = "failed"
-    ERROR = "error"
+    ERROR = "error"          # program did not compile or crashed before tests
     TIMEOUT = "timeout"
 
 
 class Language(Enum):
-    """Supported specification languages."""
     DAFNY = "dafny"
     PYTHON_ICONTRACT = "python_icontract"
 
+    @property
+    def short(self) -> str:
+        return "dafny" if self is Language.DAFNY else "python"
+
 
 class AgentMode(Enum):
-    """Agent operating modes for ablation study."""
-    SINGLE_SHOT = "single_shot"          # No feedback loop
-    TESTING_ONLY = "testing_only"        # Feedback from tests only (baseline)
-    VERIFIER_FEEDBACK = "verifier_feedback"  # Feedback from formal verifier
-    COMBINED = "combined"                # Both verifier + testing feedback
+    """Feedback configuration of the agent (Phase 1 naming kept)."""
+    SINGLE_SHOT = "single_shot"              # no feedback loop
+    TESTING_ONLY = "testing_only"            # Phase 1 baseline: test feedback only
+    VERIFIER_FEEDBACK = "verifier_feedback"  # formal verifier feedback only
+    COMBINED = "combined"                    # proposed: verifier + tests
+
+    @property
+    def uses_verifier(self) -> bool:
+        return self in (AgentMode.VERIFIER_FEEDBACK, AgentMode.COMBINED)
+
+    @property
+    def uses_tests(self) -> bool:
+        return self in (AgentMode.TESTING_ONLY, AgentMode.COMBINED)
 
 
 @dataclass
 class TaskSpec:
-    """A single benchmark task with its formal specification.
-    
-    Attributes:
-        task_id: Unique identifier for the task.
-        description: Natural language description of the task.
-        language: The specification language for this task.
-        specification: The formal specification (preconditions, postconditions, invariants).
-        reference_solution: Ground truth solution for evaluation.
-        test_cases: Runtime test cases as executable strings.
-        difficulty: Estimated difficulty level (easy, medium, hard).
+    """One benchmark task rendered in one specification language.
+
+    The same `pair_id` is shared by the Dafny and the Python version of a
+    task, which is what the paired Gap 1 analysis keys on.
     """
     task_id: str
     description: str
     language: Language
     specification: str
     reference_solution: str
-    test_cases: list[str] = field(default_factory=list)
-    difficulty: str = "medium"
-    source_benchmark: str = "custom"
+    entry_point: str = ""
+    params: list[dict] = field(default_factory=list)     # [{"name", "type"}]
+    returns: str = ""
+    tests: list[dict] = field(default_factory=list)      # [{"input": {...}, "expected": ...}]
+    pair_id: str = ""
+    verina_id: str = ""
+    difficulty: str = "basic"
+    source_benchmark: str = "verina-basic"
+    content_hash: str = ""                               # sha1 of the task file
+    test_cases: list[str] = field(default_factory=list)  # legacy Phase 1 field
+
+    @property
+    def n_visible(self) -> int:
+        # first half (rounded up) of the tests is shown to the agent,
+        # the rest is held out and only used by the final oracle
+        return math.ceil(len(self.tests) / 2)
+
+    @property
+    def visible_tests(self) -> list[dict]:
+        return self.tests[: self.n_visible]
+
+    @property
+    def hidden_tests(self) -> list[dict]:
+        return self.tests[self.n_visible:]
+
+
+@dataclass
+class Diagnostic:
+    """A normalised, language independent error report (Gap 1 component)."""
+    kind: str                       # syntax, resolution, postcondition, invariant, ...
+    message: str
+    line: Optional[int] = None
+    source_line: str = ""           # text of the offending line in the candidate
+    related: str = ""               # spec clause involved, if the tool reports one
+    counterexample: str = ""        # concrete inputs (CrossHair) if any
+
+    def to_dict(self) -> dict:
+        return dict(kind=self.kind, message=self.message, line=self.line,
+                    source_line=self.source_line, related=self.related,
+                    counterexample=self.counterexample)
 
 
 @dataclass
 class VerificationResult:
-    """Result from running a formal verifier on generated code.
-    
-    Attributes:
-        status: Overall verification outcome.
-        errors: List of verifier error messages for feedback.
-        warnings: List of verifier warnings.
-        time_seconds: Verification wall-clock time.
-        verified_conditions: Number of conditions successfully verified.
-        total_conditions: Total number of conditions checked.
-    """
     status: VerificationStatus
     errors: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
     time_seconds: float = 0.0
     verified_conditions: int = 0
     total_conditions: int = 0
+    raw_output: str = ""
+    diagnostics: list[Diagnostic] = field(default_factory=list)
 
     @property
     def success_rate(self) -> float:
-        """Fraction of conditions verified."""
         if self.total_conditions == 0:
             return 0.0
         return self.verified_conditions / self.total_conditions
 
 
 @dataclass
+class TestCaseOutcome:
+    index: int
+    passed: bool
+    input_repr: str = ""
+    expected_repr: str = ""
+    got_repr: str = ""
+    error: str = ""
+
+
+@dataclass
 class TestResult:
-    """Result from running runtime tests on generated code.
-    
-    Attributes:
-        status: Overall test outcome.
-        passed: Number of tests passed.
-        total: Total number of tests.
-        failures: Detailed failure messages.
-        time_seconds: Total test execution time.
-    """
     status: TestStatus
     passed: int = 0
     total: int = 0
     failures: list[str] = field(default_factory=list)
     time_seconds: float = 0.0
+    cases: list[TestCaseOutcome] = field(default_factory=list)
+    raw_output: str = ""
 
     @property
     def pass_rate(self) -> float:
-        """Fraction of tests passed."""
         if self.total == 0:
             return 0.0
         return self.passed / self.total
 
 
 @dataclass
+class GuardResult:
+    """Outcome of the specification integrity guard."""
+    ok: bool
+    checked: bool = True            # False when the code could not be parsed
+    violations: list[str] = field(default_factory=list)
+
+
+@dataclass
 class GeneratedCode:
-    """Code generated by an LLM agent for a task.
-    
-    Attributes:
-        task_id: The task this code was generated for.
-        code: The generated source code.
-        language: Target language.
-        model: LLM model identifier.
-        attempt: Attempt number in the feedback loop.
-        prompt_tokens: Tokens used in the prompt.
-        completion_tokens: Tokens in the completion.
-    """
     task_id: str
     code: str
     language: Language
@@ -139,38 +174,18 @@ class GeneratedCode:
 
 @dataclass
 class FeedbackMessage:
-    """Structured feedback sent back to the LLM agent for repair.
-    
-    Attributes:
-        source: Where the feedback comes from (verifier, test, or combined).
-        success: Whether the code passed this check.
-        message: Human-readable summary.
-        errors: Detailed error list for repair guidance.
-        suggestion: Optional repair hint.
-    """
-    source: str  # "verifier", "test", "combined"
+    """Feedback produced by the router and sent to the LLM for repair."""
+    source: str                     # "verifier", "test", "combined", "guard"
     success: bool
     message: str
+    failure_class: str = ""         # SPEC_TAMPER, SYNTAX, LOGIC_BUG, PROOF_GAP, ...
     errors: list[str] = field(default_factory=list)
     suggestion: Optional[str] = None
 
 
 @dataclass
 class PipelineResult:
-    """Complete result from one pipeline run on a single task.
-    
-    Attributes:
-        task_id: The task identifier.
-        model: LLM model used.
-        agent_mode: The agent configuration.
-        language: Specification language used.
-        final_code: The final generated code after all attempts.
-        verification_result: Result from formal verification.
-        test_result: Result from runtime testing.
-        attempts: Total number of attempts (feedback loop iterations).
-        total_time_seconds: Wall-clock time for the entire pipeline run.
-        correct: Whether the code is considered correct.
-    """
+    """Everything recorded for one (task, configuration, seed) run."""
     task_id: str
     model: str
     agent_mode: AgentMode
@@ -181,38 +196,43 @@ class PipelineResult:
     attempts: int = 1
     total_time_seconds: float = 0.0
     correct: bool = False
+    # Phase 2 additions
+    config_name: str = ""
+    seed: int = 0
+    pair_id: str = ""
+    spec_intact: bool = True
+    first_attempt_tests_passed: bool = False
+    first_attempt_verified: bool = False
+    solved_at_attempt: Optional[int] = None
+    stop_reason: str = ""
+    llm_calls: int = 0
+    prompt_tokens: int = 0
+    completion_tokens: int = 0
+    cost_usd: float = 0.0
+    verifier_calls: int = 0
+    test_calls: int = 0
+    guard_blocks: int = 0
+    strategy_switches: int = 0
+    llm_seconds: float = 0.0
+    tool_seconds: float = 0.0
+    failure_classes: list[str] = field(default_factory=list)
+    final_failure_class: str = ""
+    trajectory_id: str = ""
+    extra: dict[str, Any] = field(default_factory=dict)
 
     @property
     def formally_verified(self) -> bool:
-        """Whether the code passed formal verification."""
-        return (self.verification_result is not None and 
-                self.verification_result.status == VerificationStatus.VERIFIED)
+        return (self.verification_result is not None
+                and self.verification_result.status == VerificationStatus.VERIFIED)
 
     @property
     def tests_passed(self) -> bool:
-        """Whether all runtime tests passed."""
-        return (self.test_result is not None and 
-                self.test_result.status == TestStatus.PASSED)
+        return (self.test_result is not None
+                and self.test_result.status == TestStatus.PASSED)
 
 
 @dataclass
 class EvaluationMetrics:
-    """Aggregated metrics across multiple pipeline runs.
-    
-    Attributes:
-        model: LLM model identifier.
-        agent_mode: Agent configuration.
-        language: Specification language.
-        total_tasks: Number of tasks evaluated.
-        verified_count: Tasks that passed formal verification.
-        test_pass_count: Tasks that passed all runtime tests.
-        correct_count: Tasks deemed fully correct.
-        avg_attempts: Mean feedback loop iterations.
-        avg_time: Mean wall-clock time per task.
-        verification_rate: Fraction verified.
-        test_pass_rate: Fraction passing tests.
-        correctness_rate: Fraction fully correct.
-    """
     model: str
     agent_mode: AgentMode
     language: Language

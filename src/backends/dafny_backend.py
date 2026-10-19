@@ -1,275 +1,187 @@
 """
 Dafny verification backend.
 
-Provides the DafnyBackend class that interfaces with the Dafny verifier
-to check generated code against formal specifications (preconditions,
-postconditions, loop invariants). Includes safety guards to prevent
-the LLM from weakening or removing specifications.
+verify()    -> runs `dafny verify` on the candidate program
+run_tests() -> compiles the candidate with a generated Main (Python target,
+               --no-verify) and reads per-case PASS/FAIL markers
+
+Results are memoised by a hash of the program text, so the final oracle
+does not pay twice for a candidate the agent already checked.
 """
 
+from __future__ import annotations
+
+import hashlib
 import os
 import re
+import shutil
 import subprocess
 import tempfile
+import threading
 import time
-from pathlib import Path
 from typing import Optional
 
-from src.schemas import (
-    VerificationResult,
-    VerificationStatus,
-    TestResult,
-    TestStatus,
-)
+from src.backends import tool_cache
+from src.backends.proc import run_tree
+from src.schemas import (TestCaseOutcome, TestResult, TestStatus,
+                         VerificationResult, VerificationStatus)
+from src.tasks.harness import FAIL, PASS, case_repr, dafny_harness, parse_markers
+
+DEFAULT_DAFNY = os.environ.get("DAFNY_PATH", "dafny")
+
+_LOC = re.compile(r"^(?P<file>.+?)\((?P<line>\d+),(?P<col>\d+)\): "
+                  r"(?P<sev>Error|Warning|Related location): (?P<msg>.*)$")
+_SUMMARY = re.compile(r"finished with (\d+) verified, (\d+) errors?")
+_MAIN = re.compile(r"\bmethod\s+Main\s*\(")
+
+
+def _hash(*parts: str) -> str:
+    h = hashlib.sha256()
+    for p in parts:
+        h.update(p.encode("utf-8"))
+        h.update(b"\0")
+    return h.hexdigest()
 
 
 class DafnyBackend:
-    """Backend for Dafny formal verification and runtime testing.
+    name = "dafny"
 
-    This backend:
-    1. Verifies Dafny code against its specification using `dafny verify`.
-    2. Runs runtime tests by compiling and executing Dafny test methods.
-    3. Guards against spec tampering (ensures LLM doesn't weaken the spec).
-
-    Attributes:
-        dafny_path: Path to the Dafny executable.
-        timeout: Maximum seconds for verification/compilation.
-        z3_timeout: Z3 solver timeout in seconds.
-    """
-
-    def __init__(
-        self,
-        dafny_path: str = "dafny",
-        timeout: int = 60,
-        z3_timeout: int = 30,
-    ):
+    def __init__(self, dafny_path: str = DEFAULT_DAFNY, timeout: int = 90,
+                 z3_timeout: int = 20):
         self.dafny_path = dafny_path
         self.timeout = timeout
         self.z3_timeout = z3_timeout
+        self._cache: dict[str, object] = {}
+        self._lock = threading.Lock()
 
-    def verify(self, code: str) -> VerificationResult:
-        """Run Dafny formal verification on the given code.
+    def _disk_key(self, key: str) -> str:
+        return f"dafny4.11|{self.timeout}|{self.z3_timeout}|{key}"
 
-        Args:
-            code: Complete Dafny source code including specification.
-
-        Returns:
-            VerificationResult with status, errors, and timing.
-        """
-        start = time.time()
-
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".dfy", delete=False
-        ) as f:
+    # ------------------------------------------------------------------
+    def _run(self, args: list[str], code: str, cwd_files: Optional[str] = None):
+        work = tempfile.mkdtemp(prefix="specloop_dfy_")
+        path = os.path.join(work, "candidate.dfy")
+        with open(path, "w", encoding="utf-8") as f:
             f.write(code)
-            tmp_path = f.name
-
         try:
-            result = subprocess.run(
-                [
-                    self.dafny_path,
-                    "verify",
-                    "--verification-time-limit", str(self.z3_timeout),
-                    tmp_path,
-                ],
-                capture_output=True,
-                text=True,
-                timeout=self.timeout,
-            )
-
-            elapsed = time.time() - start
-            stdout = result.stdout
-            stderr = result.stderr
-            output = stdout + "\n" + stderr
-
-            # Parse Dafny output
-            errors = self._parse_errors(output)
-            warnings = self._parse_warnings(output)
-
-            # Count verified vs total conditions
-            verified, total = self._count_conditions(output)
-
-            if result.returncode == 0 and not errors:
-                status = VerificationStatus.VERIFIED
-            else:
-                status = VerificationStatus.FAILED
-
-            return VerificationResult(
-                status=status,
-                errors=errors,
-                warnings=warnings,
-                time_seconds=elapsed,
-                verified_conditions=verified,
-                total_conditions=total,
-            )
-
-        except subprocess.TimeoutExpired:
-            return VerificationResult(
-                status=VerificationStatus.TIMEOUT,
-                errors=["Verification timed out after {} seconds".format(self.timeout)],
-                time_seconds=self.timeout,
-            )
-        except FileNotFoundError:
-            return VerificationResult(
-                status=VerificationStatus.ERROR,
-                errors=[
-                    "Dafny not found at '{}'. Install Dafny or set dafny_path.".format(
-                        self.dafny_path
-                    )
-                ],
-            )
+            # run_tree kills the compiled program too if a candidate loops forever
+            return run_tree([self.dafny_path, *args, path], cwd=work, timeout=self.timeout)
         finally:
-            os.unlink(tmp_path)
+            shutil.rmtree(work, ignore_errors=True)
 
-    def run_tests(self, code: str, test_code: str) -> TestResult:
-        """Compile and run Dafny test methods.
-
-        Args:
-            code: The main Dafny implementation code.
-            test_code: Dafny test methods (Main method with assertions).
-
-        Returns:
-            TestResult with pass/fail counts and failure details.
-        """
+    # ------------------------------------------------------------------
+    def verify(self, code: str) -> VerificationResult:
+        key = _hash("verify", code)
+        with self._lock:
+            if key in self._cache:
+                return self._cache[key]  # type: ignore[return-value]
+        disk = tool_cache.get(self._disk_key(key))
+        if disk is not None:
+            with self._lock:
+                self._cache[key] = disk
+            return disk
         start = time.time()
-        full_code = code + "\n\n" + test_code
-
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".dfy", delete=False
-        ) as f:
-            f.write(full_code)
-            tmp_path = f.name
-
         try:
-            # Compile to Python target (no .NET required)
-            out_dir = tempfile.mkdtemp()
-            compile_result = subprocess.run(
-                [
-                    self.dafny_path,
-                    "run",
-                    "--target", "py",
-                    "--no-verify",
-                    tmp_path,
-                ],
-                capture_output=True,
-                text=True,
-                timeout=self.timeout,
-                cwd=out_dir,
-            )
-
-            elapsed = time.time() - start
-
-            if compile_result.returncode == 0:
-                return TestResult(
-                    status=TestStatus.PASSED,
-                    passed=1,
-                    total=1,
-                    time_seconds=elapsed,
-                )
-            else:
-                error_msg = compile_result.stderr or compile_result.stdout
-                return TestResult(
-                    status=TestStatus.FAILED,
-                    passed=0,
-                    total=1,
-                    failures=[error_msg.strip()],
-                    time_seconds=elapsed,
-                )
-
+            rc, out = self._run(["verify", "--allow-warnings", "--cores", "1",
+                                 "--verification-time-limit", str(self.z3_timeout)], code)
         except subprocess.TimeoutExpired:
-            return TestResult(
-                status=TestStatus.TIMEOUT,
-                failures=["Test execution timed out"],
-                time_seconds=self.timeout,
-            )
+            res = VerificationResult(VerificationStatus.TIMEOUT,
+                                     errors=[f"verification timed out after {self.timeout}s"],
+                                     time_seconds=time.time() - start,
+                                     raw_output="TIMEOUT")
+            with self._lock:
+                self._cache[key] = res
+            return res
         except FileNotFoundError:
-            return TestResult(
-                status=TestStatus.ERROR,
-                failures=["Dafny not found"],
-            )
-        finally:
-            os.unlink(tmp_path)
+            return VerificationResult(VerificationStatus.ERROR,
+                                      errors=[f"Dafny not found at {self.dafny_path!r}"])
+        errors, warnings = [], []
+        for line in out.splitlines():
+            m = _LOC.match(line.strip())
+            if not m:
+                if "parse errors detected" in line or "resolution/type errors" in line:
+                    errors.append(line.strip())
+                continue
+            text = f"line {m.group('line')}: {m.group('sev')}: {m.group('msg')}"
+            (warnings if m.group("sev") == "Warning" else errors).append(text)
+        verified, failed = 0, 0
+        sm = _SUMMARY.search(out)
+        if sm:
+            verified, failed = int(sm.group(1)), int(sm.group(2))
+        if rc == 0 and sm and failed == 0:
+            status = VerificationStatus.VERIFIED
+        elif "timed out" in out.lower() or "out of resource" in out.lower():
+            status = VerificationStatus.TIMEOUT
+        else:
+            status = VerificationStatus.FAILED
+            if not errors:
+                errors = [out.strip()[-600:] or "verification failed"]
+        res = VerificationResult(status=status, errors=errors, warnings=warnings,
+                                 time_seconds=time.time() - start,
+                                 verified_conditions=verified,
+                                 total_conditions=verified + failed, raw_output=out)
+        with self._lock:
+            self._cache[key] = res
+        return res
 
-    def guard_spec_integrity(
-        self, original_spec: str, generated_code: str
-    ) -> tuple[bool, list[str]]:
-        """Check that the LLM has not weakened or removed the specification.
+    # ------------------------------------------------------------------
+    def run_tests(self, code: str, entry: str, params: list[dict], returns: str,
+                  cases: list[dict]) -> TestResult:
+        if not cases:
+            return TestResult(TestStatus.PASSED)
+        # a Main written by the model would clash with the harness
+        program = _MAIN.sub("method Main_unused(", code) + "\n\n" + \
+            dafny_harness(entry, params, returns, cases)
+        key = _hash("tests", program)
+        with self._lock:
+            if key in self._cache:
+                return self._cache[key]  # type: ignore[return-value]
+        disk = tool_cache.get(self._disk_key(key))
+        if disk is not None:
+            with self._lock:
+                self._cache[key] = disk
+            return disk
+        start = time.time()
+        try:
+            rc, out = self._run(["run", "--no-verify", "--allow-warnings",
+                                 "--target", "py"], program)
+        except subprocess.TimeoutExpired:
+            res = TestResult(TestStatus.TIMEOUT, total=len(cases),
+                             failures=["test run timed out (possible infinite loop)"],
+                             time_seconds=time.time() - start, raw_output="TIMEOUT")
+            with self._lock:
+                self._cache[key] = res
+            return res
+        except FileNotFoundError:
+            return TestResult(TestStatus.ERROR, total=len(cases), failures=["Dafny not found"])
+        res = _collect(cases, out, rc, time.time() - start)
+        with self._lock:
+            self._cache[key] = res
+        return res
 
-        Compares the specification annotations (requires, ensures, invariant)
-        in the generated code against the original specification.
 
-        Args:
-            original_spec: The original Dafny specification.
-            generated_code: The LLM-generated code to check.
-
-        Returns:
-            Tuple of (spec_intact: bool, violations: list[str]).
-        """
-        violations = []
-
-        # Extract specification clauses from both
-        orig_clauses = self._extract_spec_clauses(original_spec)
-        gen_clauses = self._extract_spec_clauses(generated_code)
-
-        # Check that all original clauses are preserved
-        for clause_type, clauses in orig_clauses.items():
-            gen_set = set(gen_clauses.get(clause_type, []))
-            for clause in clauses:
-                normalized = self._normalize_whitespace(clause)
-                found = any(
-                    self._normalize_whitespace(g) == normalized
-                    for g in gen_set
-                )
-                if not found:
-                    violations.append(
-                        "Missing {} clause: {}".format(clause_type, clause.strip())
-                    )
-
-        return (len(violations) == 0, violations)
-
-    def _parse_errors(self, output: str) -> list[str]:
-        """Extract error messages from Dafny output."""
-        errors = []
-        for line in output.splitlines():
-            if "Error" in line or "error" in line:
-                errors.append(line.strip())
-        return errors
-
-    def _parse_warnings(self, output: str) -> list[str]:
-        """Extract warning messages from Dafny output."""
-        warnings = []
-        for line in output.splitlines():
-            if "Warning" in line or "warning" in line:
-                warnings.append(line.strip())
-        return warnings
-
-    def _count_conditions(self, output: str) -> tuple[int, int]:
-        """Count verified and total conditions from Dafny output."""
-        # Pattern: "Dafny program verifier finished with X verified, Y errors"
-        match = re.search(
-            r"(\d+)\s+verified,\s+(\d+)\s+error", output
-        )
-        if match:
-            verified = int(match.group(1))
-            error_count = int(match.group(2))
-            return verified, verified + error_count
-
-        return 0, 0
-
-    def _extract_spec_clauses(self, code: str) -> dict[str, list[str]]:
-        """Extract requires/ensures/invariant clauses from Dafny code."""
-        clauses: dict[str, list[str]] = {
-            "requires": [],
-            "ensures": [],
-            "invariant": [],
-        }
-        for keyword in clauses:
-            pattern = rf"({keyword}\s+.+?)(?:\n|;)"
-            matches = re.findall(pattern, code, re.MULTILINE)
-            clauses[keyword] = matches
-        return clauses
-
-    @staticmethod
-    def _normalize_whitespace(s: str) -> str:
-        """Collapse whitespace for comparison."""
-        return " ".join(s.split())
+def _collect(cases: list[dict], out: str, rc: int, elapsed: float) -> TestResult:
+    marks = parse_markers(out)
+    outcomes, failures = [], []
+    for i, case in enumerate(cases):
+        marker, detail = marks.get(i, ("", ""))
+        ok = marker == PASS
+        got = detail[4:] if detail.startswith("got=") else ""
+        err = "" if ok or marker == FAIL else (detail or "did not run (earlier crash or compile error)")
+        outcomes.append(TestCaseOutcome(index=i, passed=ok, input_repr=case_repr(case),
+                                        expected_repr=repr(case["expected"]),
+                                        got_repr=got, error=err))
+        if not ok:
+            msg = f"test {i}: input ({case_repr(case)}) expected {case['expected']!r}"
+            msg += f" got {got}" if marker == FAIL else f" error: {err}"
+            failures.append(msg)
+    passed = sum(o.passed for o in outcomes)
+    if not marks:
+        # nothing ran: compile/resolution error or crash before the first case
+        tail = "\n".join(l for l in out.splitlines() if l.strip())[-800:]
+        return TestResult(TestStatus.ERROR, passed=0, total=len(cases),
+                          failures=[f"program did not run: {tail}"], time_seconds=elapsed,
+                          cases=outcomes, raw_output=out)
+    status = TestStatus.PASSED if passed == len(cases) else TestStatus.FAILED
+    return TestResult(status, passed=passed, total=len(cases), failures=failures,
+                      time_seconds=elapsed, cases=outcomes, raw_output=out)
