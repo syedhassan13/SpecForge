@@ -1,245 +1,157 @@
 """
-Python iContract + CrossHair verification backend.
+Python + iContract backend.
 
-Provides the PythonContractBackend class that uses iContract for
-runtime contract checking and CrossHair for static contract analysis.
-This represents the mainstream-language contract approach compared
-to Dafny's purpose-built verification language.
+verify()    -> CrossHair symbolic execution over the iContract contracts.
+               CrossHair is a bounded checker: "verified" here means no
+               counterexample was found within the time budget, which is a
+               weaker guarantee than a Dafny proof (discussed in the paper).
+run_tests() -> executes the generated test runner with iContract enabled, so
+               a contract violation shows up as a failing case.
 """
 
-import importlib
-import io
+from __future__ import annotations
+
+import hashlib
 import os
+import re
+import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 import time
-import traceback
-from typing import Optional
 
-from src.schemas import (
-    VerificationResult,
-    VerificationStatus,
-    TestResult,
-    TestStatus,
-)
+from src.backends import tool_cache
+from src.schemas import (TestResult, TestStatus, VerificationResult,
+                         VerificationStatus)
+from src.backends.dafny_backend import _collect
+from src.backends.proc import run_tree
+from src.tasks.harness import python_harness
+
+_CH_LINE = re.compile(r"^(?P<file>.+?\.py):(?P<line>\d+): (?P<sev>error|warning|info): (?P<msg>.*)$")
+
+
+def _hash(*parts: str) -> str:
+    h = hashlib.sha256()
+    for p in parts:
+        h.update(p.encode("utf-8"))
+        h.update(b"\0")
+    return h.hexdigest()
 
 
 class PythonContractBackend:
-    """Backend for Python contract-based verification using iContract + CrossHair.
+    name = "python"
 
-    This backend provides two verification modes:
-    1. Static analysis via CrossHair (attempts to find counterexamples).
-    2. Runtime contract checking via iContract (design-by-contract decorators).
-
-    Attributes:
-        crosshair_timeout: Seconds for CrossHair analysis per function.
-        test_timeout: Seconds for runtime test execution.
-    """
-
-    def __init__(
-        self,
-        crosshair_timeout: int = 30,
-        test_timeout: int = 30,
-    ):
-        self.crosshair_timeout = crosshair_timeout
+    def __init__(self, crosshair_timeout: int = 6, test_timeout: int = 30,
+                 python: str = sys.executable):
+        self.crosshair_timeout = crosshair_timeout      # per condition
         self.test_timeout = test_timeout
+        self.python = python
+        self._cache: dict[str, object] = {}
+        self._lock = threading.Lock()
 
-    def verify(self, code: str) -> VerificationResult:
-        """Run CrossHair static analysis on Python code with iContract specs.
+    def _disk_key(self, key: str) -> str:
+        return f"crosshair|{self.crosshair_timeout}|{self.test_timeout}|{key}"
 
-        CrossHair uses symbolic execution to find counterexamples that
-        violate iContract preconditions, postconditions, or invariants.
-
-        Args:
-            code: Python source code with iContract decorators.
-
-        Returns:
-            VerificationResult with status and any counterexamples found.
-        """
-        start = time.time()
-
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".py", delete=False, dir="."
-        ) as f:
+    def _write(self, code: str) -> tuple[str, str]:
+        work = tempfile.mkdtemp(prefix="specloop_py_")
+        path = os.path.join(work, "candidate.py")
+        with open(path, "w", encoding="utf-8") as f:
             f.write(code)
-            tmp_path = f.name
+        return work, path
 
+    @staticmethod
+    def syntax_error(code: str) -> str:
         try:
-            result = subprocess.run(
-                [
-                    sys.executable, "-m", "crosshair",
-                    "check",
-                    "--analysis_kind", "icontract",
-                    "--per_condition_timeout", str(self.crosshair_timeout),
-                    tmp_path,
-                ],
-                capture_output=True,
-                text=True,
-                timeout=self.crosshair_timeout * 3,
-            )
+            compile(code, "candidate.py", "exec")
+        except SyntaxError as e:
+            return f"line {e.lineno}: SyntaxError: {e.msg}"
+        return ""
 
-            elapsed = time.time() - start
-            output = result.stdout + "\n" + result.stderr
-
-            errors = []
-            warnings = []
-
-            if result.returncode != 0:
-                # Parse CrossHair counterexamples
-                for line in output.splitlines():
-                    line = line.strip()
-                    if line and "error" in line.lower():
-                        errors.append(line)
-                    elif line and ("counterexample" in line.lower() or "fail" in line.lower()):
-                        errors.append(line)
-                    elif line and "warning" in line.lower():
-                        warnings.append(line)
-
-                if not errors:
-                    errors = [output.strip()] if output.strip() else ["CrossHair analysis failed"]
-
-            status = (
-                VerificationStatus.VERIFIED
-                if result.returncode == 0 and not errors
-                else VerificationStatus.FAILED
-            )
-
-            return VerificationResult(
-                status=status,
-                errors=errors,
-                warnings=warnings,
-                time_seconds=elapsed,
-                verified_conditions=1 if status == VerificationStatus.VERIFIED else 0,
-                total_conditions=1,
-            )
-
-        except subprocess.TimeoutExpired:
-            return VerificationResult(
-                status=VerificationStatus.TIMEOUT,
-                errors=["CrossHair timed out after {} seconds".format(
-                    self.crosshair_timeout * 3
-                )],
-                time_seconds=time.time() - start,
-            )
-        except Exception as e:
-            return VerificationResult(
-                status=VerificationStatus.ERROR,
-                errors=["CrossHair error: {}".format(str(e))],
-                time_seconds=time.time() - start,
-            )
-        finally:
-            os.unlink(tmp_path)
-
-    def run_tests(self, code: str, test_code: str) -> TestResult:
-        """Execute Python tests with iContract runtime checking enabled.
-
-        iContract decorators (@icontract.require, @icontract.ensure) are
-        enforced at runtime, so any contract violation raises an exception
-        during test execution.
-
-        Args:
-            code: Python source with iContract decorators.
-            test_code: Python test functions (using assert statements).
-
-        Returns:
-            TestResult with pass/fail details.
-        """
+    # ------------------------------------------------------------------
+    def verify(self, code: str) -> VerificationResult:
+        key = _hash("verify", code)
+        with self._lock:
+            if key in self._cache:
+                return self._cache[key]  # type: ignore[return-value]
+        disk = tool_cache.get(self._disk_key(key))
+        if disk is not None:
+            with self._lock:
+                self._cache[key] = disk
+            return disk
         start = time.time()
-        full_code = code + "\n\n" + test_code
-
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".py", delete=False
-        ) as f:
-            f.write(full_code)
-            tmp_path = f.name
-
+        syn = self.syntax_error(code)
+        if syn:
+            res = VerificationResult(VerificationStatus.FAILED, errors=[syn],
+                                     time_seconds=time.time() - start, raw_output=syn)
+            with self._lock:
+                self._cache[key] = res
+            return res
+        work, path = self._write(code)
+        overall = max(60, self.crosshair_timeout * 12)
         try:
-            result = subprocess.run(
-                [sys.executable, tmp_path],
-                capture_output=True,
-                text=True,
-                timeout=self.test_timeout,
-            )
-
-            elapsed = time.time() - start
-
-            if result.returncode == 0:
-                return TestResult(
-                    status=TestStatus.PASSED,
-                    passed=1,
-                    total=1,
-                    time_seconds=elapsed,
-                )
-            else:
-                error = result.stderr or result.stdout
-                failures = []
-
-                # Check for iContract violations
-                if "icontract" in error.lower():
-                    failures.append("Contract violation: " + error.strip())
-                else:
-                    failures.append(error.strip())
-
-                return TestResult(
-                    status=TestStatus.FAILED,
-                    passed=0,
-                    total=1,
-                    failures=failures,
-                    time_seconds=elapsed,
-                )
-
+            rc, out = run_tree(
+                [self.python, "-m", "crosshair", "check", "--analysis_kind", "icontract",
+                 "--per_condition_timeout", str(self.crosshair_timeout), path],
+                cwd=work, timeout=overall)
         except subprocess.TimeoutExpired:
-            return TestResult(
-                status=TestStatus.TIMEOUT,
-                failures=["Test execution timed out"],
-                time_seconds=self.test_timeout,
-            )
+            res = VerificationResult(VerificationStatus.TIMEOUT,
+                                     errors=[f"CrossHair timed out after {overall}s"],
+                                     time_seconds=time.time() - start, raw_output="TIMEOUT")
+            with self._lock:
+                self._cache[key] = res
+            return res
         finally:
-            os.unlink(tmp_path)
+            shutil.rmtree(work, ignore_errors=True)
 
-    def guard_spec_integrity(
-        self, original_spec: str, generated_code: str
-    ) -> tuple[bool, list[str]]:
-        """Check that iContract decorators have not been weakened or removed.
+        errors = []
+        for line in out.splitlines():
+            m = _CH_LINE.match(line.strip())
+            if m and m.group("sev") == "error":
+                errors.append(f"line {m.group('line')}: {m.group('msg')}")
+        if rc == 0 and not errors:
+            status = VerificationStatus.VERIFIED
+        else:
+            status = VerificationStatus.FAILED
+            if not errors:
+                # import error or crash inside crosshair, keep the useful tail
+                tail = [l for l in out.splitlines() if l.strip()][-4:]
+                errors = ["could not analyse module: " + " | ".join(tail)]
+        n_cond = code.count("@icontract.ensure") + code.count("@icontract.require")
+        res = VerificationResult(status=status, errors=errors,
+                                 time_seconds=time.time() - start,
+                                 verified_conditions=0 if errors else n_cond,
+                                 total_conditions=n_cond, raw_output=out)
+        with self._lock:
+            self._cache[key] = res
+        return res
 
-        Verifies that all @icontract.require and @icontract.ensure decorators
-        from the original specification are present in the generated code.
-
-        Args:
-            original_spec: Original Python code with iContract decorators.
-            generated_code: LLM-generated code to check.
-
-        Returns:
-            Tuple of (spec_intact: bool, violations: list[str]).
-        """
-        violations = []
-
-        orig_requires = self._extract_contracts(original_spec, "require")
-        orig_ensures = self._extract_contracts(original_spec, "ensure")
-
-        gen_requires = self._extract_contracts(generated_code, "require")
-        gen_ensures = self._extract_contracts(generated_code, "ensure")
-
-        for req in orig_requires:
-            normalized = self._normalize(req)
-            if not any(self._normalize(g) == normalized for g in gen_requires):
-                violations.append("Missing precondition: {}".format(req.strip()))
-
-        for ens in orig_ensures:
-            normalized = self._normalize(ens)
-            if not any(self._normalize(g) == normalized for g in gen_ensures):
-                violations.append("Missing postcondition: {}".format(ens.strip()))
-
-        return (len(violations) == 0, violations)
-
-    @staticmethod
-    def _extract_contracts(code: str, kind: str) -> list[str]:
-        """Extract iContract decorator lambda expressions."""
-        import re
-        pattern = rf"@icontract\.{kind}\(lambda\s+.*?:.*?\)"
-        return re.findall(pattern, code, re.DOTALL)
-
-    @staticmethod
-    def _normalize(s: str) -> str:
-        return " ".join(s.split())
+    # ------------------------------------------------------------------
+    def run_tests(self, code: str, entry: str, params: list[dict], returns: str,
+                  cases: list[dict]) -> TestResult:
+        if not cases:
+            return TestResult(TestStatus.PASSED)
+        program = code + "\n" + python_harness(entry, params, returns, cases)
+        key = _hash("tests", program)
+        with self._lock:
+            if key in self._cache:
+                return self._cache[key]  # type: ignore[return-value]
+        disk = tool_cache.get(self._disk_key(key))
+        if disk is not None:
+            with self._lock:
+                self._cache[key] = disk
+            return disk
+        start = time.time()
+        work, path = self._write(program)
+        try:
+            rc, out = _run([self.python, path], cwd=work, timeout=self.test_timeout)
+            res = _collect(cases, out, rc, time.time() - start)
+        except subprocess.TimeoutExpired:
+            res = TestResult(TestStatus.TIMEOUT, total=len(cases),
+                             failures=["test run timed out (possible infinite loop)"],
+                             time_seconds=time.time() - start, raw_output="TIMEOUT")
+        finally:
+            shutil.rmtree(work, ignore_errors=True)
+        with self._lock:
+            self._cache[key] = res
+        return res
