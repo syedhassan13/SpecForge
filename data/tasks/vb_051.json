@@ -1,0 +1,115 @@
+{
+  "task_id": "vb_051",
+  "verina_id": "verina_basic_51",
+  "upstream": "clover/Clover_binary_search",
+  "entry_point": "BinarySearch",
+  "description": "Given a list of integers sorted in non-decreasing order and an integer key, return the insertion index for key: the first index such that every element before it is smaller than key and every element from it onwards is greater than or equal to key. If key is larger than every element, return the length of the list.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    },
+    {
+      "name": "key",
+      "type": "int"
+    }
+  ],
+  "returns": "nat",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          3,
+          5,
+          7,
+          9
+        ],
+        "key": 5
+      },
+      "expected": 2,
+      "unexpected": [
+        1,
+        3,
+        4
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          3,
+          5,
+          7,
+          9
+        ],
+        "key": 6
+      },
+      "expected": 3,
+      "unexpected": [
+        2,
+        4,
+        5
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          2,
+          4,
+          6,
+          8
+        ],
+        "key": 1
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          2,
+          4,
+          6,
+          8
+        ],
+        "key": 10
+      },
+      "expected": 4,
+      "unexpected": [
+        3,
+        5,
+        6
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "key": 1
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        2,
+        3
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method BinarySearch(a: seq<int>, key: int) returns (result: nat)\n  requires forall i, j :: 0 <= i < j < |a| ==> a[i] <= a[j]\n  ensures result <= |a|\n  ensures forall i :: 0 <= i < result ==> a[i] < key\n  ensures forall i :: result <= i < |a| ==> a[i] >= key\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method BinarySearch(a: seq<int>, key: int) returns (result: nat)\n  requires forall i, j :: 0 <= i < j < |a| ==> a[i] <= a[j]\n  ensures result <= |a|\n  ensures forall i :: 0 <= i < result ==> a[i] < key\n  ensures forall i :: result <= i < |a| ==> a[i] >= key\n{\n  var lo, hi := 0, |a|;\n  while lo < hi\n    invariant 0 <= lo <= hi <= |a|\n    invariant forall i :: 0 <= i < lo ==> a[i] < key\n    invariant forall i :: hi <= i < |a| ==> a[i] >= key\n  {\n    var mid := (lo + hi) / 2;\n    if a[mid] < key {\n      lo := mid + 1;\n    } else {\n      hi := mid;\n    }\n  }\n  result := lo;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: all(a[i] <= a[i + 1] for i in range(len(a) - 1)))\n@icontract.ensure(lambda a, result: 0 <= result <= len(a))\n@icontract.ensure(lambda a, key, result: all(a[i] < key for i in range(result)))\n@icontract.ensure(lambda a, key, result: all(a[i] >= key for i in range(result, len(a))))\ndef BinarySearch(a: List[int], key: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: all(a[i] <= a[i + 1] for i in range(len(a) - 1)))\n@icontract.ensure(lambda a, result: 0 <= result <= len(a))\n@icontract.ensure(lambda a, key, result: all(a[i] < key for i in range(result)))\n@icontract.ensure(lambda a, key, result: all(a[i] >= key for i in range(result, len(a))))\ndef BinarySearch(a: List[int], key: int) -> int:\n    lo, hi = 0, len(a)\n    while lo < hi:\n        mid = (lo + hi) // 2\n        if a[mid] < key:\n            lo = mid + 1\n        else:\n            hi = mid\n    return lo\n"
+  }
+}
