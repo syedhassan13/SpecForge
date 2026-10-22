@@ -28,3 +28,20 @@ visible/held-out test split.
 rejected (admission check 4 in `validate_tasks.py`, 97/97 tasks, both
 languages), and the generated Dafny tests contain no `assert`
 (`tests/test_pipeline.py::TestHarness`).
+
+---
+
+### 2026-10-22 · Rewriting the integrity guard
+**Observed.** The Phase 1 guard matched `requires/ensures/invariant` lines
+with a regex and compared them as strings. It did not look at helper
+predicates (a model could change `Sorted` to `true`), and it did not know
+about `assume`, `{:verify false}`, `{:axiom}` or bodyless lemmas. In Python
+it matched decorators with a regex that broke on multi-line lambdas.
+
+**Changed.** Header-and-declaration comparison for Dafny, AST comparison for
+Python, explicit escape-hatch rules, and Dafny's own bodyless/assume warnings
+(`src/components/spec_guard.py`).
+
+**Effect.** On the stress test (`experiments/guard_stress.py`, all tasks) the
+guard rejects every tampering mutant and accepts every benign one; see
+`results/guard_stress_summary.json` (numbers in the paper, Table on reliability).
