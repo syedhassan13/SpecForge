@@ -1,0 +1,169 @@
+{
+  "task_id": "vb_009",
+  "verina_id": "verina_basic_9",
+  "upstream": "dafny-synthesis/task_id_431",
+  "entry_point": "hasCommonElement",
+  "description": "Given two non-empty lists of integers a and b, return true if they have at least one element in common (some element of a is equal to some element of b), and false otherwise.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    },
+    {
+      "name": "b",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3
+        ],
+        "b": [
+          4,
+          5,
+          6
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3
+        ],
+        "b": [
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          7,
+          8,
+          9
+        ],
+        "b": [
+          10,
+          11,
+          7
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "b": [
+          5,
+          6,
+          7,
+          8
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "b": [
+          4,
+          5,
+          6
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          1,
+          1
+        ],
+        "b": [
+          1,
+          2,
+          1
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          0
+        ],
+        "b": [
+          0
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          0
+        ],
+        "b": [
+          -1,
+          1
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method hasCommonElement(a: seq<int>, b: seq<int>) returns (result: bool)\n  requires |a| > 0 && |b| > 0\n  ensures result <==> |multiset(a) * multiset(b)| > 0\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method hasCommonElement(a: seq<int>, b: seq<int>) returns (result: bool)\n  requires |a| > 0 && |b| > 0\n  ensures result <==> |multiset(a) * multiset(b)| > 0\n{\n  var i := 0;\n  while i < |a|\n    invariant 0 <= i <= |a|\n    invariant forall k, l :: 0 <= k < i && 0 <= l < |b| ==> a[k] != b[l]\n  {\n    var j := 0;\n    while j < |b|\n      invariant 0 <= j <= |b|\n      invariant forall l :: 0 <= l < j ==> a[i] != b[l]\n    {\n      if a[i] == b[j] {\n        assert a[i] in multiset(a) && a[i] in multiset(b);\n        assert (multiset(a) * multiset(b))[a[i]] > 0;\n        result := true;\n        return;\n      }\n      j := j + 1;\n    }\n    i := i + 1;\n  }\n  assert forall x :: x in a ==> x !in b;\n  assert forall x :: (multiset(a) * multiset(b))[x] == 0;\n  assert multiset(a) * multiset(b) == multiset{};\n  assert |multiset(a) * multiset(b)| == 0;\n  result := false;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a, b: len(a) > 0 and len(b) > 0)\n@icontract.ensure(lambda a, b, result: result == any(a[i] == b[j] for i in range(len(a)) for j in range(len(b))))\ndef hasCommonElement(a: List[int], b: List[int]) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a, b: len(a) > 0 and len(b) > 0)\n@icontract.ensure(lambda a, b, result: result == any(a[i] == b[j] for i in range(len(a)) for j in range(len(b))))\ndef hasCommonElement(a: List[int], b: List[int]) -> bool:\n    for x in a:\n        for y in b:\n            if x == y:\n                return True\n    return False\n"
+  },
+  "notes": "VERINA's postcondition (exists i, j with a[i] == b[j]) <-> result is stated in Dafny as |multiset(a) * multiset(b)| > 0, which is equivalent; Dafny cannot find the witness indices of an existential postcondition on concrete inputs, so the literal form fails the acceptance probes. The Python spec keeps VERINA's form."
+}

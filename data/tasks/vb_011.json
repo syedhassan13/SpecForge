@@ -1,0 +1,112 @@
+{
+  "task_id": "vb_011",
+  "verina_id": "verina_basic_11",
+  "upstream": "dafny-synthesis/task_id_435",
+  "entry_point": "lastDigit",
+  "description": "Given a non-negative integer n, return its last decimal digit, i.e. the remainder of n divided by 10. The result is always between 0 and 9 inclusive.",
+  "params": [
+    {
+      "name": "n",
+      "type": "nat"
+    }
+  ],
+  "returns": "nat",
+  "tests": [
+    {
+      "input": {
+        "n": 123
+      },
+      "expected": 3,
+      "unexpected": [
+        2,
+        1,
+        23
+      ]
+    },
+    {
+      "input": {
+        "n": 0
+      },
+      "expected": 0,
+      "unexpected": [
+        10,
+        5,
+        9
+      ]
+    },
+    {
+      "input": {
+        "n": 987654321
+      },
+      "expected": 1,
+      "unexpected": [
+        9,
+        0,
+        2
+      ]
+    },
+    {
+      "input": {
+        "n": 10
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        10,
+        5
+      ]
+    },
+    {
+      "input": {
+        "n": 999
+      },
+      "expected": 9,
+      "unexpected": [
+        8,
+        99,
+        0
+      ]
+    },
+    {
+      "input": {
+        "n": 45
+      },
+      "expected": 5,
+      "unexpected": [
+        4,
+        0,
+        55
+      ]
+    },
+    {
+      "input": {
+        "n": 100
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        10,
+        5
+      ]
+    },
+    {
+      "input": {
+        "n": 5
+      },
+      "expected": 5,
+      "unexpected": [
+        4,
+        0,
+        6
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method lastDigit(n: nat) returns (result: nat)\n  ensures 0 <= result < 10\n  ensures result == n % 10\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method lastDigit(n: nat) returns (result: nat)\n  ensures 0 <= result < 10\n  ensures result == n % 10\n{\n  result := n % 10;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.require(lambda n: n >= 0)\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda result: 0 <= result < 10)\n@icontract.ensure(lambda n, result: result == n % 10)\ndef lastDigit(n: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.require(lambda n: n >= 0)\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda result: 0 <= result < 10)\n@icontract.ensure(lambda n, result: result == n % 10)\ndef lastDigit(n: int) -> int:\n    return n % 10\n"
+  }
+}

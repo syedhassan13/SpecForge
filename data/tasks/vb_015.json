@@ -1,0 +1,125 @@
+{
+  "task_id": "vb_015",
+  "verina_id": "verina_basic_15",
+  "upstream": "dafny-synthesis/task_id_472",
+  "entry_point": "containsConsecutiveNumbers",
+  "description": "Given a list of integers a, return true if there is an index i such that a[i] + 1 equals the next element a[i + 1] (two adjacent elements that are consecutive increasing integers), and false otherwise. Empty and single-element lists contain no such pair.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          5
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          3,
+          5,
+          7
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": []
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          5,
+          6
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          5,
+          7,
+          8,
+          10
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          9,
+          9,
+          10
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          3,
+          3,
+          3
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "// HasConsecutivePair(a, n): some i with i + 1 < n has a[i] + 1 == a[i + 1]\npredicate {:fuel 10} HasConsecutivePair(a: seq<int>, n: nat)\n  requires n <= |a|\n{\n  n >= 2 && (a[n - 2] + 1 == a[n - 1] || HasConsecutivePair(a, n - 1))\n}\n\nmethod containsConsecutiveNumbers(a: seq<int>) returns (result: bool)\n  ensures result <==> HasConsecutivePair(a, |a|)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "// HasConsecutivePair(a, n): some i with i + 1 < n has a[i] + 1 == a[i + 1]\npredicate {:fuel 10} HasConsecutivePair(a: seq<int>, n: nat)\n  requires n <= |a|\n{\n  n >= 2 && (a[n - 2] + 1 == a[n - 1] || HasConsecutivePair(a, n - 1))\n}\n\nmethod containsConsecutiveNumbers(a: seq<int>) returns (result: bool)\n  ensures result <==> HasConsecutivePair(a, |a|)\n{\n  result := false;\n  var n := 0;\n  while n < |a|\n    invariant 0 <= n <= |a|\n    invariant result <==> HasConsecutivePair(a, n)\n  {\n    n := n + 1;\n    if n >= 2 && a[n - 2] + 1 == a[n - 1] {\n      result := true;\n    }\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda a, result: result == any(a[i] + 1 == a[i + 1] for i in range(len(a) - 1)))\ndef containsConsecutiveNumbers(a: List[int]) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda a, result: result == any(a[i] + 1 == a[i + 1] for i in range(len(a) - 1)))\ndef containsConsecutiveNumbers(a: List[int]) -> bool:\n    for i in range(len(a) - 1):\n        if a[i] + 1 == a[i + 1]:\n            return True\n    return False\n"
+  },
+  "notes": "VERINA: (exists i < |a| - 1, a[i] + 1 = a[i + 1]) <-> result. The Dafny spec states the existential through the recursive predicate HasConsecutivePair (with a {:fuel} hint) so that the verifier can evaluate it on the concrete test lists; it is equivalent to the quantified form used in the Python spec."
+}

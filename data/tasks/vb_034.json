@@ -1,0 +1,142 @@
+{
+  "task_id": "vb_034",
+  "verina_id": "verina_basic_34",
+  "upstream": "dafny-synthesis/task_id_629",
+  "entry_point": "findEvenNumbers",
+  "description": "Given a list of integers arr (possibly empty), return a list of the even numbers of arr in the order in which they appear. Required properties: every element of the result is even and occurs in arr; every even number that occurs in arr occurs in the result; and for any two even numbers x and y of arr, if the first occurrence of x in arr is not after the first occurrence of y in arr, then the first occurrence of x in the result is not after the first occurrence of y in the result.",
+  "params": [
+    {
+      "name": "arr",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "expected": [
+        2,
+        4,
+        6
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          2,
+          3,
+          4,
+          6
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          7,
+          8,
+          10,
+          13,
+          14
+        ]
+      },
+      "expected": [
+        8,
+        10,
+        14
+      ],
+      "unexpected": [
+        [
+          7,
+          8,
+          10
+        ],
+        [
+          8,
+          14
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          3,
+          5,
+          7
+        ]
+      },
+      "expected": [],
+      "unexpected": [
+        [
+          1
+        ],
+        [
+          1,
+          3
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": []
+      },
+      "expected": [],
+      "unexpected": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          0,
+          -2,
+          -3,
+          -4,
+          5
+        ]
+      },
+      "expected": [
+        0,
+        -2,
+        -4
+      ],
+      "unexpected": [
+        [
+          0,
+          -3,
+          -4
+        ],
+        [
+          -2,
+          -4
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "predicate IsEven(n: int) { n % 2 == 0 }\n\n// index of the first occurrence of x in s, or |s| if x does not occur in s\nfunction {:fuel 10} IdxOf(s: seq<int>, x: int): nat\n{\n  if |s| == 0 then 0 else if s[0] == x then 0 else 1 + IdxOf(s[1..], x)\n}\n\nmethod findEvenNumbers(arr: seq<int>) returns (result: seq<int>)\n  ensures forall x :: x in result ==> IsEven(x) && x in arr\n  ensures forall x :: x in arr && IsEven(x) ==> x in result\n  ensures forall x, y :: x in arr && y in arr && IsEven(x) && IsEven(y) && IdxOf(arr, x) <= IdxOf(arr, y)\n            ==> IdxOf(result, x) <= IdxOf(result, y)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "predicate IsEven(n: int) { n % 2 == 0 }\n\n// index of the first occurrence of x in s, or |s| if x does not occur in s\nfunction {:fuel 10} IdxOf(s: seq<int>, x: int): nat\n{\n  if |s| == 0 then 0 else if s[0] == x then 0 else 1 + IdxOf(s[1..], x)\n}\n\nfunction FilterEven(s: seq<int>): seq<int>\n{\n  if |s| == 0 then [] else (if IsEven(s[0]) then [s[0]] else []) + FilterEven(s[1..])\n}\n\nlemma FilterEvenMembers(s: seq<int>)\n  ensures forall x :: x in FilterEven(s) <==> x in s && IsEven(x)\n{\n  if |s| > 0 {\n    FilterEvenMembers(s[1..]);\n    assert s == [s[0]] + s[1..];\n  }\n}\n\nlemma FilterEvenOrder(s: seq<int>, x: int, y: int)\n  requires x in s && y in s && IsEven(x) && IsEven(y)\n  requires IdxOf(s, x) <= IdxOf(s, y)\n  ensures IdxOf(FilterEven(s), x) <= IdxOf(FilterEven(s), y)\n{\n  var rest := FilterEven(s[1..]);\n  if s[0] == x {\n    assert FilterEven(s) == [x] + rest;\n  } else {\n    assert s[0] != y;\n    assert s == [s[0]] + s[1..];\n    assert x in s[1..] && y in s[1..];\n    FilterEvenOrder(s[1..], x, y);\n    if IsEven(s[0]) {\n      var f := [s[0]] + rest;\n      assert FilterEven(s) == f;\n      assert f[1..] == rest;\n    } else {\n      assert FilterEven(s) == rest;\n    }\n  }\n}\n\nmethod findEvenNumbers(arr: seq<int>) returns (result: seq<int>)\n  ensures forall x :: x in result ==> IsEven(x) && x in arr\n  ensures forall x :: x in arr && IsEven(x) ==> x in result\n  ensures forall x, y :: x in arr && y in arr && IsEven(x) && IsEven(y) && IdxOf(arr, x) <= IdxOf(arr, y)\n            ==> IdxOf(result, x) <= IdxOf(result, y)\n{\n  result := FilterEven(arr);\n  FilterEvenMembers(arr);\n  forall x, y | x in arr && y in arr && IsEven(x) && IsEven(y) && IdxOf(arr, x) <= IdxOf(arr, y)\n    ensures IdxOf(result, x) <= IdxOf(result, y)\n  {\n    FilterEvenOrder(arr, x, y);\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\ndef is_even(n: int) -> bool:\n    return n % 2 == 0\n\n\ndef idx_of(xs: List[int], x: int) -> int:\n    \"\"\"Index of the first occurrence of x in xs, or len(xs) if x does not occur in xs.\"\"\"\n    for i in range(len(xs)):\n        if xs[i] == x:\n            return i\n    return len(xs)\n\n\n@icontract.ensure(lambda arr, result: all(is_even(x) and x in arr for x in result))\n@icontract.ensure(lambda arr, result: all(x in result for x in arr if is_even(x)))\n@icontract.ensure(lambda arr, result: all(\n    idx_of(result, x) <= idx_of(result, y)\n    for x in arr for y in arr\n    if is_even(x) and is_even(y) and idx_of(arr, x) <= idx_of(arr, y)))\ndef findEvenNumbers(arr: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\ndef is_even(n: int) -> bool:\n    return n % 2 == 0\n\n\ndef idx_of(xs: List[int], x: int) -> int:\n    \"\"\"Index of the first occurrence of x in xs, or len(xs) if x does not occur in xs.\"\"\"\n    for i in range(len(xs)):\n        if xs[i] == x:\n            return i\n    return len(xs)\n\n\n@icontract.ensure(lambda arr, result: all(is_even(x) and x in arr for x in result))\n@icontract.ensure(lambda arr, result: all(x in result for x in arr if is_even(x)))\n@icontract.ensure(lambda arr, result: all(\n    idx_of(result, x) <= idx_of(result, y)\n    for x in arr for y in arr\n    if is_even(x) and is_even(y) and idx_of(arr, x) <= idx_of(arr, y)))\ndef findEvenNumbers(arr: List[int]) -> List[int]:\n    result = []\n    for x in arr:\n        if is_even(x):\n            result.append(x)\n    return result\n"
+  }
+}

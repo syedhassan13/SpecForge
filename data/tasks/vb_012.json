@@ -1,0 +1,79 @@
+{
+  "task_id": "vb_012",
+  "verina_id": "verina_basic_12",
+  "upstream": "dafny-synthesis/task_id_441",
+  "entry_point": "cubeSurfaceArea",
+  "description": "Given the edge length size of a cube (a non-negative integer), return the surface area of the cube, which is 6 * size * size.",
+  "params": [
+    {
+      "name": "size",
+      "type": "nat"
+    }
+  ],
+  "returns": "nat",
+  "tests": [
+    {
+      "input": {
+        "size": 3
+      },
+      "expected": 54,
+      "unexpected": [
+        27,
+        48,
+        60
+      ]
+    },
+    {
+      "input": {
+        "size": 1
+      },
+      "expected": 6,
+      "unexpected": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "input": {
+        "size": 10
+      },
+      "expected": 600,
+      "unexpected": [
+        100,
+        500,
+        610
+      ]
+    },
+    {
+      "input": {
+        "size": 5
+      },
+      "expected": 150,
+      "unexpected": [
+        25,
+        100,
+        125
+      ]
+    },
+    {
+      "input": {
+        "size": 2
+      },
+      "expected": 24,
+      "unexpected": [
+        8,
+        16,
+        20
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method cubeSurfaceArea(size: nat) returns (result: nat)\n  ensures result == 6 * size * size\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method cubeSurfaceArea(size: nat) returns (result: nat)\n  ensures result == 6 * size * size\n{\n  result := 6 * size * size;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.require(lambda size: size >= 0)\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda size, result: result == 6 * size * size)\ndef cubeSurfaceArea(size: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.require(lambda size: size >= 0)\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda size, result: result == 6 * size * size)\ndef cubeSurfaceArea(size: int) -> int:\n    return 6 * size * size\n"
+  }
+}

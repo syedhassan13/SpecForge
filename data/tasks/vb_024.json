@@ -1,0 +1,105 @@
+{
+  "task_id": "vb_024",
+  "verina_id": "verina_basic_24",
+  "upstream": "dafny-synthesis/task_id_594",
+  "entry_point": "firstEvenOddDifference",
+  "description": "Given a list of integers a with at least two elements that contains at least one even and at least one odd number, return the first even element minus the first odd element, where 'first' means closest to the start of the list. A number is even when its remainder modulo 2 is 0 and odd otherwise; negative numbers are classified the same way (for example -3 is odd and -4 is even).",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": -1,
+      "unexpected": [
+        -2,
+        1,
+        -3
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          4,
+          6,
+          8
+        ]
+      },
+      "expected": 3,
+      "unexpected": [
+        2,
+        4,
+        5
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          7,
+          2,
+          9,
+          4
+        ]
+      },
+      "expected": -5,
+      "unexpected": [
+        -3,
+        -6,
+        5
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          2,
+          2,
+          3,
+          3
+        ]
+      },
+      "expected": -1,
+      "unexpected": [
+        1,
+        0,
+        -2
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          1,
+          2,
+          2
+        ]
+      },
+      "expected": 1,
+      "unexpected": [
+        0,
+        2,
+        -1
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "predicate IsEven(n: int) { n % 2 == 0 }\n\npredicate IsOdd(n: int) { n % 2 != 0 }\n\n// the first even element of a (0 if there is none)\nfunction {:fuel 10} FirstEven(a: seq<int>): int\n{\n  if |a| == 0 then 0 else if IsEven(a[0]) then a[0] else FirstEven(a[1..])\n}\n\n// the first odd element of a (0 if there is none)\nfunction {:fuel 10} FirstOdd(a: seq<int>): int\n{\n  if |a| == 0 then 0 else if IsOdd(a[0]) then a[0] else FirstOdd(a[1..])\n}\n\nmethod firstEvenOddDifference(a: seq<int>) returns (result: int)\n  requires |a| > 1\n  requires exists x :: x in a && IsEven(x)\n  requires exists x :: x in a && IsOdd(x)\n  ensures result == FirstEven(a) - FirstOdd(a)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "predicate IsEven(n: int) { n % 2 == 0 }\n\npredicate IsOdd(n: int) { n % 2 != 0 }\n\n// the first even element of a (0 if there is none)\nfunction {:fuel 10} FirstEven(a: seq<int>): int\n{\n  if |a| == 0 then 0 else if IsEven(a[0]) then a[0] else FirstEven(a[1..])\n}\n\n// the first odd element of a (0 if there is none)\nfunction {:fuel 10} FirstOdd(a: seq<int>): int\n{\n  if |a| == 0 then 0 else if IsOdd(a[0]) then a[0] else FirstOdd(a[1..])\n}\n\nlemma FirstEvenAt(a: seq<int>, i: nat)\n  requires i < |a| && IsEven(a[i])\n  requires forall k :: 0 <= k < i ==> !IsEven(a[k])\n  ensures FirstEven(a) == a[i]\n  decreases i\n{\n  if i > 0 {\n    FirstEvenAt(a[1..], i - 1);\n  }\n}\n\nlemma FirstOddAt(a: seq<int>, i: nat)\n  requires i < |a| && IsOdd(a[i])\n  requires forall k :: 0 <= k < i ==> !IsOdd(a[k])\n  ensures FirstOdd(a) == a[i]\n  decreases i\n{\n  if i > 0 {\n    FirstOddAt(a[1..], i - 1);\n  }\n}\n\nmethod firstEvenOddDifference(a: seq<int>) returns (result: int)\n  requires |a| > 1\n  requires exists x :: x in a && IsEven(x)\n  requires exists x :: x in a && IsOdd(x)\n  ensures result == FirstEven(a) - FirstOdd(a)\n{\n  var e := 0;\n  while e < |a| && !IsEven(a[e])\n    invariant 0 <= e <= |a|\n    invariant forall k :: 0 <= k < e ==> !IsEven(a[k])\n  {\n    e := e + 1;\n  }\n  var o := 0;\n  while o < |a| && !IsOdd(a[o])\n    invariant 0 <= o <= |a|\n    invariant forall k :: 0 <= k < o ==> !IsOdd(a[k])\n  {\n    o := o + 1;\n  }\n  FirstEvenAt(a, e);\n  FirstOddAt(a, o);\n  result := a[e] - a[o];\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\ndef is_even(n: int) -> bool:\n    return n % 2 == 0\n\n\ndef is_odd(n: int) -> bool:\n    return n % 2 != 0\n\n\ndef first_even(a: List[int]) -> int:\n    \"\"\"The first even element of a (0 if there is none).\"\"\"\n    for x in a:\n        if is_even(x):\n            return x\n    return 0\n\n\ndef first_odd(a: List[int]) -> int:\n    \"\"\"The first odd element of a (0 if there is none).\"\"\"\n    for x in a:\n        if is_odd(x):\n            return x\n    return 0\n\n\n@icontract.require(lambda a: len(a) > 1)\n@icontract.require(lambda a: any(is_even(x) for x in a))\n@icontract.require(lambda a: any(is_odd(x) for x in a))\n@icontract.ensure(lambda a, result: result == first_even(a) - first_odd(a))\ndef firstEvenOddDifference(a: List[int]) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\ndef is_even(n: int) -> bool:\n    return n % 2 == 0\n\n\ndef is_odd(n: int) -> bool:\n    return n % 2 != 0\n\n\ndef first_even(a: List[int]) -> int:\n    \"\"\"The first even element of a (0 if there is none).\"\"\"\n    for x in a:\n        if is_even(x):\n            return x\n    return 0\n\n\ndef first_odd(a: List[int]) -> int:\n    \"\"\"The first odd element of a (0 if there is none).\"\"\"\n    for x in a:\n        if is_odd(x):\n            return x\n    return 0\n\n\n@icontract.require(lambda a: len(a) > 1)\n@icontract.require(lambda a: any(is_even(x) for x in a))\n@icontract.require(lambda a: any(is_odd(x) for x in a))\n@icontract.ensure(lambda a, result: result == first_even(a) - first_odd(a))\ndef firstEvenOddDifference(a: List[int]) -> int:\n    e = 0\n    while not is_even(a[e]):\n        e += 1\n    o = 0\n    while not is_odd(a[o]):\n        o += 1\n    return a[e] - a[o]\n"
+  },
+  "notes": "VERINA states the postcondition as: there exist indices i, j such that a[i] is even, a[j] is odd, every element before i is odd, every element before j is even, and result = a[i] - a[j]. Both specs state the equivalent result == FirstEven(a) - FirstOdd(a) with small recursive helpers, because Dafny cannot find the index witnesses for the concrete probes."
+}

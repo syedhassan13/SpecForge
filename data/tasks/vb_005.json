@@ -1,0 +1,112 @@
+{
+  "task_id": "vb_005",
+  "verina_id": "verina_basic_5",
+  "upstream": "dafny-synthesis/task_id_127",
+  "entry_point": "multiply",
+  "description": "Given two integers a and b, return their product a * b.",
+  "params": [
+    {
+      "name": "a",
+      "type": "int"
+    },
+    {
+      "name": "b",
+      "type": "int"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "a": 3,
+        "b": 4
+      },
+      "expected": 12,
+      "unexpected": [
+        0,
+        11,
+        15
+      ]
+    },
+    {
+      "input": {
+        "a": 3,
+        "b": -4
+      },
+      "expected": -12,
+      "unexpected": [
+        0,
+        -11,
+        12
+      ]
+    },
+    {
+      "input": {
+        "a": -3,
+        "b": 4
+      },
+      "expected": -12,
+      "unexpected": [
+        0,
+        -11,
+        12
+      ]
+    },
+    {
+      "input": {
+        "a": -3,
+        "b": -4
+      },
+      "expected": 12,
+      "unexpected": [
+        0,
+        11,
+        -12
+      ]
+    },
+    {
+      "input": {
+        "a": 0,
+        "b": 5
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        -1,
+        5
+      ]
+    },
+    {
+      "input": {
+        "a": 5,
+        "b": 0
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        -1,
+        5
+      ]
+    },
+    {
+      "input": {
+        "a": 0,
+        "b": 0
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        -1,
+        5
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method multiply(a: int, b: int) returns (result: int)\n  ensures result - a * b == 0 && a * b - result == 0\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method multiply(a: int, b: int) returns (result: int)\n  ensures result - a * b == 0 && a * b - result == 0\n{\n  result := a * b;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.ensure(lambda a, b, result: result - a * b == 0 and a * b - result == 0)\ndef multiply(a: int, b: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.ensure(lambda a, b, result: result - a * b == 0 and a * b - result == 0)\ndef multiply(a: int, b: int) -> int:\n    return a * b\n"
+  }
+}

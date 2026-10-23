@@ -1,0 +1,75 @@
+{
+  "task_id": "vb_031",
+  "verina_id": "verina_basic_31",
+  "upstream": "dafny-synthesis/task_id_624",
+  "entry_point": "toUppercase",
+  "description": "Given a string s, return a string of the same length in which every lowercase ASCII letter ('a' to 'z') is replaced by the character whose code is 32 lower (its uppercase counterpart), and every other character is left unchanged.",
+  "params": [
+    {
+      "name": "s",
+      "type": "string"
+    }
+  ],
+  "returns": "string",
+  "tests": [
+    {
+      "input": {
+        "s": "Hello, World!"
+      },
+      "expected": "HELLO, WORLD!",
+      "unexpected": [
+        "hello, world!",
+        "HeLLo, WORld!"
+      ]
+    },
+    {
+      "input": {
+        "s": "abc"
+      },
+      "expected": "ABC",
+      "unexpected": [
+        "AbC",
+        "abc"
+      ]
+    },
+    {
+      "input": {
+        "s": "ABC"
+      },
+      "expected": "ABC",
+      "unexpected": [
+        "abc",
+        "aBC",
+        "Abc"
+      ]
+    },
+    {
+      "input": {
+        "s": "123!?@"
+      },
+      "expected": "123!?@",
+      "unexpected": [
+        "123!@?",
+        "321!?@"
+      ]
+    },
+    {
+      "input": {
+        "s": ""
+      },
+      "expected": "",
+      "unexpected": [
+        " ",
+        "a"
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "predicate IsLowerCase(c: char)\n{\n  'a' <= c <= 'z'\n}\n\nfunction ShiftMinus32(c: char): char\n  requires IsLowerCase(c)\n{\n  ((c as int - 32) % 128) as char\n}\n\nmethod toUppercase(s: string) returns (result: string)\n  ensures |result| == |s|\n  ensures forall i :: 0 <= i < |s| ==>\n            (IsLowerCase(s[i]) ==> result[i] == ShiftMinus32(s[i])) &&\n            (!IsLowerCase(s[i]) ==> result[i] == s[i])\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "predicate IsLowerCase(c: char)\n{\n  'a' <= c <= 'z'\n}\n\nfunction ShiftMinus32(c: char): char\n  requires IsLowerCase(c)\n{\n  ((c as int - 32) % 128) as char\n}\n\nmethod toUppercase(s: string) returns (result: string)\n  ensures |result| == |s|\n  ensures forall i :: 0 <= i < |s| ==>\n            (IsLowerCase(s[i]) ==> result[i] == ShiftMinus32(s[i])) &&\n            (!IsLowerCase(s[i]) ==> result[i] == s[i])\n{\n  result := \"\";\n  var i := 0;\n  while i < |s|\n    invariant 0 <= i <= |s|\n    invariant |result| == i\n    invariant forall k :: 0 <= k < i ==>\n                (IsLowerCase(s[k]) ==> result[k] == ShiftMinus32(s[k])) &&\n                (!IsLowerCase(s[k]) ==> result[k] == s[k])\n  {\n    if IsLowerCase(s[i]) {\n      result := result + [ShiftMinus32(s[i])];\n    } else {\n      result := result + [s[i]];\n    }\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\ndef is_lower_case(c: str) -> bool:\n    return 'a' <= c <= 'z'\n\n\ndef shift_minus32(c: str) -> str:\n    return chr((ord(c) - 32) % 128)\n\n\n@icontract.ensure(lambda s, result: len(result) == len(s))\n@icontract.ensure(lambda s, result: len(result) == len(s) and all(\n    (result[i] == shift_minus32(s[i])) if is_lower_case(s[i]) else (result[i] == s[i]) for i in range(len(s))))\ndef toUppercase(s: str) -> str:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\ndef is_lower_case(c: str) -> bool:\n    return 'a' <= c <= 'z'\n\n\ndef shift_minus32(c: str) -> str:\n    return chr((ord(c) - 32) % 128)\n\n\n@icontract.ensure(lambda s, result: len(result) == len(s))\n@icontract.ensure(lambda s, result: len(result) == len(s) and all(\n    (result[i] == shift_minus32(s[i])) if is_lower_case(s[i]) else (result[i] == s[i]) for i in range(len(s))))\ndef toUppercase(s: str) -> str:\n    chars = []\n    for c in s:\n        if 'a' <= c <= 'z':\n            chars.append(chr(ord(c) - 32))\n        else:\n            chars.append(c)\n    return ''.join(chars)\n"
+  }
+}

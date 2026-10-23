@@ -1,0 +1,126 @@
+{
+  "task_id": "vb_023",
+  "verina_id": "verina_basic_23",
+  "upstream": "dafny-synthesis/task_id_588",
+  "entry_point": "differenceMinMax",
+  "description": "Given a non-empty list of integers, return the difference between its largest and its smallest element (maximum minus minimum). For a list whose elements are all equal, including a single-element list, the result is 0.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          3,
+          1,
+          4,
+          1,
+          5,
+          9,
+          2,
+          6,
+          5,
+          3,
+          5
+        ]
+      },
+      "expected": 8,
+      "unexpected": [
+        7,
+        9,
+        10
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10,
+          20,
+          30,
+          40,
+          50
+        ]
+      },
+      "expected": 40,
+      "unexpected": [
+        30,
+        35,
+        45
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -10,
+          -20,
+          -30,
+          -40,
+          -50
+        ]
+      },
+      "expected": 40,
+      "unexpected": [
+        30,
+        41,
+        20
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          7
+        ]
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        -1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          5,
+          5,
+          5,
+          5
+        ]
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        5,
+        -1
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          -1,
+          2,
+          -2
+        ]
+      },
+      "expected": 4,
+      "unexpected": [
+        3,
+        0,
+        5
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "// FoldMin(a, n) / FoldMax(a, n): minimum / maximum of the first n elements of a,\n// computed left to right as in VERINA's foldl\nfunction {:fuel 15} FoldMin(a: seq<int>, n: nat): int\n  requires 0 < n <= |a|\n{\n  if n == 1 then a[0]\n  else if a[n - 1] < FoldMin(a, n - 1) then a[n - 1] else FoldMin(a, n - 1)\n}\n\nfunction {:fuel 15} FoldMax(a: seq<int>, n: nat): int\n  requires 0 < n <= |a|\n{\n  if n == 1 then a[0]\n  else if a[n - 1] > FoldMax(a, n - 1) then a[n - 1] else FoldMax(a, n - 1)\n}\n\nmethod differenceMinMax(a: seq<int>) returns (result: int)\n  requires |a| > 0\n  ensures result + FoldMin(a, |a|) == FoldMax(a, |a|)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "// FoldMin(a, n) / FoldMax(a, n): minimum / maximum of the first n elements of a,\n// computed left to right as in VERINA's foldl\nfunction {:fuel 15} FoldMin(a: seq<int>, n: nat): int\n  requires 0 < n <= |a|\n{\n  if n == 1 then a[0]\n  else if a[n - 1] < FoldMin(a, n - 1) then a[n - 1] else FoldMin(a, n - 1)\n}\n\nfunction {:fuel 15} FoldMax(a: seq<int>, n: nat): int\n  requires 0 < n <= |a|\n{\n  if n == 1 then a[0]\n  else if a[n - 1] > FoldMax(a, n - 1) then a[n - 1] else FoldMax(a, n - 1)\n}\n\nmethod differenceMinMax(a: seq<int>) returns (result: int)\n  requires |a| > 0\n  ensures result + FoldMin(a, |a|) == FoldMax(a, |a|)\n{\n  var mn := a[0];\n  var mx := a[0];\n  var i := 1;\n  while i < |a|\n    invariant 1 <= i <= |a|\n    invariant mn == FoldMin(a, i)\n    invariant mx == FoldMax(a, i)\n  {\n    if a[i] < mn {\n      mn := a[i];\n    }\n    if a[i] > mx {\n      mx := a[i];\n    }\n    i := i + 1;\n  }\n  result := mx - mn;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: len(a) > 0)\n@icontract.ensure(lambda a, result: result + min(a) == max(a))\ndef differenceMinMax(a: List[int]) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: len(a) > 0)\n@icontract.ensure(lambda a, result: result + min(a) == max(a))\ndef differenceMinMax(a: List[int]) -> int:\n    lo = a[0]\n    hi = a[0]\n    for x in a:\n        if x < lo:\n            lo = x\n        if x > hi:\n            hi = x\n    return hi - lo\n"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "task_id": "vb_036",
+  "verina_id": "verina_basic_36",
+  "upstream": "dafny-synthesis/task_id_732",
+  "entry_point": "replaceWithColon",
+  "description": "Given a string s, return a new string of the same length in which every space ' ', comma ',' and period '.' is replaced by a colon ':' and every other character is left unchanged.",
+  "params": [
+    {
+      "name": "s",
+      "type": "string"
+    }
+  ],
+  "returns": "string",
+  "tests": [
+    {
+      "input": {
+        "s": "Hello, world. How are you?"
+      },
+      "expected": "Hello::world::How:are:you?",
+      "unexpected": [
+        "Hello,world,How,are,you?",
+        "Hello: world: How: are: you?"
+      ]
+    },
+    {
+      "input": {
+        "s": "No-changes!"
+      },
+      "expected": "No-changes!",
+      "unexpected": [
+        "No changes!",
+        "No–changes!"
+      ]
+    },
+    {
+      "input": {
+        "s": ",. "
+      },
+      "expected": ":::",
+      "unexpected": [
+        "::",
+        ";:;",
+        "::: "
+      ]
+    },
+    {
+      "input": {
+        "s": ""
+      },
+      "expected": "",
+      "unexpected": [
+        " ",
+        "a"
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "predicate IsSpaceCommaDot(c: char)\n{\n  c == ' ' || c == ',' || c == '.'\n}\n\nmethod replaceWithColon(s: string) returns (result: string)\n  ensures |result| == |s|\n  ensures forall i :: 0 <= i < |s| ==>\n    (IsSpaceCommaDot(s[i]) ==> result[i] == ':') && (!IsSpaceCommaDot(s[i]) ==> result[i] == s[i])\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "predicate IsSpaceCommaDot(c: char)\n{\n  c == ' ' || c == ',' || c == '.'\n}\n\nmethod replaceWithColon(s: string) returns (result: string)\n  ensures |result| == |s|\n  ensures forall i :: 0 <= i < |s| ==>\n    (IsSpaceCommaDot(s[i]) ==> result[i] == ':') && (!IsSpaceCommaDot(s[i]) ==> result[i] == s[i])\n{\n  result := \"\";\n  var i := 0;\n  while i < |s|\n    invariant 0 <= i <= |s|\n    invariant |result| == i\n    invariant forall k :: 0 <= k < i ==>\n      (IsSpaceCommaDot(s[k]) ==> result[k] == ':') && (!IsSpaceCommaDot(s[k]) ==> result[k] == s[k])\n  {\n    if IsSpaceCommaDot(s[i]) {\n      result := result + [':'];\n    } else {\n      result := result + [s[i]];\n    }\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\ndef is_space_comma_dot(c: str) -> bool:\n    return c == ' ' or c == ',' or c == '.'\n\n\n@icontract.ensure(lambda s, result: len(result) == len(s))\n@icontract.ensure(lambda s, result: all(\n    (result[i] == ':') if is_space_comma_dot(s[i]) else (result[i] == s[i]) for i in range(len(s))))\ndef replaceWithColon(s: str) -> str:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\ndef is_space_comma_dot(c: str) -> bool:\n    return c == ' ' or c == ',' or c == '.'\n\n\n@icontract.ensure(lambda s, result: len(result) == len(s))\n@icontract.ensure(lambda s, result: all(\n    (result[i] == ':') if is_space_comma_dot(s[i]) else (result[i] == s[i]) for i in range(len(s))))\ndef replaceWithColon(s: str) -> str:\n    out = []\n    for c in s:\n        if is_space_comma_dot(c):\n            out.append(':')\n        else:\n            out.append(c)\n    return ''.join(out)\n"
+  }
+}

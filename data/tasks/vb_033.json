@@ -1,0 +1,99 @@
+{
+  "task_id": "vb_033",
+  "verina_id": "verina_basic_33",
+  "upstream": "dafny-synthesis/task_id_627",
+  "entry_point": "smallestMissingNumber",
+  "description": "Given a list of non-negative integers sorted in non-decreasing order (duplicates are allowed), return the smallest non-negative integer that does not appear in the list. Every integer from 0 up to, but not including, the result must appear in the list, and the result itself must not. For an empty list the result is 0.",
+  "params": [
+    {
+      "name": "s",
+      "type": "list<nat>"
+    }
+  ],
+  "returns": "nat",
+  "tests": [
+    {
+      "input": {
+        "s": [
+          0,
+          1,
+          2,
+          6,
+          9
+        ]
+      },
+      "expected": 3,
+      "unexpected": [
+        2,
+        4,
+        5
+      ]
+    },
+    {
+      "input": {
+        "s": [
+          4,
+          5,
+          10,
+          11
+        ]
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "s": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": 6,
+      "unexpected": [
+        5,
+        7
+      ]
+    },
+    {
+      "input": {
+        "s": []
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "s": [
+          0,
+          2,
+          3,
+          4
+        ]
+      },
+      "expected": 1,
+      "unexpected": [
+        0,
+        2,
+        3
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method smallestMissingNumber(s: seq<nat>) returns (result: nat)\n  requires forall i, j :: 0 <= i < j < |s| ==> s[i] <= s[j]\n  ensures result !in s\n  ensures forall k :: 0 <= k < result ==> k in s\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method smallestMissingNumber(s: seq<nat>) returns (result: nat)\n  requires forall i, j :: 0 <= i < j < |s| ==> s[i] <= s[j]\n  ensures result !in s\n  ensures forall k :: 0 <= k < result ==> k in s\n{\n  var v: nat := 0;\n  var i := 0;\n  while i < |s|\n    invariant 0 <= i <= |s|\n    invariant forall k :: 0 <= k < v ==> k in s\n    invariant forall j :: 0 <= j < i ==> s[j] < v\n  {\n    if s[i] > v {\n      return v;\n    } else if s[i] == v {\n      v := v + 1;\n    }\n    i := i + 1;\n  }\n  result := v;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda s: all(x >= 0 for x in s))\n@icontract.require(lambda s: all(s[i] <= s[i + 1] for i in range(len(s) - 1)))\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda s, result: result not in s)\n@icontract.ensure(lambda s, result: all(k in s for k in range(result)))\ndef smallestMissingNumber(s: List[int]) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda s: all(x >= 0 for x in s))\n@icontract.require(lambda s: all(s[i] <= s[i + 1] for i in range(len(s) - 1)))\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda s, result: result not in s)\n@icontract.ensure(lambda s, result: all(k in s for k in range(result)))\ndef smallestMissingNumber(s: List[int]) -> int:\n    v = 0\n    for x in s:\n        if x > v:\n            break\n        if x == v:\n            v += 1\n    return v\n"
+  }
+}

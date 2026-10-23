@@ -1,0 +1,131 @@
+{
+  "task_id": "vb_030",
+  "verina_id": "verina_basic_30",
+  "upstream": "dafny-synthesis/task_id_616",
+  "entry_point": "elementWiseModulo",
+  "description": "Given two lists of integers a and b of the same, non-zero length, where every element of b is non-zero, return a new list of the same length whose element at index i is the remainder of a[i] divided by b[i]. The remainder is the Euclidean one, which is never negative: it lies between 0 and |b[i]| - 1 even when a[i] or b[i] is negative (for example -10 mod 3 = 2 and -20 mod -7 = 1).",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    },
+    {
+      "name": "b",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          10,
+          20,
+          30
+        ],
+        "b": [
+          3,
+          7,
+          5
+        ]
+      },
+      "expected": [
+        1,
+        6,
+        0
+      ],
+      "unexpected": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          100,
+          200,
+          300,
+          400
+        ],
+        "b": [
+          10,
+          20,
+          30,
+          50
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "unexpected": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -10,
+          -20,
+          30
+        ],
+        "b": [
+          3,
+          -7,
+          5
+        ]
+      },
+      "expected": [
+        2,
+        1,
+        0
+      ],
+      "unexpected": [
+        [
+          -1,
+          -5,
+          0
+        ],
+        [
+          -1,
+          -6,
+          1
+        ],
+        [
+          0,
+          -6,
+          0
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method elementWiseModulo(a: seq<int>, b: seq<int>) returns (result: seq<int>)\n  requires |a| == |b| && |a| > 0\n  requires forall i :: 0 <= i < |b| ==> b[i] != 0\n  ensures |result| == |a|\n  ensures forall i :: 0 <= i < |result| ==> result[i] == a[i] % b[i]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method elementWiseModulo(a: seq<int>, b: seq<int>) returns (result: seq<int>)\n  requires |a| == |b| && |a| > 0\n  requires forall i :: 0 <= i < |b| ==> b[i] != 0\n  ensures |result| == |a|\n  ensures forall i :: 0 <= i < |result| ==> result[i] == a[i] % b[i]\n{\n  result := [];\n  var i := 0;\n  while i < |a|\n    invariant 0 <= i <= |a|\n    invariant |result| == i\n    invariant forall j :: 0 <= j < i ==> result[j] == a[j] % b[j]\n  {\n    result := result + [a[i] % b[i]];\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\ndef euclid_mod(x: int, y: int) -> int:\n    \"\"\"Euclidean remainder of x divided by y (y != 0): always 0 <= r < abs(y).\"\"\"\n    return x % abs(y)\n\n\n@icontract.require(lambda a, b: len(a) == len(b) and len(a) > 0)\n@icontract.require(lambda b: all(y != 0 for y in b))\n@icontract.ensure(lambda a, b, result: len(result) == len(a) and all(\n    result[i] == euclid_mod(a[i], b[i]) for i in range(len(result))))\ndef elementWiseModulo(a: List[int], b: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\ndef euclid_mod(x: int, y: int) -> int:\n    \"\"\"Euclidean remainder of x divided by y (y != 0): always 0 <= r < abs(y).\"\"\"\n    return x % abs(y)\n\n\n@icontract.require(lambda a, b: len(a) == len(b) and len(a) > 0)\n@icontract.require(lambda b: all(y != 0 for y in b))\n@icontract.ensure(lambda a, b, result: len(result) == len(a) and all(\n    result[i] == euclid_mod(a[i], b[i]) for i in range(len(result))))\ndef elementWiseModulo(a: List[int], b: List[int]) -> List[int]:\n    result = []\n    for i in range(len(a)):\n        result.append(a[i] % abs(b[i]))\n    return result\n"
+  }
+}

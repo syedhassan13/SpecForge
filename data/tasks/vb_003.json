@@ -1,0 +1,133 @@
+{
+  "task_id": "vb_003",
+  "verina_id": "verina_basic_3",
+  "upstream": "dafny-synthesis/task_id_77",
+  "entry_point": "isDivisibleBy11",
+  "description": "Determine whether a given integer n is divisible by 11. Return true if n is a multiple of 11 (this includes 0 and negative multiples such as -22) and false otherwise.",
+  "params": [
+    {
+      "name": "n",
+      "type": "int"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "n": 0
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 11
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 22
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 23
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "n": 33
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 44
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": -11
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": -22
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 1
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "n": -1
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "n": 121
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 123
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method isDivisibleBy11(n: int) returns (result: bool)\n  ensures result <==> n % 11 == 0\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method isDivisibleBy11(n: int) returns (result: bool)\n  ensures result <==> n % 11 == 0\n{\n  result := n % 11 == 0;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.ensure(lambda n, result: result == (n % 11 == 0))\ndef isDivisibleBy11(n: int) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.ensure(lambda n, result: result == (n % 11 == 0))\ndef isDivisibleBy11(n: int) -> bool:\n    return n % 11 == 0\n"
+  },
+  "notes": "VERINA states the postcondition with quantifiers over k (result -> exists k, n = 11 * k; not result -> forall k, n != 11 * k). Both specs use the equivalent remainder test n % 11 == 0, which the verifier can decide on concrete inputs."
+}

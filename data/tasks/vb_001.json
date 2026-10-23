@@ -1,0 +1,138 @@
+{
+  "task_id": "vb_001",
+  "verina_id": "verina_basic_1",
+  "upstream": "dafny-synthesis/task_id_58",
+  "entry_point": "hasOppositeSign",
+  "description": "Given two integers a and b, determine whether they have opposite signs, that is, one of them is strictly positive and the other is strictly negative. Zero is neither positive nor negative, so if either integer (or both) is zero the answer is false. Return true when the signs are opposite and false otherwise.",
+  "params": [
+    {
+      "name": "a",
+      "type": "int"
+    },
+    {
+      "name": "b",
+      "type": "int"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "a": -5,
+        "b": 10
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": 5,
+        "b": -10
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": 5,
+        "b": 10
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": -5,
+        "b": -10
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": 0,
+        "b": 10
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": 10,
+        "b": 0
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": 0,
+        "b": -10
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": -10,
+        "b": 0
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": 0,
+        "b": 0
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": -1,
+        "b": 1
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": 1,
+        "b": -1
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method hasOppositeSign(a: int, b: int) returns (result: bool)\n  ensures ((a < 0 && b > 0) || (a > 0 && b < 0)) ==> result\n  ensures !((a < 0 && b > 0) || (a > 0 && b < 0)) ==> !result\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method hasOppositeSign(a: int, b: int) returns (result: bool)\n  ensures ((a < 0 && b > 0) || (a > 0 && b < 0)) ==> result\n  ensures !((a < 0 && b > 0) || (a > 0 && b < 0)) ==> !result\n{\n  result := (a < 0 && b > 0) || (a > 0 && b < 0);\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.ensure(lambda a, b, result: (not ((a < 0 and b > 0) or (a > 0 and b < 0))) or result)\n@icontract.ensure(lambda a, b, result: ((a < 0 and b > 0) or (a > 0 and b < 0)) or not result)\ndef hasOppositeSign(a: int, b: int) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.ensure(lambda a, b, result: (not ((a < 0 and b > 0) or (a > 0 and b < 0))) or result)\n@icontract.ensure(lambda a, b, result: ((a < 0 and b > 0) or (a > 0 and b < 0)) or not result)\ndef hasOppositeSign(a: int, b: int) -> bool:\n    return (a < 0 and b > 0) or (a > 0 and b < 0)\n"
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "task_id": "vb_021",
+  "verina_id": "verina_basic_21",
+  "upstream": "dafny-synthesis/task_id_576",
+  "entry_point": "isSublist",
+  "description": "Given two lists of integers sub and main, return true if sub appears as a contiguous block inside main, i.e. there is a start position i with i + len(sub) <= len(main) such that main[i + k] == sub[k] for every index k of sub; otherwise return false. The empty list appears in every list, including the empty list.",
+  "params": [
+    {
+      "name": "sub",
+      "type": "list<int>"
+    },
+    {
+      "name": "main",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "sub": [
+          1,
+          2
+        ],
+        "main": [
+          3,
+          1,
+          2,
+          4
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "sub": [
+          2,
+          3
+        ],
+        "main": [
+          3,
+          1,
+          2,
+          4
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "sub": [
+          3,
+          1
+        ],
+        "main": [
+          3,
+          1,
+          2,
+          4
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "sub": [
+          4
+        ],
+        "main": [
+          3,
+          1,
+          2,
+          4
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "sub": [
+          5
+        ],
+        "main": [
+          3,
+          1,
+          2,
+          4
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "sub": [],
+        "main": [
+          3,
+          1,
+          2,
+          4
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "sub": [
+          1,
+          2
+        ],
+        "main": []
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "sub": [],
+        "main": []
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "// true iff main[i + k] == sub[k] for every index k of sub with k >= j\npredicate {:fuel 10} MatchesFrom(sub: seq<int>, main: seq<int>, i: nat, j: nat)\n  requires i + |sub| <= |main|\n  decreases |sub| - j\n{\n  j >= |sub| || (sub[j] == main[i + j] && MatchesFrom(sub, main, i, j + 1))\n}\n\n// true iff sub occurs as a contiguous block of main starting at some position p >= i,\n// i.e. p + |sub| <= |main| and main[p + k] == sub[k] for every index k of sub\npredicate {:fuel 10} OccursFrom(sub: seq<int>, main: seq<int>, i: nat)\n  decreases |main| + 1 - i\n{\n  i + |sub| <= |main| && (MatchesFrom(sub, main, i, 0) || OccursFrom(sub, main, i + 1))\n}\n\nmethod isSublist(sub: seq<int>, main: seq<int>) returns (result: bool)\n  ensures result <==> OccursFrom(sub, main, 0)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "// true iff main[i + k] == sub[k] for every index k of sub with k >= j\npredicate {:fuel 10} MatchesFrom(sub: seq<int>, main: seq<int>, i: nat, j: nat)\n  requires i + |sub| <= |main|\n  decreases |sub| - j\n{\n  j >= |sub| || (sub[j] == main[i + j] && MatchesFrom(sub, main, i, j + 1))\n}\n\n// true iff sub occurs as a contiguous block of main starting at some position p >= i,\n// i.e. p + |sub| <= |main| and main[p + k] == sub[k] for every index k of sub\npredicate {:fuel 10} OccursFrom(sub: seq<int>, main: seq<int>, i: nat)\n  decreases |main| + 1 - i\n{\n  i + |sub| <= |main| && (MatchesFrom(sub, main, i, 0) || OccursFrom(sub, main, i + 1))\n}\n\nmethod isSublist(sub: seq<int>, main: seq<int>) returns (result: bool)\n  ensures result <==> OccursFrom(sub, main, 0)\n{\n  var i := 0;\n  while i + |sub| <= |main|\n    invariant OccursFrom(sub, main, 0) <==> OccursFrom(sub, main, i)\n    decreases |main| + 1 - i\n  {\n    var j := 0;\n    while j < |sub| && sub[j] == main[i + j]\n      invariant 0 <= j <= |sub|\n      invariant MatchesFrom(sub, main, i, 0) <==> MatchesFrom(sub, main, i, j)\n    {\n      j := j + 1;\n    }\n    if j == |sub| {\n      result := true;\n      return;\n    }\n    i := i + 1;\n  }\n  result := false;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda sub, main, result: result == any(\n    main[i:i + len(sub)] == sub for i in range(len(main) - len(sub) + 1)))\ndef isSublist(sub: List[int], main: List[int]) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda sub, main, result: result == any(\n    main[i:i + len(sub)] == sub for i in range(len(main) - len(sub) + 1)))\ndef isSublist(sub: List[int], main: List[int]) -> bool:\n    n, m = len(sub), len(main)\n    i = 0\n    while i + n <= m:\n        if main[i:i + n] == sub:\n            return True\n        i += 1\n    return False\n"
+  },
+  "notes": "VERINA's existential over the start position (exists i, i + |sub| <= |main| and sub equals the |sub| elements of main from i) is stated in Dafny with the recursive predicates OccursFrom / MatchesFrom ({:fuel 10}, so the verifier can evaluate them on the test inputs); they are equivalent to the existential. The Python spec keeps VERINA's form."
+}

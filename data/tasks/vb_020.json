@@ -1,0 +1,130 @@
+{
+  "task_id": "vb_020",
+  "verina_id": "verina_basic_20",
+  "upstream": "dafny-synthesis/task_id_573",
+  "entry_point": "uniqueProduct",
+  "description": "Given a list of integers arr, return the product of its distinct values: every value is multiplied in exactly once, however many times it occurs in the list. The product of the empty list is 1. The order of the elements does not affect the result.",
+  "params": [
+    {
+      "name": "arr",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "arr": [
+          2,
+          3,
+          2,
+          4
+        ]
+      },
+      "expected": 24,
+      "unexpected": [
+        12,
+        30,
+        0
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          5,
+          5,
+          5,
+          5
+        ]
+      },
+      "expected": 5,
+      "unexpected": [
+        25,
+        0,
+        10
+      ]
+    },
+    {
+      "input": {
+        "arr": []
+      },
+      "expected": 1,
+      "unexpected": [
+        0,
+        -1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": 6,
+      "unexpected": [
+        5,
+        7,
+        2
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          0,
+          2,
+          3
+        ]
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        -1,
+        10
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          -1,
+          -2,
+          -1,
+          -3
+        ]
+      },
+      "expected": -6,
+      "unexpected": [
+        -1,
+        6,
+        -3
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          10,
+          10,
+          20,
+          20,
+          30
+        ]
+      },
+      "expected": 6000,
+      "unexpected": [
+        600,
+        0,
+        5000
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "// product of the distinct values among the first n elements of s,\n// each value counted once (at its first occurrence)\nfunction {:fuel 10} ProductOfDistinct(s: seq<int>, n: nat): int\n  requires n <= |s|\n{\n  if n == 0 then 1\n  else if s[n - 1] in s[..n - 1] then ProductOfDistinct(s, n - 1)\n  else ProductOfDistinct(s, n - 1) * s[n - 1]\n}\n\nmethod uniqueProduct(arr: seq<int>) returns (result: int)\n  ensures result == ProductOfDistinct(arr, |arr|)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "// product of the distinct values among the first n elements of s,\n// each value counted once (at its first occurrence)\nfunction {:fuel 10} ProductOfDistinct(s: seq<int>, n: nat): int\n  requires n <= |s|\n{\n  if n == 0 then 1\n  else if s[n - 1] in s[..n - 1] then ProductOfDistinct(s, n - 1)\n  else ProductOfDistinct(s, n - 1) * s[n - 1]\n}\n\nmethod uniqueProduct(arr: seq<int>) returns (result: int)\n  ensures result == ProductOfDistinct(arr, |arr|)\n{\n  result := 1;\n  var i := 0;\n  while i < |arr|\n    invariant 0 <= i <= |arr|\n    invariant result == ProductOfDistinct(arr, i)\n  {\n    if arr[i] !in arr[..i] {\n      result := result * arr[i];\n    }\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\ndef erase_dups(xs: List[int]) -> List[int]:\n    \"\"\"The distinct values of xs, each kept at its first occurrence, in order.\"\"\"\n    out: List[int] = []\n    for x in xs:\n        if x not in out:\n            out.append(x)\n    return out\n\n\ndef product(xs: List[int]) -> int:\n    \"\"\"Product of all elements of xs (1 for the empty list).\"\"\"\n    p = 1\n    for x in xs:\n        p *= x\n    return p\n\n\n@icontract.ensure(lambda arr, result: result == product(erase_dups(arr)))\ndef uniqueProduct(arr: List[int]) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\ndef erase_dups(xs: List[int]) -> List[int]:\n    \"\"\"The distinct values of xs, each kept at its first occurrence, in order.\"\"\"\n    out: List[int] = []\n    for x in xs:\n        if x not in out:\n            out.append(x)\n    return out\n\n\ndef product(xs: List[int]) -> int:\n    \"\"\"Product of all elements of xs (1 for the empty list).\"\"\"\n    p = 1\n    for x in xs:\n        p *= x\n    return p\n\n\n@icontract.ensure(lambda arr, result: result == product(erase_dups(arr)))\ndef uniqueProduct(arr: List[int]) -> int:\n    seen = set()\n    result = 1\n    for x in arr:\n        if x not in seen:\n            seen.add(x)\n            result *= x\n    return result\n"
+  }
+}

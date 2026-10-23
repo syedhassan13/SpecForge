@@ -1,0 +1,105 @@
+{
+  "task_id": "vb_014",
+  "verina_id": "verina_basic_14",
+  "upstream": "dafny-synthesis/task_id_454",
+  "entry_point": "containsZ",
+  "description": "Given a string s, return true if s contains the character 'z' or the character 'Z' at least once, and false otherwise. The empty string contains neither, so the answer for it is false.",
+  "params": [
+    {
+      "name": "s",
+      "type": "string"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "s": "hello"
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "s": "zebra"
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "s": "Zebra"
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "s": ""
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "s": "crazy"
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "s": "AZ"
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "s": "abc"
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "s": "Zz"
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "s": "no letter"
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method containsZ(s: string) returns (result: bool)\n  ensures result <==> ('z' in s || 'Z' in s)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method containsZ(s: string) returns (result: bool)\n  ensures result <==> ('z' in s || 'Z' in s)\n{\n  var i := 0;\n  while i < |s|\n    invariant 0 <= i <= |s|\n    invariant forall k :: 0 <= k < i ==> s[k] != 'z' && s[k] != 'Z'\n  {\n    if s[i] == 'z' || s[i] == 'Z' {\n      return true;\n    }\n    i := i + 1;\n  }\n  return false;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.ensure(lambda s, result: result == ('z' in s or 'Z' in s))\ndef containsZ(s: str) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.ensure(lambda s, result: result == ('z' in s or 'Z' in s))\ndef containsZ(s: str) -> bool:\n    for c in s:\n        if c == 'z' or c == 'Z':\n            return True\n    return False\n"
+  }
+}

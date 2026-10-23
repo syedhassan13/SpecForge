@@ -1,0 +1,122 @@
+{
+  "task_id": "vb_016",
+  "verina_id": "verina_basic_16",
+  "upstream": "dafny-synthesis/task_id_474",
+  "entry_point": "replaceChars",
+  "description": "Given a string s and two characters oldChar and newChar, return a new string of the same length as s in which every occurrence of oldChar is replaced by newChar and every other character is left unchanged. The string may be empty, and oldChar may not occur in it at all.",
+  "params": [
+    {
+      "name": "s",
+      "type": "string"
+    },
+    {
+      "name": "oldChar",
+      "type": "char"
+    },
+    {
+      "name": "newChar",
+      "type": "char"
+    }
+  ],
+  "returns": "string",
+  "tests": [
+    {
+      "input": {
+        "s": "hello, world!",
+        "oldChar": ",",
+        "newChar": ";"
+      },
+      "expected": "hello; world!",
+      "unexpected": [
+        "hello, world!",
+        "hello world!",
+        "hello;world!"
+      ]
+    },
+    {
+      "input": {
+        "s": "a,b.c",
+        "oldChar": ",",
+        "newChar": ":"
+      },
+      "expected": "a:b.c",
+      "unexpected": [
+        "a,b.c",
+        "a;b.c",
+        "ab:c"
+      ]
+    },
+    {
+      "input": {
+        "s": "hello, world!",
+        "oldChar": "o",
+        "newChar": "O"
+      },
+      "expected": "hellO, wOrld!",
+      "unexpected": [
+        "hello, world!",
+        "hellO, world!",
+        "hello, wOrld!"
+      ]
+    },
+    {
+      "input": {
+        "s": "",
+        "oldChar": "x",
+        "newChar": "y"
+      },
+      "expected": "",
+      "unexpected": [
+        " ",
+        "abc"
+      ]
+    },
+    {
+      "input": {
+        "s": "test",
+        "oldChar": "x",
+        "newChar": "y"
+      },
+      "expected": "test",
+      "unexpected": [
+        "testy",
+        "tset",
+        "yxest"
+      ]
+    },
+    {
+      "input": {
+        "s": "unchanged",
+        "oldChar": "u",
+        "newChar": "u"
+      },
+      "expected": "unchanged",
+      "unexpected": [
+        "nchanged",
+        "unchanged!",
+        "unchangEd"
+      ]
+    },
+    {
+      "input": {
+        "s": "aaa",
+        "oldChar": "a",
+        "newChar": "b"
+      },
+      "expected": "bbb",
+      "unexpected": [
+        "aaa",
+        "abb",
+        "bba"
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method replaceChars(s: string, oldChar: char, newChar: char) returns (result: string)\n  ensures |result| == |s|\n  ensures forall i :: 0 <= i < |s| ==>\n            (s[i] == oldChar ==> result[i] == newChar) &&\n            (s[i] != oldChar ==> result[i] == s[i])\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method replaceChars(s: string, oldChar: char, newChar: char) returns (result: string)\n  ensures |result| == |s|\n  ensures forall i :: 0 <= i < |s| ==>\n            (s[i] == oldChar ==> result[i] == newChar) &&\n            (s[i] != oldChar ==> result[i] == s[i])\n{\n  result := \"\";\n  var i := 0;\n  while i < |s|\n    invariant 0 <= i <= |s|\n    invariant |result| == i\n    invariant forall j :: 0 <= j < i ==>\n                (s[j] == oldChar ==> result[j] == newChar) &&\n                (s[j] != oldChar ==> result[j] == s[j])\n  {\n    if s[i] == oldChar {\n      result := result + [newChar];\n    } else {\n      result := result + [s[i]];\n    }\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.require(lambda oldChar, newChar: len(oldChar) == 1 and len(newChar) == 1)\n@icontract.ensure(lambda s, oldChar, newChar, result: len(result) == len(s) and all(\n    (result[i] == newChar if s[i] == oldChar else result[i] == s[i]) for i in range(len(s))))\ndef replaceChars(s: str, oldChar: str, newChar: str) -> str:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.require(lambda oldChar, newChar: len(oldChar) == 1 and len(newChar) == 1)\n@icontract.ensure(lambda s, oldChar, newChar, result: len(result) == len(s) and all(\n    (result[i] == newChar if s[i] == oldChar else result[i] == s[i]) for i in range(len(s))))\ndef replaceChars(s: str, oldChar: str, newChar: str) -> str:\n    out = []\n    for c in s:\n        if c == oldChar:\n            out.append(newChar)\n        else:\n            out.append(c)\n    return \"\".join(out)\n"
+  }
+}

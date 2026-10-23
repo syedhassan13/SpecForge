@@ -1,0 +1,246 @@
+{
+  "task_id": "vb_022",
+  "verina_id": "verina_basic_22",
+  "upstream": "dafny-synthesis/task_id_579",
+  "entry_point": "dissimilarElements",
+  "description": "Given two lists of integers a and b, return a list of the values that occur in exactly one of them (in a but not in b, or in b but not in a), sorted in non-decreasing order. Every value of a that does not occur in b and every value of b that does not occur in a must appear in the result, and no value that occurs in both lists (or in neither) may appear. Each such value should be listed once. Either input may be empty.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    },
+    {
+      "name": "b",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "b": [
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          1,
+          3,
+          5
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          1,
+          2
+        ],
+        "b": [
+          2,
+          3
+        ]
+      },
+      "expected": [
+        1,
+        3
+      ],
+      "unexpected": [
+        [
+          1
+        ],
+        [
+          3
+        ],
+        [
+          1,
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [],
+        "b": [
+          4,
+          5
+        ]
+      },
+      "expected": [
+        4,
+        5
+      ],
+      "unexpected": [
+        [
+          4
+        ],
+        [
+          5
+        ],
+        []
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          7,
+          8
+        ],
+        "b": []
+      },
+      "expected": [
+        7,
+        8
+      ],
+      "unexpected": [
+        [
+          7
+        ],
+        [
+          8
+        ],
+        [
+          7,
+          8,
+          9
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3
+        ],
+        "b": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": [],
+      "unexpected": [
+        [
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3
+        ],
+        "b": [
+          4,
+          5,
+          6
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          4,
+          5,
+          6
+        ],
+        [
+          1,
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -1,
+          0,
+          1
+        ],
+        "b": [
+          0
+        ]
+      },
+      "expected": [
+        -1,
+        1
+      ],
+      "unexpected": [
+        [
+          0
+        ],
+        [
+          -1,
+          0,
+          1
+        ],
+        [
+          -1
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method dissimilarElements(a: seq<int>, b: seq<int>) returns (result: seq<int>)\n  ensures forall x :: x in result ==> ((x in a) != (x in b))\n  ensures forall i, j :: 0 <= i < j < |result| ==> result[i] <= result[j]\n  ensures forall x :: x in a ==> (if x in b then x !in result else x in result)\n  ensures forall x :: x in b ==> (if x in a then x !in result else x in result)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method dissimilarElements(a: seq<int>, b: seq<int>) returns (result: seq<int>)\n  ensures forall x :: x in result ==> ((x in a) != (x in b))\n  ensures forall i, j :: 0 <= i < j < |result| ==> result[i] <= result[j]\n  ensures forall x :: x in a ==> (if x in b then x !in result else x in result)\n  ensures forall x :: x in b ==> (if x in a then x !in result else x in result)\n{\n  var res: seq<int> := [];\n  var i := 0;\n  while i < |a|\n    invariant 0 <= i <= |a|\n    invariant forall p, q :: 0 <= p < q < |res| ==> res[p] < res[q]\n    invariant forall y :: y in res <==> (y in a[..i] && y !in b)\n  {\n    if a[i] !in b {\n      res := InsertSorted(res, a[i]);\n    }\n    assert a[..i + 1] == a[..i] + [a[i]];\n    i := i + 1;\n  }\n  assert a[..|a|] == a;\n  var j := 0;\n  while j < |b|\n    invariant 0 <= j <= |b|\n    invariant forall p, q :: 0 <= p < q < |res| ==> res[p] < res[q]\n    invariant forall y :: y in res <==> ((y in a && y !in b) || (y in b[..j] && y !in a))\n  {\n    if b[j] !in a {\n      res := InsertSorted(res, b[j]);\n    }\n    assert b[..j + 1] == b[..j] + [b[j]];\n    j := j + 1;\n  }\n  assert b[..|b|] == b;\n  result := res;\n}\n\nmethod InsertSorted(s: seq<int>, x: int) returns (r: seq<int>)\n  requires forall i, j :: 0 <= i < j < |s| ==> s[i] < s[j]\n  ensures forall i, j :: 0 <= i < j < |r| ==> r[i] < r[j]\n  ensures forall y :: y in r <==> (y in s || y == x)\n{\n  var k := 0;\n  while k < |s| && s[k] < x\n    invariant 0 <= k <= |s|\n    invariant forall i :: 0 <= i < k ==> s[i] < x\n  {\n    k := k + 1;\n  }\n  if k < |s| && s[k] == x {\n    r := s;\n  } else {\n    assert forall i :: k <= i < |s| ==> s[i] > x;\n    r := s[..k] + [x] + s[k..];\n    assert forall i :: 0 <= i < k ==> r[i] == s[i];\n    assert r[k] == x;\n    assert forall i :: k < i < |r| ==> r[i] == s[i - 1];\n    assert forall y :: y in r <==> (y in s[..k] || y == x || y in s[k..]);\n    assert s == s[..k] + s[k..];\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda a, b, result: all((x in a) != (x in b) for x in result))\n@icontract.ensure(lambda result: all(result[i] <= result[i + 1] for i in range(len(result) - 1)))\n@icontract.ensure(lambda a, b, result: all((x not in result) if x in b else (x in result) for x in a))\n@icontract.ensure(lambda a, b, result: all((x not in result) if x in a else (x in result) for x in b))\ndef dissimilarElements(a: List[int], b: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda a, b, result: all((x in a) != (x in b) for x in result))\n@icontract.ensure(lambda result: all(result[i] <= result[i + 1] for i in range(len(result) - 1)))\n@icontract.ensure(lambda a, b, result: all((x not in result) if x in b else (x in result) for x in a))\n@icontract.ensure(lambda a, b, result: all((x not in result) if x in a else (x in result) for x in b))\ndef dissimilarElements(a: List[int], b: List[int]) -> List[int]:\n    values = set()\n    for x in a:\n        if x not in b:\n            values.add(x)\n    for x in b:\n        if x not in a:\n            values.add(x)\n    return sorted(values)\n"
+  },
+  "notes": "VERINA's description asks for a result without duplicates, but its Lean postcondition only requires the result to be sorted in non-decreasing order (Pairwise <=) together with the membership conditions. Both specs follow the Lean postcondition, so a result with repeated values would satisfy the spec; the tests (VERINA's expected outputs) contain each value once."
+}

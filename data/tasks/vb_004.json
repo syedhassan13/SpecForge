@@ -1,0 +1,185 @@
+{
+  "task_id": "vb_004",
+  "verina_id": "verina_basic_4",
+  "upstream": "dafny-synthesis/task_id_101",
+  "entry_point": "kthElement",
+  "description": "Given a list of integers arr and a position k, return the element at position k using 1-based indexing, so position 1 is the first element. The input guarantees 1 <= k <= length of arr (in particular the list is non-empty). The result must be an element of the list and equal to the element at 0-based index k - 1.",
+  "params": [
+    {
+      "name": "arr",
+      "type": "list<int>"
+    },
+    {
+      "name": "k",
+      "type": "nat"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "arr": [
+          10,
+          20,
+          30,
+          40,
+          50
+        ],
+        "k": 1
+      },
+      "expected": 10,
+      "unexpected": [
+        20,
+        30
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          10,
+          20,
+          30,
+          40,
+          50
+        ],
+        "k": 3
+      },
+      "expected": 30,
+      "unexpected": [
+        10,
+        40,
+        50
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          10,
+          20,
+          30,
+          40,
+          50
+        ],
+        "k": 5
+      },
+      "expected": 50,
+      "unexpected": [
+        10,
+        40
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          5
+        ],
+        "k": 1
+      },
+      "expected": 5,
+      "unexpected": [
+        0,
+        1
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          3
+        ],
+        "k": 3
+      },
+      "expected": 3,
+      "unexpected": [
+        1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          3
+        ],
+        "k": 2
+      },
+      "expected": 2,
+      "unexpected": [
+        1,
+        3,
+        0
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          9,
+          9,
+          9
+        ],
+        "k": 2
+      },
+      "expected": 9,
+      "unexpected": [
+        0,
+        7
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          0,
+          -1,
+          -2
+        ],
+        "k": 1
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        -1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          0,
+          -1,
+          -2
+        ],
+        "k": 2
+      },
+      "expected": -1,
+      "unexpected": [
+        0,
+        -2
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          0,
+          -1,
+          -2
+        ],
+        "k": 3
+      },
+      "expected": -2,
+      "unexpected": [
+        0,
+        -1
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method kthElement(arr: seq<int>, k: nat) returns (result: int)\n  requires k >= 1 && k <= |arr|\n  ensures result in arr && result == arr[k - 1]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method kthElement(arr: seq<int>, k: nat) returns (result: int)\n  requires k >= 1 && k <= |arr|\n  ensures result in arr && result == arr[k - 1]\n{\n  result := arr[k - 1];\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda k: k >= 0)\n@icontract.require(lambda arr, k: 1 <= k <= len(arr))\n@icontract.ensure(lambda arr, k, result: result in arr and result == arr[k - 1])\ndef kthElement(arr: List[int], k: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda k: k >= 0)\n@icontract.require(lambda arr, k: 1 <= k <= len(arr))\n@icontract.ensure(lambda arr, k, result: result in arr and result == arr[k - 1])\ndef kthElement(arr: List[int], k: int) -> int:\n    return arr[k - 1]\n"
+  }
+}

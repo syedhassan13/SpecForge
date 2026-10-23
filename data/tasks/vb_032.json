@@ -1,0 +1,143 @@
+{
+  "task_id": "vb_032",
+  "verina_id": "verina_basic_32",
+  "upstream": "dafny-synthesis/task_id_625",
+  "entry_point": "swapFirstAndLast",
+  "description": "Given a non-empty list of integers a, return a new list of the same length in which the first and the last element of a are exchanged and every other element stays at its original position. For a list with a single element the result equals the input.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": [
+        5,
+        2,
+        3,
+        4,
+        1
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          5,
+          4,
+          3,
+          2,
+          1
+        ],
+        [
+          2,
+          3,
+          4,
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10
+        ]
+      },
+      "expected": [
+        10
+      ],
+      "unexpected": [
+        [
+          0
+        ],
+        [
+          5
+        ],
+        [
+          11
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          2
+        ]
+      },
+      "expected": [
+        2,
+        1
+      ],
+      "unexpected": [
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": [
+        3,
+        2,
+        1
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          3,
+          1,
+          2
+        ],
+        [
+          2,
+          1,
+          3
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method swapFirstAndLast(a: seq<int>) returns (result: seq<int>)\n  requires |a| > 0\n  ensures |result| == |a|\n  ensures result[0] == a[|a| - 1]\n  ensures result[|result| - 1] == a[0]\n  ensures forall i :: 0 <= i < |result| - 2 ==> result[i + 1] == a[i + 1]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method swapFirstAndLast(a: seq<int>) returns (result: seq<int>)\n  requires |a| > 0\n  ensures |result| == |a|\n  ensures result[0] == a[|a| - 1]\n  ensures result[|result| - 1] == a[0]\n  ensures forall i :: 0 <= i < |result| - 2 ==> result[i + 1] == a[i + 1]\n{\n  if |a| == 1 {\n    result := a;\n  } else {\n    result := [a[|a| - 1]] + a[1..|a| - 1] + [a[0]];\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: len(a) > 0)\n@icontract.ensure(lambda a, result: len(result) == len(a))\n@icontract.ensure(lambda a, result: result[0] == a[len(a) - 1])\n@icontract.ensure(lambda a, result: result[len(result) - 1] == a[0])\n@icontract.ensure(lambda a, result: all(result[i + 1] == a[i + 1] for i in range(len(result) - 2)))\ndef swapFirstAndLast(a: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: len(a) > 0)\n@icontract.ensure(lambda a, result: len(result) == len(a))\n@icontract.ensure(lambda a, result: result[0] == a[len(a) - 1])\n@icontract.ensure(lambda a, result: result[len(result) - 1] == a[0])\n@icontract.ensure(lambda a, result: all(result[i + 1] == a[i + 1] for i in range(len(result) - 2)))\ndef swapFirstAndLast(a: List[int]) -> List[int]:\n    if len(a) == 1:\n        return [a[0]]\n    return [a[len(a) - 1]] + a[1:len(a) - 1] + [a[0]]\n"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "task_id": "vb_028",
+  "verina_id": "verina_basic_28",
+  "upstream": "dafny-synthesis/task_id_605",
+  "entry_point": "isPrime",
+  "description": "Given an integer n with n >= 2, determine whether n is prime. Return true if no integer k with 2 <= k < n divides n, and false if some integer k with 2 <= k < n divides n.",
+  "params": [
+    {
+      "name": "n",
+      "type": "nat"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "n": 2
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 3
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 4
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "n": 5
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 9
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "n": 11
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 12
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "n": 13
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "// NoDivisorFrom(n, k) holds when no integer d with k <= d < n divides n\npredicate NoDivisorFrom(n: nat, k: nat)\n  requires k >= 2\n  decreases n - k\n{\n  k >= n || (n % k != 0 && NoDivisorFrom(n, k + 1))\n}\n\nmethod isPrime(n: nat) returns (result: bool)\n  requires n >= 2\n  ensures result <==> NoDivisorFrom(n, 2)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "// NoDivisorFrom(n, k) holds when no integer d with k <= d < n divides n\npredicate NoDivisorFrom(n: nat, k: nat)\n  requires k >= 2\n  decreases n - k\n{\n  k >= n || (n % k != 0 && NoDivisorFrom(n, k + 1))\n}\n\nmethod isPrime(n: nat) returns (result: bool)\n  requires n >= 2\n  ensures result <==> NoDivisorFrom(n, 2)\n{\n  var i := 2;\n  while i < n\n    invariant 2 <= i <= n\n    invariant NoDivisorFrom(n, 2) <==> NoDivisorFrom(n, i)\n  {\n    if n % i == 0 {\n      return false;\n    }\n    i := i + 1;\n  }\n  return true;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.require(lambda n: n >= 0)\n@icontract.require(lambda n: n >= 2)\n@icontract.ensure(lambda n, result: (not result) or all(n % k != 0 for k in range(2, n)))\n@icontract.ensure(lambda n, result: result or any(n % k == 0 for k in range(2, n)))\ndef isPrime(n: int) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.require(lambda n: n >= 0)\n@icontract.require(lambda n: n >= 2)\n@icontract.ensure(lambda n, result: (not result) or all(n % k != 0 for k in range(2, n)))\n@icontract.ensure(lambda n, result: result or any(n % k == 0 for k in range(2, n)))\ndef isPrime(n: int) -> bool:\n    k = 2\n    while k < n:\n        if n % k == 0:\n            return False\n        k += 1\n    return True\n"
+  },
+  "notes": "The Dafny spec states VERINA's check over the range 2..n-1 with the recursive predicate NoDivisorFrom(n, 2) instead of a forall/exists pair: it means the same thing, and unlike the existential form Dafny can decide it on concrete inputs (the probes for non-prime n need a witness divisor otherwise)."
+}

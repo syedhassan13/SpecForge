@@ -1,0 +1,160 @@
+{
+  "task_id": "vb_013",
+  "verina_id": "verina_basic_13",
+  "upstream": "dafny-synthesis/task_id_447",
+  "entry_point": "cubeElements",
+  "description": "Given a list of integers a, return a new list of the same length in which every element is the cube (x * x * x) of the element at the same position in a. The input list may be empty.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "expected": [
+        1,
+        8,
+        27,
+        64
+      ],
+      "unexpected": [
+        [
+          1,
+          4,
+          9,
+          16
+        ],
+        [
+          1,
+          8,
+          27,
+          63
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          0,
+          -1,
+          -2,
+          3
+        ]
+      },
+      "expected": [
+        0,
+        -1,
+        -8,
+        27
+      ],
+      "unexpected": [
+        [
+          0,
+          1,
+          8,
+          -27
+        ],
+        [
+          0,
+          -1,
+          -8,
+          26
+        ],
+        [
+          1,
+          -1,
+          -8,
+          27
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": []
+      },
+      "expected": [],
+      "unexpected": [
+        [
+          1
+        ],
+        [
+          -1
+        ],
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          5
+        ]
+      },
+      "expected": [
+        125
+      ],
+      "unexpected": [
+        [
+          5
+        ],
+        [
+          25
+        ],
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -3,
+          -3
+        ]
+      },
+      "expected": [
+        -27,
+        -27
+      ],
+      "unexpected": [
+        [
+          27,
+          27
+        ],
+        [
+          -9,
+          -9
+        ],
+        [
+          -27,
+          27
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method cubeElements(a: seq<int>) returns (result: seq<int>)\n  ensures |result| == |a|\n  ensures forall i :: 0 <= i < |a| ==> result[i] == a[i] * a[i] * a[i]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method cubeElements(a: seq<int>) returns (result: seq<int>)\n  ensures |result| == |a|\n  ensures forall i :: 0 <= i < |a| ==> result[i] == a[i] * a[i] * a[i]\n{\n  result := [];\n  var i := 0;\n  while i < |a|\n    invariant 0 <= i <= |a|\n    invariant |result| == i\n    invariant forall k :: 0 <= k < i ==> result[k] == a[k] * a[k] * a[k]\n  {\n    result := result + [a[i] * a[i] * a[i]];\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda a, result: len(result) == len(a))\n@icontract.ensure(lambda a, result: len(result) == len(a) and all(result[i] == a[i] * a[i] * a[i] for i in range(len(a))))\ndef cubeElements(a: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda a, result: len(result) == len(a))\n@icontract.ensure(lambda a, result: len(result) == len(a) and all(result[i] == a[i] * a[i] * a[i] for i in range(len(a))))\ndef cubeElements(a: List[int]) -> List[int]:\n    result = []\n    for x in a:\n        result.append(x * x * x)\n    return result\n"
+  }
+}
