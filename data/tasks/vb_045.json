@@ -1,0 +1,72 @@
+{
+  "task_id": "vb_045",
+  "verina_id": "verina_basic_45",
+  "upstream": "dafny-synthesis/task_id_784",
+  "entry_point": "findProduct",
+  "description": "Given a list of integers lst with at least two elements that contains at least one even number and at least one odd number, return the product of the first even element and the first odd element of the list, where first means the one with the smallest index. An integer is even when it is divisible by 2 and odd otherwise (this also applies to negative numbers).",
+  "params": [
+    {
+      "name": "lst",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "lst": [
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": 6,
+      "unexpected": [
+        8,
+        0,
+        10
+      ]
+    },
+    {
+      "input": {
+        "lst": [
+          2,
+          4,
+          3,
+          6
+        ]
+      },
+      "expected": 6,
+      "unexpected": [
+        8,
+        0,
+        24
+      ]
+    },
+    {
+      "input": {
+        "lst": [
+          1,
+          2,
+          5,
+          4
+        ]
+      },
+      "expected": 2,
+      "unexpected": [
+        5,
+        0,
+        10
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "predicate IsEven(n: int)\n{\n  n % 2 == 0\n}\n\npredicate IsOdd(n: int)\n{\n  n % 2 != 0\n}\n\nfunction FirstEvenIndex(lst: seq<int>, start: nat): (r: nat)\n  requires start <= |lst|\n  ensures start <= r <= |lst|\n  ensures r < |lst| ==> IsEven(lst[r])\n  ensures forall k :: start <= k < r ==> !IsEven(lst[k])\n  decreases |lst| - start\n{\n  if start == |lst| then start else if IsEven(lst[start]) then start else FirstEvenIndex(lst, start + 1)\n}\n\nfunction FirstOddIndex(lst: seq<int>, start: nat): (r: nat)\n  requires start <= |lst|\n  ensures start <= r <= |lst|\n  ensures r < |lst| ==> IsOdd(lst[r])\n  ensures forall k :: start <= k < r ==> !IsOdd(lst[k])\n  decreases |lst| - start\n{\n  if start == |lst| then start else if IsOdd(lst[start]) then start else FirstOddIndex(lst, start + 1)\n}\n\nmethod findProduct(lst: seq<int>) returns (result: int)\n  requires |lst| > 1\n  requires exists x :: x in lst && IsEven(x)\n  requires exists x :: x in lst && IsOdd(x)\n  ensures result == lst[FirstEvenIndex(lst, 0)] * lst[FirstOddIndex(lst, 0)]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "predicate IsEven(n: int)\n{\n  n % 2 == 0\n}\n\npredicate IsOdd(n: int)\n{\n  n % 2 != 0\n}\n\nfunction FirstEvenIndex(lst: seq<int>, start: nat): (r: nat)\n  requires start <= |lst|\n  ensures start <= r <= |lst|\n  ensures r < |lst| ==> IsEven(lst[r])\n  ensures forall k :: start <= k < r ==> !IsEven(lst[k])\n  decreases |lst| - start\n{\n  if start == |lst| then start else if IsEven(lst[start]) then start else FirstEvenIndex(lst, start + 1)\n}\n\nfunction FirstOddIndex(lst: seq<int>, start: nat): (r: nat)\n  requires start <= |lst|\n  ensures start <= r <= |lst|\n  ensures r < |lst| ==> IsOdd(lst[r])\n  ensures forall k :: start <= k < r ==> !IsOdd(lst[k])\n  decreases |lst| - start\n{\n  if start == |lst| then start else if IsOdd(lst[start]) then start else FirstOddIndex(lst, start + 1)\n}\n\nmethod findProduct(lst: seq<int>) returns (result: int)\n  requires |lst| > 1\n  requires exists x :: x in lst && IsEven(x)\n  requires exists x :: x in lst && IsOdd(x)\n  ensures result == lst[FirstEvenIndex(lst, 0)] * lst[FirstOddIndex(lst, 0)]\n{\n  var ei := 0;\n  while ei < |lst| && !IsEven(lst[ei])\n    invariant 0 <= ei <= |lst|\n    invariant FirstEvenIndex(lst, ei) == FirstEvenIndex(lst, 0)\n  {\n    ei := ei + 1;\n  }\n  var oi := 0;\n  while oi < |lst| && !IsOdd(lst[oi])\n    invariant 0 <= oi <= |lst|\n    invariant FirstOddIndex(lst, oi) == FirstOddIndex(lst, 0)\n  {\n    oi := oi + 1;\n  }\n  result := lst[ei] * lst[oi];\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\ndef is_even(n: int) -> bool:\n    return n % 2 == 0\n\n\ndef is_odd(n: int) -> bool:\n    return n % 2 != 0\n\n\ndef first_even(lst: List[int]) -> int:\n    return next(x for x in lst if is_even(x))\n\n\ndef first_odd(lst: List[int]) -> int:\n    return next(x for x in lst if is_odd(x))\n\n\n@icontract.require(lambda lst: len(lst) > 1)\n@icontract.require(lambda lst: any(is_even(x) for x in lst))\n@icontract.require(lambda lst: any(is_odd(x) for x in lst))\n@icontract.ensure(lambda lst, result: result == first_even(lst) * first_odd(lst))\ndef findProduct(lst: List[int]) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\ndef is_even(n: int) -> bool:\n    return n % 2 == 0\n\n\ndef is_odd(n: int) -> bool:\n    return n % 2 != 0\n\n\ndef first_even(lst: List[int]) -> int:\n    return next(x for x in lst if is_even(x))\n\n\ndef first_odd(lst: List[int]) -> int:\n    return next(x for x in lst if is_odd(x))\n\n\n@icontract.require(lambda lst: len(lst) > 1)\n@icontract.require(lambda lst: any(is_even(x) for x in lst))\n@icontract.require(lambda lst: any(is_odd(x) for x in lst))\n@icontract.ensure(lambda lst, result: result == first_even(lst) * first_odd(lst))\ndef findProduct(lst: List[int]) -> int:\n    even = None\n    odd = None\n    for x in lst:\n        if even is None and x % 2 == 0:\n            even = x\n        if odd is None and x % 2 != 0:\n            odd = x\n    return even * odd\n"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "task_id": "vb_062",
+  "verina_id": "verina_basic_62",
+  "upstream": "clover/Clover_find",
+  "entry_point": "Find",
+  "description": "Given a list of integers a and an integer key, return the index of the first occurrence of key in a, or -1 if key does not occur in a. When the result is not -1 it must be a valid index of a, the element there must equal key, and no earlier element may equal key. The list may be empty.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    },
+    {
+      "name": "key",
+      "type": "int"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "key": 3
+      },
+      "expected": 2,
+      "unexpected": [
+        1,
+        3,
+        0
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          5,
+          7,
+          5,
+          9
+        ],
+        "key": 5
+      },
+      "expected": 0,
+      "unexpected": [
+        2,
+        -1
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          2,
+          4,
+          6,
+          8
+        ],
+        "key": 5
+      },
+      "expected": -1,
+      "unexpected": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "input": {
+        "a": [],
+        "key": 10
+      },
+      "expected": -1,
+      "unexpected": [
+        0,
+        1,
+        10
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          0,
+          -3,
+          -1,
+          -3
+        ],
+        "key": -3
+      },
+      "expected": 1,
+      "unexpected": [
+        0,
+        2,
+        3
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method Find(a: seq<int>, key: int) returns (result: int)\n  ensures result == -1 || (0 <= result < |a|)\n  ensures result != -1 ==> a[result] == key && forall i :: 0 <= i < result ==> a[i] != key\n  ensures result == -1 ==> forall i :: 0 <= i < |a| ==> a[i] != key\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method Find(a: seq<int>, key: int) returns (result: int)\n  ensures result == -1 || (0 <= result < |a|)\n  ensures result != -1 ==> a[result] == key && forall i :: 0 <= i < result ==> a[i] != key\n  ensures result == -1 ==> forall i :: 0 <= i < |a| ==> a[i] != key\n{\n  var index := 0;\n  while index < |a|\n    invariant 0 <= index <= |a|\n    invariant forall i :: 0 <= i < index ==> a[i] != key\n  {\n    if a[index] == key {\n      result := index;\n      return;\n    }\n    index := index + 1;\n  }\n  result := -1;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda a, result: result == -1 or 0 <= result < len(a))\n@icontract.ensure(lambda a, key, result: result == -1 or (\n    0 <= result < len(a) and a[result] == key and all(a[i] != key for i in range(result))))\n@icontract.ensure(lambda a, key, result: result != -1 or all(a[i] != key for i in range(len(a))))\ndef Find(a: List[int], key: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda a, result: result == -1 or 0 <= result < len(a))\n@icontract.ensure(lambda a, key, result: result == -1 or (\n    0 <= result < len(a) and a[result] == key and all(a[i] != key for i in range(result))))\n@icontract.ensure(lambda a, key, result: result != -1 or all(a[i] != key for i in range(len(a))))\ndef Find(a: List[int], key: int) -> int:\n    index = 0\n    while index < len(a):\n        if a[index] == key:\n            return index\n        index += 1\n    return -1\n"
+  }
+}

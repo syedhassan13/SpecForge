@@ -1,0 +1,109 @@
+{
+  "task_id": "vb_057",
+  "verina_id": "verina_basic_57",
+  "upstream": "clover/Clover_count_lessthan",
+  "entry_point": "CountLessThan",
+  "description": "Given a list of integers numbers (possibly empty) and an integer threshold, return how many elements of the list are strictly less than threshold. Every occurrence counts, so repeated values are counted once per position.",
+  "params": [
+    {
+      "name": "numbers",
+      "type": "list<int>"
+    },
+    {
+      "name": "threshold",
+      "type": "int"
+    }
+  ],
+  "returns": "nat",
+  "tests": [
+    {
+      "input": {
+        "numbers": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "threshold": 3
+      },
+      "expected": 2,
+      "unexpected": [
+        3,
+        1,
+        0
+      ]
+    },
+    {
+      "input": {
+        "numbers": [],
+        "threshold": 10
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "input": {
+        "numbers": [
+          -1,
+          0,
+          1
+        ],
+        "threshold": 0
+      },
+      "expected": 1,
+      "unexpected": [
+        0,
+        2,
+        3
+      ]
+    },
+    {
+      "input": {
+        "numbers": [
+          5,
+          6,
+          7,
+          2,
+          1
+        ],
+        "threshold": 5
+      },
+      "expected": 2,
+      "unexpected": [
+        3,
+        4,
+        1
+      ]
+    },
+    {
+      "input": {
+        "numbers": [
+          3,
+          3,
+          3,
+          3
+        ],
+        "threshold": 3
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        2,
+        3
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "// number of elements among the first n elements of numbers that are < threshold\nfunction {:fuel 10} CountLess(numbers: seq<int>, threshold: int, n: nat): nat\n  requires n <= |numbers|\n{\n  if n == 0 then 0\n  else CountLess(numbers, threshold, n - 1) + (if numbers[n - 1] < threshold then 1 else 0)\n}\n\nmethod CountLessThan(numbers: seq<int>, threshold: int) returns (result: nat)\n  ensures result == CountLess(numbers, threshold, |numbers|)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "// number of elements among the first n elements of numbers that are < threshold\nfunction {:fuel 10} CountLess(numbers: seq<int>, threshold: int, n: nat): nat\n  requires n <= |numbers|\n{\n  if n == 0 then 0\n  else CountLess(numbers, threshold, n - 1) + (if numbers[n - 1] < threshold then 1 else 0)\n}\n\nmethod CountLessThan(numbers: seq<int>, threshold: int) returns (result: nat)\n  ensures result == CountLess(numbers, threshold, |numbers|)\n{\n  result := 0;\n  var i := 0;\n  while i < |numbers|\n    invariant 0 <= i <= |numbers|\n    invariant result == CountLess(numbers, threshold, i)\n  {\n    if numbers[i] < threshold {\n      result := result + 1;\n    }\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\ndef count_less(numbers: List[int], threshold: int) -> int:\n    \"\"\"Number of elements of numbers that are < threshold.\"\"\"\n    count = 0\n    for n in numbers:\n        if n < threshold:\n            count += 1\n    return count\n\n\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda numbers, threshold, result: result == count_less(numbers, threshold))\ndef CountLessThan(numbers: List[int], threshold: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\ndef count_less(numbers: List[int], threshold: int) -> int:\n    \"\"\"Number of elements of numbers that are < threshold.\"\"\"\n    count = 0\n    for n in numbers:\n        if n < threshold:\n            count += 1\n    return count\n\n\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda numbers, threshold, result: result == count_less(numbers, threshold))\ndef CountLessThan(numbers: List[int], threshold: int) -> int:\n    result = 0\n    for x in numbers:\n        if x < threshold:\n            result += 1\n    return result\n"
+  }
+}

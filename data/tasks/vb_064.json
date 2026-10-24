@@ -1,0 +1,316 @@
+{
+  "task_id": "vb_064",
+  "verina_id": "verina_basic_64",
+  "upstream": "clover/Clover_insert",
+  "entry_point": "insert",
+  "description": "Insert characters into a character list. Only the first l characters of oline and the first p characters of nl are used. Return the list obtained by inserting the first p characters of nl into the first l characters of oline at position atPos (0-based). The result has length l + p: its first atPos characters are oline[0..atPos-1], the next p characters are nl[0..p-1], and the last l - atPos characters are oline[atPos..l-1]. The inputs satisfy l <= length of oline, p <= length of nl and atPos <= l, where l, p and atPos are non-negative integers.",
+  "params": [
+    {
+      "name": "oline",
+      "type": "list<char>"
+    },
+    {
+      "name": "l",
+      "type": "nat"
+    },
+    {
+      "name": "nl",
+      "type": "list<char>"
+    },
+    {
+      "name": "p",
+      "type": "nat"
+    },
+    {
+      "name": "atPos",
+      "type": "nat"
+    }
+  ],
+  "returns": "list<char>",
+  "tests": [
+    {
+      "input": {
+        "oline": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e"
+        ],
+        "l": 5,
+        "nl": [
+          "X",
+          "Y"
+        ],
+        "p": 2,
+        "atPos": 2
+      },
+      "expected": [
+        "a",
+        "b",
+        "X",
+        "Y",
+        "c",
+        "d",
+        "e"
+      ],
+      "unexpected": [
+        [
+          "a",
+          "b",
+          "X",
+          "Y",
+          "c",
+          "d"
+        ],
+        [
+          "a",
+          "b",
+          "X",
+          "Y",
+          "c",
+          "d",
+          "f"
+        ],
+        [
+          "a",
+          "X",
+          "b",
+          "Y",
+          "c",
+          "d",
+          "e"
+        ]
+      ]
+    },
+    {
+      "input": {
+        "oline": [
+          "H",
+          "e",
+          "l",
+          "l",
+          "o"
+        ],
+        "l": 5,
+        "nl": [
+          "W",
+          "o",
+          "r",
+          "l",
+          "d"
+        ],
+        "p": 5,
+        "atPos": 0
+      },
+      "expected": [
+        "W",
+        "o",
+        "r",
+        "l",
+        "d",
+        "H",
+        "e",
+        "l",
+        "l",
+        "o"
+      ],
+      "unexpected": [
+        [
+          "H",
+          "e",
+          "l",
+          "l",
+          "o",
+          "W",
+          "o",
+          "r",
+          "l",
+          "d"
+        ],
+        [
+          "W",
+          "o",
+          "r",
+          "l",
+          "d",
+          "H",
+          "e",
+          "l",
+          "l",
+          "o",
+          "!"
+        ],
+        [
+          "W",
+          "o",
+          "r",
+          "l",
+          "d",
+          "W",
+          "o",
+          "r",
+          "l",
+          "d"
+        ]
+      ]
+    },
+    {
+      "input": {
+        "oline": [
+          "L",
+          "e",
+          "a",
+          "n"
+        ],
+        "l": 4,
+        "nl": [
+          "4"
+        ],
+        "p": 1,
+        "atPos": 4
+      },
+      "expected": [
+        "L",
+        "e",
+        "a",
+        "n",
+        "4"
+      ],
+      "unexpected": [
+        [
+          "L",
+          "e",
+          "a",
+          "n"
+        ],
+        [
+          "L",
+          "e",
+          "a",
+          "n",
+          " "
+        ],
+        [
+          "4",
+          "L",
+          "e",
+          "a",
+          "n"
+        ]
+      ]
+    },
+    {
+      "input": {
+        "oline": [
+          "T",
+          "e",
+          "s",
+          "t"
+        ],
+        "l": 4,
+        "nl": [],
+        "p": 0,
+        "atPos": 2
+      },
+      "expected": [
+        "T",
+        "e",
+        "s",
+        "t"
+      ],
+      "unexpected": [
+        [
+          "T",
+          "e",
+          "s"
+        ],
+        [
+          "T",
+          "s",
+          "t",
+          "e"
+        ],
+        [
+          "t",
+          "e",
+          "s",
+          "T"
+        ]
+      ]
+    },
+    {
+      "input": {
+        "oline": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6"
+        ],
+        "l": 5,
+        "nl": [
+          "a",
+          "b",
+          "c"
+        ],
+        "p": 3,
+        "atPos": 3
+      },
+      "expected": [
+        "1",
+        "2",
+        "3",
+        "a",
+        "b",
+        "c",
+        "4",
+        "5"
+      ],
+      "unexpected": [
+        [
+          "1",
+          "2",
+          "3",
+          "a",
+          "b",
+          "c",
+          "4",
+          "5",
+          "6"
+        ],
+        [
+          "1",
+          "2",
+          "3",
+          "4",
+          "a",
+          "b",
+          "c",
+          "5",
+          "6"
+        ],
+        [
+          "1",
+          "2",
+          "3",
+          "a",
+          "b",
+          "4",
+          "c",
+          "5",
+          "6"
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method insert(oline: seq<char>, l: nat, nl: seq<char>, p: nat, atPos: nat) returns (result: seq<char>)\n  requires l <= |oline|\n  requires p <= |nl|\n  requires atPos <= l\n  ensures |result| == l + p\n  ensures forall i :: 0 <= i < p ==> result[atPos + i] == nl[i]\n  ensures forall i :: 0 <= i < atPos ==> result[i] == oline[i]\n  ensures forall i :: 0 <= i < l - atPos ==> result[atPos + p + i] == oline[atPos + i]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method insert(oline: seq<char>, l: nat, nl: seq<char>, p: nat, atPos: nat) returns (result: seq<char>)\n  requires l <= |oline|\n  requires p <= |nl|\n  requires atPos <= l\n  ensures |result| == l + p\n  ensures forall i :: 0 <= i < p ==> result[atPos + i] == nl[i]\n  ensures forall i :: 0 <= i < atPos ==> result[i] == oline[i]\n  ensures forall i :: 0 <= i < l - atPos ==> result[atPos + p + i] == oline[atPos + i]\n{\n  result := oline[..atPos] + nl[..p] + oline[atPos..l];\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda l: l >= 0)\n@icontract.require(lambda p: p >= 0)\n@icontract.require(lambda atPos: atPos >= 0)\n@icontract.require(lambda oline, l: l <= len(oline))\n@icontract.require(lambda nl, p: p <= len(nl))\n@icontract.require(lambda l, atPos: atPos <= l)\n@icontract.ensure(lambda l, p, result: len(result) == l + p)\n@icontract.ensure(lambda nl, p, atPos, result: all(result[atPos + i] == nl[i] for i in range(p)))\n@icontract.ensure(lambda oline, atPos, result: all(result[i] == oline[i] for i in range(atPos)))\n@icontract.ensure(lambda oline, l, p, atPos, result: all(\n    result[atPos + p + i] == oline[atPos + i] for i in range(l - atPos)))\ndef insert(oline: List[str], l: int, nl: List[str], p: int, atPos: int) -> List[str]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda l: l >= 0)\n@icontract.require(lambda p: p >= 0)\n@icontract.require(lambda atPos: atPos >= 0)\n@icontract.require(lambda oline, l: l <= len(oline))\n@icontract.require(lambda nl, p: p <= len(nl))\n@icontract.require(lambda l, atPos: atPos <= l)\n@icontract.ensure(lambda l, p, result: len(result) == l + p)\n@icontract.ensure(lambda nl, p, atPos, result: all(result[atPos + i] == nl[i] for i in range(p)))\n@icontract.ensure(lambda oline, atPos, result: all(result[i] == oline[i] for i in range(atPos)))\n@icontract.ensure(lambda oline, l, p, atPos, result: all(\n    result[atPos + p + i] == oline[atPos + i] for i in range(l - atPos)))\ndef insert(oline: List[str], l: int, nl: List[str], p: int, atPos: int) -> List[str]:\n    return oline[:atPos] + nl[:p] + oline[atPos:l]\n"
+  }
+}

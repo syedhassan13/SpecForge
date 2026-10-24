@@ -1,0 +1,211 @@
+{
+  "task_id": "vb_060",
+  "verina_id": "verina_basic_60",
+  "upstream": "clover/Clover_even_list",
+  "entry_point": "FindEvenNumbers",
+  "description": "Given a list of integers arr, return the list of its even elements in the order in which they appear in arr, keeping repeated values. Every element of the result must be even, the result must be a subsequence of arr (order preserved), and its length must equal the number of even elements in arr, so every even element of arr appears in the result.",
+  "params": [
+    {
+      "name": "arr",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "expected": [
+        2,
+        4,
+        6
+      ],
+      "unexpected": [
+        [
+          2,
+          4,
+          5
+        ],
+        [
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          2,
+          3,
+          6
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          0,
+          -2,
+          3,
+          -4,
+          7
+        ]
+      },
+      "expected": [
+        0,
+        -2,
+        -4
+      ],
+      "unexpected": [
+        [
+          0,
+          3,
+          -4
+        ],
+        [
+          0,
+          -2,
+          3
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          3,
+          5,
+          7
+        ]
+      },
+      "expected": [],
+      "unexpected": [
+        [
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          2,
+          4,
+          8,
+          10
+        ]
+      },
+      "expected": [
+        2,
+        4,
+        8,
+        10
+      ],
+      "unexpected": [
+        [
+          2,
+          4,
+          8,
+          9
+        ],
+        [
+          2,
+          4,
+          8,
+          10,
+          12
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": []
+      },
+      "expected": [],
+      "unexpected": [
+        [
+          0
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          2,
+          4,
+          2,
+          6
+        ]
+      },
+      "expected": [
+        2,
+        4,
+        2,
+        6
+      ],
+      "unexpected": [
+        [
+          2,
+          2,
+          4,
+          6
+        ],
+        [
+          4,
+          2,
+          6
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          8,
+          2,
+          5
+        ]
+      },
+      "expected": [
+        2,
+        8,
+        2
+      ],
+      "unexpected": [
+        [
+          2,
+          2,
+          8
+        ],
+        [
+          8,
+          2,
+          2
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "// EvensOf(arr, n): the even elements among the first n elements of arr, in order\nfunction {:fuel 10} EvensOf(arr: seq<int>, n: nat): seq<int>\n  requires n <= |arr|\n{\n  if n == 0 then []\n  else EvensOf(arr, n - 1) + (if arr[n - 1] % 2 == 0 then [arr[n - 1]] else [])\n}\n\nmethod FindEvenNumbers(arr: seq<int>) returns (result: seq<int>)\n  ensures result == EvensOf(arr, |arr|)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "// EvensOf(arr, n): the even elements among the first n elements of arr, in order\nfunction {:fuel 10} EvensOf(arr: seq<int>, n: nat): seq<int>\n  requires n <= |arr|\n{\n  if n == 0 then []\n  else EvensOf(arr, n - 1) + (if arr[n - 1] % 2 == 0 then [arr[n - 1]] else [])\n}\n\nmethod FindEvenNumbers(arr: seq<int>) returns (result: seq<int>)\n  ensures result == EvensOf(arr, |arr|)\n{\n  result := [];\n  var i := 0;\n  while i < |arr|\n    invariant 0 <= i <= |arr|\n    invariant result == EvensOf(arr, i)\n  {\n    if arr[i] % 2 == 0 {\n      result := result + [arr[i]];\n    }\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda arr, result: result == [x for x in arr if x % 2 == 0])\ndef FindEvenNumbers(arr: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda arr, result: result == [x for x in arr if x % 2 == 0])\ndef FindEvenNumbers(arr: List[int]) -> List[int]:\n    out = []\n    for x in arr:\n        if x % 2 == 0:\n            out.append(x)\n    return out\n"
+  },
+  "notes": "VERINA's postcondition is: every element of result is even, result is a sublist (subsequence) of arr, and |result| equals the number of even elements of arr. These three conditions hold exactly when result is the in-order list of the even elements of arr, so both specs state result == filter(even, arr) (Dafny through the recursive EvensOf with a {:fuel} hint, so the verifier can evaluate it on the test lists)."
+}

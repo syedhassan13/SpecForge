@@ -1,0 +1,102 @@
+{
+  "task_id": "vb_042",
+  "verina_id": "verina_basic_42",
+  "upstream": "dafny-synthesis/task_id_764",
+  "entry_point": "countDigits",
+  "description": "Given a string s, return the number of characters in s that are decimal digits, i.e. characters between '0' and '9' inclusive.",
+  "params": [
+    {
+      "name": "s",
+      "type": "string"
+    }
+  ],
+  "returns": "nat",
+  "tests": [
+    {
+      "input": {
+        "s": "123abc456"
+      },
+      "expected": 6,
+      "unexpected": [
+        5,
+        7,
+        0
+      ]
+    },
+    {
+      "input": {
+        "s": "no digits here!"
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "input": {
+        "s": "1234567890"
+      },
+      "expected": 10,
+      "unexpected": [
+        9,
+        11,
+        0
+      ]
+    },
+    {
+      "input": {
+        "s": ""
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        2,
+        10
+      ]
+    },
+    {
+      "input": {
+        "s": "a1b2c3"
+      },
+      "expected": 3,
+      "unexpected": [
+        2,
+        4,
+        5
+      ]
+    },
+    {
+      "input": {
+        "s": "0"
+      },
+      "expected": 1,
+      "unexpected": [
+        0,
+        2,
+        10
+      ]
+    },
+    {
+      "input": {
+        "s": "abc"
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        8,
+        9
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "// number of characters of s in '0'..'9', counted as the multiplicities of the ten digits\nfunction DigitCount(s: string): nat\n{\n  multiset(s)['0'] + multiset(s)['1'] + multiset(s)['2'] + multiset(s)['3'] + multiset(s)['4'] +\n  multiset(s)['5'] + multiset(s)['6'] + multiset(s)['7'] + multiset(s)['8'] + multiset(s)['9']\n}\n\nmethod countDigits(s: string) returns (result: nat)\n  ensures result == DigitCount(s)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "// number of characters of s in '0'..'9', counted as the multiplicities of the ten digits\nfunction DigitCount(s: string): nat\n{\n  multiset(s)['0'] + multiset(s)['1'] + multiset(s)['2'] + multiset(s)['3'] + multiset(s)['4'] +\n  multiset(s)['5'] + multiset(s)['6'] + multiset(s)['7'] + multiset(s)['8'] + multiset(s)['9']\n}\n\nmethod countDigits(s: string) returns (result: nat)\n  ensures result == DigitCount(s)\n{\n  result := 0;\n  var i := 0;\n  while i < |s|\n    invariant 0 <= i <= |s|\n    invariant result == DigitCount(s[..i])\n  {\n    assert s[..i + 1] == s[..i] + [s[i]];\n    if '0' <= s[i] <= '9' {\n      result := result + 1;\n    }\n    i := i + 1;\n  }\n  assert s[..i] == s;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda s, result: result == len([c for c in s if '0' <= c <= '9']))\ndef countDigits(s: str) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda s, result: result == len([c for c in s if '0' <= c <= '9']))\ndef countDigits(s: str) -> int:\n    count = 0\n    for c in s:\n        if '0' <= c <= '9':\n            count += 1\n    return count\n"
+  },
+  "notes": "VERINA counts the digits as the length of the filtered character list. The Dafny spec counts them as the sum of the multiplicities of '0'..'9' in multiset(s), which is the same number and which the verifier can evaluate on the concrete test strings."
+}

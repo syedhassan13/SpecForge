@@ -1,0 +1,139 @@
+{
+  "task_id": "vb_059",
+  "verina_id": "verina_basic_59",
+  "upstream": "clover/Clover_double_quadruple",
+  "entry_point": "DoubleQuadruple",
+  "description": "Given an integer x, return a pair whose first component is twice x (2 * x) and whose second component is four times x, i.e. twice the first component.",
+  "params": [
+    {
+      "name": "x",
+      "type": "int"
+    }
+  ],
+  "returns": "tuple<int, int>",
+  "tests": [
+    {
+      "input": {
+        "x": 0
+      },
+      "expected": [
+        0,
+        0
+      ],
+      "unexpected": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          -1,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "x": 1
+      },
+      "expected": [
+        2,
+        4
+      ],
+      "unexpected": [
+        [
+          2,
+          2
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          3,
+          4
+        ]
+      ]
+    },
+    {
+      "input": {
+        "x": -1
+      },
+      "expected": [
+        -2,
+        -4
+      ],
+      "unexpected": [
+        [
+          -2,
+          -2
+        ],
+        [
+          -1,
+          -4
+        ],
+        [
+          -3,
+          -4
+        ]
+      ]
+    },
+    {
+      "input": {
+        "x": 10
+      },
+      "expected": [
+        20,
+        40
+      ],
+      "unexpected": [
+        [
+          20,
+          20
+        ],
+        [
+          10,
+          40
+        ],
+        [
+          20,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "x": -5
+      },
+      "expected": [
+        -10,
+        -20
+      ],
+      "unexpected": [
+        [
+          -10,
+          -10
+        ],
+        [
+          -5,
+          -20
+        ],
+        [
+          -15,
+          -20
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method DoubleQuadruple(x: int) returns (result: (int, int))\n  ensures result.0 == 2 * x\n  ensures result.1 == 2 * result.0\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method DoubleQuadruple(x: int) returns (result: (int, int))\n  ensures result.0 == 2 * x\n  ensures result.1 == 2 * result.0\n{\n  var a := 2 * x;\n  result := (a, 2 * a);\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import Tuple\n\n\n@icontract.ensure(lambda x, result: result[0] == 2 * x)\n@icontract.ensure(lambda result: result[1] == 2 * result[0])\ndef DoubleQuadruple(x: int) -> Tuple[int, int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import Tuple\n\n\n@icontract.ensure(lambda x, result: result[0] == 2 * x)\n@icontract.ensure(lambda result: result[1] == 2 * result[0])\ndef DoubleQuadruple(x: int) -> Tuple[int, int]:\n    a = 2 * x\n    return (a, 2 * a)\n"
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "task_id": "vb_069",
+  "verina_id": "verina_basic_69",
+  "upstream": "clover/Clover_linear_search2",
+  "entry_point": "LinearSearch",
+  "description": "Given a list of integers a and an integer e that is guaranteed to occur in a, return the index of the first occurrence of e: a valid index i with a[i] = e such that no element before position i equals e.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    },
+    {
+      "name": "e",
+      "type": "int"
+    }
+  ],
+  "returns": "nat",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "e": 3
+      },
+      "expected": 2,
+      "unexpected": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10,
+          20,
+          30,
+          40,
+          50
+        ],
+        "e": 10
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          5,
+          4,
+          3,
+          2,
+          1
+        ],
+        "e": 1
+      },
+      "expected": 4,
+      "unexpected": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -1,
+          0,
+          1,
+          2
+        ],
+        "e": -1
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          7,
+          8,
+          7,
+          9,
+          7
+        ],
+        "e": 7
+      },
+      "expected": 0,
+      "unexpected": [
+        2,
+        3,
+        4
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method LinearSearch(a: seq<int>, e: int) returns (result: nat)\n  requires exists i :: 0 <= i < |a| && a[i] == e\n  ensures result < |a|\n  ensures a[result] == e\n  ensures forall k :: 0 <= k < result ==> a[k] != e\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method LinearSearch(a: seq<int>, e: int) returns (result: nat)\n  requires exists i :: 0 <= i < |a| && a[i] == e\n  ensures result < |a|\n  ensures a[result] == e\n  ensures forall k :: 0 <= k < result ==> a[k] != e\n{\n  var i := 0;\n  while i < |a| && a[i] != e\n    invariant 0 <= i <= |a|\n    invariant forall k :: 0 <= k < i ==> a[k] != e\n  {\n    i := i + 1;\n  }\n  result := i;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a, e: any(a[i] == e for i in range(len(a))))\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda a, result: result < len(a))\n@icontract.ensure(lambda a, e, result: a[result] == e)\n@icontract.ensure(lambda a, e, result: all(a[k] != e for k in range(result)))\ndef LinearSearch(a: List[int], e: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a, e: any(a[i] == e for i in range(len(a))))\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda a, result: result < len(a))\n@icontract.ensure(lambda a, e, result: a[result] == e)\n@icontract.ensure(lambda a, e, result: all(a[k] != e for k in range(result)))\ndef LinearSearch(a: List[int], e: int) -> int:\n    i = 0\n    while i < len(a) and a[i] != e:\n        i += 1\n    return i\n"
+  }
+}

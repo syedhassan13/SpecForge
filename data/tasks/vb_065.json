@@ -1,0 +1,77 @@
+{
+  "task_id": "vb_065",
+  "verina_id": "verina_basic_65",
+  "upstream": "clover/Clover_integer_square_root",
+  "entry_point": "SquareRoot",
+  "description": "Given a non-negative integer N, return its integer square root: the non-negative integer r such that r * r <= N and N < (r + 1) * (r + 1). For N = 0 the result is 0.",
+  "params": [
+    {
+      "name": "N",
+      "type": "nat"
+    }
+  ],
+  "returns": "nat",
+  "tests": [
+    {
+      "input": {
+        "N": 0
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "N": 1
+      },
+      "expected": 1,
+      "unexpected": [
+        0,
+        2
+      ]
+    },
+    {
+      "input": {
+        "N": 15
+      },
+      "expected": 3,
+      "unexpected": [
+        2,
+        4,
+        5
+      ]
+    },
+    {
+      "input": {
+        "N": 16
+      },
+      "expected": 4,
+      "unexpected": [
+        3,
+        5,
+        6
+      ]
+    },
+    {
+      "input": {
+        "N": 26
+      },
+      "expected": 5,
+      "unexpected": [
+        4,
+        6,
+        7
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method SquareRoot(N: nat) returns (result: nat)\n  ensures result * result <= N\n  ensures N < (result + 1) * (result + 1)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method SquareRoot(N: nat) returns (result: nat)\n  ensures result * result <= N\n  ensures N < (result + 1) * (result + 1)\n{\n  var r: nat := 0;\n  while (r + 1) * (r + 1) <= N\n    invariant r * r <= N\n    decreases N - r\n  {\n    assert r + 1 <= (r + 1) * (r + 1);\n    r := r + 1;\n  }\n  result := r;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.require(lambda N: N >= 0)\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda N, result: result * result <= N)\n@icontract.ensure(lambda N, result: N < (result + 1) * (result + 1))\ndef SquareRoot(N: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.require(lambda N: N >= 0)\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda N, result: result * result <= N)\n@icontract.ensure(lambda N, result: N < (result + 1) * (result + 1))\ndef SquareRoot(N: int) -> int:\n    r = 0\n    while (r + 1) * (r + 1) <= N:\n        r += 1\n    return r\n"
+  }
+}

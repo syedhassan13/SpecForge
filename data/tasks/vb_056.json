@@ -1,0 +1,291 @@
+{
+  "task_id": "vb_056",
+  "verina_id": "verina_basic_56",
+  "upstream": "clover/Clover_copy_part",
+  "entry_point": "copy",
+  "description": "Given a source list src, a start index sStart in src, a destination list dest, a start index dStart in dest and a length len (sStart, dStart and len are non-negative), return a copy of dest in which the len elements starting at index dStart are replaced by the len elements of src starting at index sStart. It is guaranteed that src has at least sStart + len elements and dest has at least dStart + len elements. The result has the same length as dest, and every element before dStart or at index dStart + len or later is unchanged.",
+  "params": [
+    {
+      "name": "src",
+      "type": "list<int>"
+    },
+    {
+      "name": "sStart",
+      "type": "nat"
+    },
+    {
+      "name": "dest",
+      "type": "list<int>"
+    },
+    {
+      "name": "dStart",
+      "type": "nat"
+    },
+    {
+      "name": "len",
+      "type": "nat"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "src": [
+          10,
+          20,
+          30,
+          40,
+          50
+        ],
+        "sStart": 1,
+        "dest": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "dStart": 3,
+        "len": 2
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        20,
+        30,
+        6
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3,
+          10,
+          30,
+          6
+        ],
+        [
+          1,
+          2,
+          3,
+          20,
+          40,
+          6
+        ],
+        [
+          1,
+          2,
+          20,
+          30,
+          6,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "src": [
+          5,
+          6,
+          7,
+          8
+        ],
+        "sStart": 0,
+        "dest": [
+          9,
+          9,
+          9,
+          9,
+          9
+        ],
+        "dStart": 1,
+        "len": 3
+      },
+      "expected": [
+        9,
+        5,
+        6,
+        7,
+        9
+      ],
+      "unexpected": [
+        [
+          9,
+          9,
+          5,
+          7,
+          9
+        ],
+        [
+          9,
+          5,
+          7,
+          6,
+          9
+        ],
+        [
+          9,
+          5,
+          6,
+          9,
+          9
+        ]
+      ]
+    },
+    {
+      "input": {
+        "src": [
+          100,
+          200
+        ],
+        "sStart": 0,
+        "dest": [
+          1,
+          2,
+          3
+        ],
+        "dStart": 1,
+        "len": 0
+      },
+      "expected": [
+        1,
+        2,
+        3
+      ],
+      "unexpected": [
+        [
+          1,
+          0,
+          3
+        ],
+        [
+          0,
+          2,
+          3
+        ],
+        [
+          1,
+          2,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "src": [
+          10,
+          20,
+          30,
+          40,
+          50
+        ],
+        "sStart": 0,
+        "dest": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "dStart": 0,
+        "len": 5
+      },
+      "expected": [
+        10,
+        20,
+        30,
+        40,
+        50
+      ],
+      "unexpected": [
+        [
+          10,
+          20,
+          30,
+          40,
+          60
+        ],
+        [
+          0,
+          20,
+          30,
+          40,
+          50
+        ],
+        [
+          10,
+          20,
+          30,
+          40,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "src": [
+          7,
+          8,
+          9,
+          10
+        ],
+        "sStart": 2,
+        "dest": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "dStart": 4,
+        "len": 2
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        9,
+        10
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3,
+          9,
+          4,
+          10
+        ],
+        [
+          1,
+          2,
+          9,
+          4,
+          3,
+          10
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          10,
+          9
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method copy(src: seq<int>, sStart: nat, dest: seq<int>, dStart: nat, len: nat) returns (result: seq<int>)\n  requires |src| >= sStart + len\n  requires |dest| >= dStart + len\n  ensures |result| == |dest|\n  ensures forall i :: 0 <= i < dStart ==> result[i] == dest[i]\n  ensures forall i :: dStart + len <= i < |result| ==> result[i] == dest[i]\n  ensures forall i :: 0 <= i < len ==> result[dStart + i] == src[sStart + i]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method copy(src: seq<int>, sStart: nat, dest: seq<int>, dStart: nat, len: nat) returns (result: seq<int>)\n  requires |src| >= sStart + len\n  requires |dest| >= dStart + len\n  ensures |result| == |dest|\n  ensures forall i :: 0 <= i < dStart ==> result[i] == dest[i]\n  ensures forall i :: dStart + len <= i < |result| ==> result[i] == dest[i]\n  ensures forall i :: 0 <= i < len ==> result[dStart + i] == src[sStart + i]\n{\n  result := dest[..dStart] + src[sStart..sStart + len] + dest[dStart + len..];\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\ndef size(xs: List[int]) -> int:\n    return len(xs)\n\n\n@icontract.require(lambda sStart: sStart >= 0)\n@icontract.require(lambda dStart: dStart >= 0)\n@icontract.require(lambda len: len >= 0)\n@icontract.require(lambda src, sStart, len: size(src) >= sStart + len)\n@icontract.require(lambda dest, dStart, len: size(dest) >= dStart + len)\n@icontract.ensure(lambda dest, result: size(result) == size(dest))\n@icontract.ensure(lambda dest, dStart, result: all(result[i] == dest[i] for i in range(dStart)))\n@icontract.ensure(lambda dest, dStart, len, result: all(result[i] == dest[i] for i in range(dStart + len, size(result))))\n@icontract.ensure(lambda src, sStart, dStart, len, result: all(result[dStart + i] == src[sStart + i] for i in range(len)))\ndef copy(src: List[int], sStart: int, dest: List[int], dStart: int, len: int) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\ndef size(xs: List[int]) -> int:\n    return len(xs)\n\n\n@icontract.require(lambda sStart: sStart >= 0)\n@icontract.require(lambda dStart: dStart >= 0)\n@icontract.require(lambda len: len >= 0)\n@icontract.require(lambda src, sStart, len: size(src) >= sStart + len)\n@icontract.require(lambda dest, dStart, len: size(dest) >= dStart + len)\n@icontract.ensure(lambda dest, result: size(result) == size(dest))\n@icontract.ensure(lambda dest, dStart, result: all(result[i] == dest[i] for i in range(dStart)))\n@icontract.ensure(lambda dest, dStart, len, result: all(result[i] == dest[i] for i in range(dStart + len, size(result))))\n@icontract.ensure(lambda src, sStart, dStart, len, result: all(result[dStart + i] == src[sStart + i] for i in range(len)))\ndef copy(src: List[int], sStart: int, dest: List[int], dStart: int, len: int) -> List[int]:\n    return dest[:dStart] + src[sStart:sStart + len] + dest[dStart + len:]\n"
+  },
+  "notes": "The parameter name len (kept from VERINA) shadows Python's built-in len inside the function and the contract lambdas, so the Python spec measures list lengths with the helper size()."
+}

@@ -1,0 +1,181 @@
+{
+  "task_id": "vb_072",
+  "verina_id": "verina_basic_72",
+  "upstream": "clover/Clover_array_append",
+  "entry_point": "append",
+  "description": "Given a list of integers a and an integer b, return a new list made of all the elements of a in their original order followed by b as the last element.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    },
+    {
+      "name": "b",
+      "type": "int"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3
+        ],
+        "b": 4
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3,
+          0
+        ],
+        [
+          1,
+          2,
+          4,
+          3
+        ],
+        [
+          4,
+          1,
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [],
+        "b": 0
+      },
+      "expected": [
+        0
+      ],
+      "unexpected": [
+        [
+          1
+        ],
+        [],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          5,
+          6
+        ],
+        "b": -1
+      },
+      "expected": [
+        5,
+        6,
+        -1
+      ],
+      "unexpected": [
+        [
+          5,
+          -1,
+          6
+        ],
+        [
+          5,
+          6,
+          0
+        ],
+        [
+          6,
+          5,
+          -1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          0,
+          0,
+          0
+        ],
+        "b": 1
+      },
+      "expected": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "unexpected": [
+        [
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -2,
+          -3
+        ],
+        "b": -4
+      },
+      "expected": [
+        -2,
+        -3,
+        -4
+      ],
+      "unexpected": [
+        [
+          -2,
+          -4,
+          -3
+        ],
+        [
+          -2,
+          -3,
+          0
+        ],
+        [
+          -3,
+          -2,
+          -4
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method append(a: seq<int>, b: int) returns (result: seq<int>)\n  ensures |result| == |a| + 1\n  ensures forall i :: 0 <= i < |a| ==> result[i] == a[i]\n  ensures result[|a|] == b\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method append(a: seq<int>, b: int) returns (result: seq<int>)\n  ensures |result| == |a| + 1\n  ensures forall i :: 0 <= i < |a| ==> result[i] == a[i]\n  ensures result[|a|] == b\n{\n  result := [];\n  var i := 0;\n  while i < |a|\n    invariant 0 <= i <= |a|\n    invariant result == a[..i]\n  {\n    result := result + [a[i]];\n    i := i + 1;\n  }\n  result := result + [b];\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda a, result: len(result) == len(a) + 1)\n@icontract.ensure(lambda a, result: len(result) == len(a) + 1 and all(result[i] == a[i] for i in range(len(a))))\n@icontract.ensure(lambda a, b, result: len(result) == len(a) + 1 and result[len(a)] == b)\ndef append(a: List[int], b: int) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda a, result: len(result) == len(a) + 1)\n@icontract.ensure(lambda a, result: len(result) == len(a) + 1 and all(result[i] == a[i] for i in range(len(a))))\n@icontract.ensure(lambda a, b, result: len(result) == len(a) + 1 and result[len(a)] == b)\ndef append(a: List[int], b: int) -> List[int]:\n    result = []\n    for x in a:\n        result.append(x)\n    result.append(b)\n    return result\n"
+  }
+}

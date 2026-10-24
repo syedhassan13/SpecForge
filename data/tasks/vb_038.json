@@ -1,0 +1,79 @@
+{
+  "task_id": "vb_038",
+  "verina_id": "verina_basic_38",
+  "upstream": "dafny-synthesis/task_id_741",
+  "entry_point": "allCharactersSame",
+  "description": "Return true if all characters of the string s are identical and false otherwise. The empty string and every single-character string count as having all characters identical. When the result is false, s is non-empty and not every character of s equals its first character.",
+  "params": [
+    {
+      "name": "s",
+      "type": "string"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "s": "aaa"
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "s": "aba"
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "s": ""
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "s": "a"
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "s": "bbbb"
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "s": "bbab"
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method allCharactersSame(s: string) returns (result: bool)\n  ensures result ==> forall i, j :: 0 <= i < j < |s| ==> s[i] == s[j]\n  ensures !result ==> |s| > 0 && multiset(s)[s[0]] < |s|\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "lemma CountBound(t: string, c: char)\n  ensures multiset(t)[c] <= |t|\n{\n  if |t| > 0 {\n    assert t == t[..|t| - 1] + [t[|t| - 1]];\n    CountBound(t[..|t| - 1], c);\n  }\n}\n\nlemma NotAllSame(s: string, i: nat)\n  requires 0 < i < |s| && s[i] != s[0]\n  ensures multiset(s)[s[0]] < |s|\n{\n  var c := s[0];\n  assert s == s[..i] + [s[i]] + s[i + 1..];\n  assert multiset(s) == multiset(s[..i]) + multiset([s[i]]) + multiset(s[i + 1..]);\n  CountBound(s[..i], c);\n  CountBound(s[i + 1..], c);\n}\n\nmethod allCharactersSame(s: string) returns (result: bool)\n  ensures result ==> forall i, j :: 0 <= i < j < |s| ==> s[i] == s[j]\n  ensures !result ==> |s| > 0 && multiset(s)[s[0]] < |s|\n{\n  if |s| == 0 {\n    return true;\n  }\n  var i := 1;\n  while i < |s|\n    invariant 1 <= i <= |s|\n    invariant forall k :: 0 <= k < i ==> s[k] == s[0]\n  {\n    if s[i] != s[0] {\n      NotAllSame(s, i);\n      return false;\n    }\n    i := i + 1;\n  }\n  return true;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.ensure(lambda s, result: not result or all(\n    s[i] == s[j] for i in range(len(s)) for j in range(i + 1, len(s))))\n@icontract.ensure(lambda s, result: result or (len(s) > 0 and s.count(s[0]) < len(s)))\ndef allCharactersSame(s: str) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.ensure(lambda s, result: not result or all(\n    s[i] == s[j] for i in range(len(s)) for j in range(i + 1, len(s))))\n@icontract.ensure(lambda s, result: result or (len(s) > 0 and s.count(s[0]) < len(s)))\ndef allCharactersSame(s: str) -> bool:\n    for c in s:\n        if c != s[0]:\n            return False\n    return True\n"
+  },
+  "notes": "VERINA's 'false' case says the string is non-empty and some character differs from the first one (an existential). Both specs state it as 'the first character occurs fewer than |s| times' (multiset count in Dafny, str.count in Python), which is equivalent and lets Dafny decide the concrete probes without an index witness."
+}

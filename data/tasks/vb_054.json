@@ -1,0 +1,130 @@
+{
+  "task_id": "vb_054",
+  "verina_id": "verina_basic_54",
+  "upstream": "clover/Clover_canyon_search",
+  "entry_point": "CanyonSearch",
+  "description": "Given two non-empty lists of integers a and b, each sorted in non-decreasing order, return the smallest absolute difference |a[i] - b[j]| over all pairs of an element of a and an element of b. The result is a non-negative integer and must be attained by some pair.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    },
+    {
+      "name": "b",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "nat",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          3,
+          5
+        ],
+        "b": [
+          2,
+          4,
+          6
+        ]
+      },
+      "expected": 1,
+      "unexpected": [
+        0,
+        2,
+        3
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -5,
+          -2,
+          0
+        ],
+        "b": [
+          1,
+          3
+        ]
+      },
+      "expected": 1,
+      "unexpected": [
+        0,
+        2,
+        5
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10,
+          20,
+          30
+        ],
+        "b": [
+          5,
+          15,
+          25
+        ]
+      },
+      "expected": 5,
+      "unexpected": [
+        3,
+        7,
+        10
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "b": [
+          3
+        ]
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -10,
+          -5,
+          0,
+          5,
+          10
+        ],
+        "b": [
+          -3,
+          2,
+          8
+        ]
+      },
+      "expected": 2,
+      "unexpected": [
+        1,
+        3,
+        4
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "function Abs(x: int): nat\n{\n  if x < 0 then -x else x\n}\n\n// true iff some element of a[i..] and some element of b are exactly d apart\n// (b contains x - d or x + d for some x in a[i..])\npredicate {:fuel 10} DistanceOccursFrom(a: seq<int>, b: seq<int>, d: nat, i: nat)\n  decreases |a| - i\n{\n  i < |a| && (a[i] - d in b || a[i] + d in b || DistanceOccursFrom(a, b, d, i + 1))\n}\n\nmethod CanyonSearch(a: seq<int>, b: seq<int>) returns (result: nat)\n  requires |a| > 0 && |b| > 0\n  requires forall i, j :: 0 <= i < j < |a| ==> a[i] <= a[j]\n  requires forall i, j :: 0 <= i < j < |b| ==> b[i] <= b[j]\n  ensures DistanceOccursFrom(a, b, result, 0)\n  ensures forall i, j :: 0 <= i < |a| && 0 <= j < |b| ==> result <= Abs(a[i] - b[j])\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "function Abs(x: int): nat\n{\n  if x < 0 then -x else x\n}\n\n// true iff some element of a[i..] and some element of b are exactly d apart\n// (b contains x - d or x + d for some x in a[i..])\npredicate {:fuel 10} DistanceOccursFrom(a: seq<int>, b: seq<int>, d: nat, i: nat)\n  decreases |a| - i\n{\n  i < |a| && (a[i] - d in b || a[i] + d in b || DistanceOccursFrom(a, b, d, i + 1))\n}\n\nmethod CanyonSearch(a: seq<int>, b: seq<int>) returns (result: nat)\n  requires |a| > 0 && |b| > 0\n  requires forall i, j :: 0 <= i < j < |a| ==> a[i] <= a[j]\n  requires forall i, j :: 0 <= i < j < |b| ==> b[i] <= b[j]\n  ensures DistanceOccursFrom(a, b, result, 0)\n  ensures forall i, j :: 0 <= i < |a| && 0 <= j < |b| ==> result <= Abs(a[i] - b[j])\n{\n  var d := Abs(a[0] - b[0]);\n  var wi, wj := 0, 0;\n  var i := 0;\n  while i < |a|\n    invariant 0 <= i <= |a|\n    invariant 0 <= wi < |a| && 0 <= wj < |b| && d == Abs(a[wi] - b[wj])\n    invariant forall p, q :: 0 <= p < i && 0 <= q < |b| ==> d <= Abs(a[p] - b[q])\n  {\n    var j := 0;\n    while j < |b|\n      invariant 0 <= j <= |b|\n      invariant 0 <= wi < |a| && 0 <= wj < |b| && d == Abs(a[wi] - b[wj])\n      invariant forall p, q :: 0 <= p < i && 0 <= q < |b| ==> d <= Abs(a[p] - b[q])\n      invariant forall q :: 0 <= q < j ==> d <= Abs(a[i] - b[q])\n    {\n      if Abs(a[i] - b[j]) < d {\n        d := Abs(a[i] - b[j]);\n        wi, wj := i, j;\n      }\n      j := j + 1;\n    }\n    i := i + 1;\n  }\n  WitnessOccurs(a, b, d, wi, wj, 0);\n  result := d;\n}\n\nlemma WitnessOccurs(a: seq<int>, b: seq<int>, d: nat, wi: nat, wj: nat, i: nat)\n  requires i <= wi < |a| && wj < |b| && Abs(a[wi] - b[wj]) == d\n  ensures DistanceOccursFrom(a, b, d, i)\n  decreases wi - i\n{\n  if i < wi {\n    WitnessOccurs(a, b, d, wi, wj, i + 1);\n  } else {\n    assert b[wj] == a[wi] - d || b[wj] == a[wi] + d;\n    assert b[wj] in b;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a, b: len(a) > 0 and len(b) > 0)\n@icontract.require(lambda a: all(a[i] <= a[i + 1] for i in range(len(a) - 1)))\n@icontract.require(lambda b: all(b[i] <= b[i + 1] for i in range(len(b) - 1)))\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda a, b, result: any(result == abs(x - y) for x in a for y in b))\n@icontract.ensure(lambda a, b, result: all(result <= abs(x - y) for x in a for y in b))\ndef CanyonSearch(a: List[int], b: List[int]) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a, b: len(a) > 0 and len(b) > 0)\n@icontract.require(lambda a: all(a[i] <= a[i + 1] for i in range(len(a) - 1)))\n@icontract.require(lambda b: all(b[i] <= b[i + 1] for i in range(len(b) - 1)))\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda a, b, result: any(result == abs(x - y) for x in a for y in b))\n@icontract.ensure(lambda a, b, result: all(result <= abs(x - y) for x in a for y in b))\ndef CanyonSearch(a: List[int], b: List[int]) -> int:\n    m, n = 0, 0\n    d = abs(a[0] - b[0])\n    while m < len(a) and n < len(b):\n        t = abs(a[m] - b[n])\n        if t < d:\n            d = t\n        if a[m] <= b[n]:\n            m += 1\n        else:\n            n += 1\n    return d\n"
+  },
+  "notes": "The existential (some pair attains the result) is stated in Dafny with the recursive predicate DistanceOccursFrom ({:fuel 10}): some x in a has x - result or x + result in b, which is equivalent to |x - y| == result for some y in b because result >= 0. Dafny cannot find the witness pair of an existential on concrete inputs. The Python spec keeps VERINA's form."
+}

@@ -1,0 +1,135 @@
+{
+  "task_id": "vb_046",
+  "verina_id": "verina_basic_46",
+  "upstream": "dafny-synthesis/task_id_793",
+  "entry_point": "lastPosition",
+  "description": "Given a list of integers arr sorted in non-decreasing order and an integer elem, return the index of the last occurrence of elem in arr, or -1 if elem does not occur. A non-negative result must be a valid index whose element equals elem, with no later element equal to elem; a result of -1 means that no element equals elem. The input list is not modified.",
+  "params": [
+    {
+      "name": "arr",
+      "type": "list<int>"
+    },
+    {
+      "name": "elem",
+      "type": "int"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          2,
+          3,
+          4,
+          5
+        ],
+        "elem": 2
+      },
+      "expected": 2,
+      "unexpected": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          2,
+          3,
+          4,
+          5
+        ],
+        "elem": 6
+      },
+      "expected": -1,
+      "unexpected": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          2,
+          3,
+          4,
+          5
+        ],
+        "elem": 5
+      },
+      "expected": 5,
+      "unexpected": [
+        3,
+        4,
+        0
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1
+        ],
+        "elem": 1
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        -1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "elem": 1
+      },
+      "expected": 3,
+      "unexpected": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "elem": 3
+      },
+      "expected": 4,
+      "unexpected": [
+        2,
+        3,
+        5
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method lastPosition(arr: seq<int>, elem: int) returns (result: int)\n  requires forall i, j :: 0 <= i < j < |arr| ==> arr[i] <= arr[j]\n  ensures result >= 0 ==> result < |arr| && arr[result] == elem && forall i :: result < i < |arr| ==> arr[i] != elem\n  ensures result == -1 ==> forall i :: 0 <= i < |arr| ==> arr[i] != elem\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method lastPosition(arr: seq<int>, elem: int) returns (result: int)\n  requires forall i, j :: 0 <= i < j < |arr| ==> arr[i] <= arr[j]\n  ensures result >= 0 ==> result < |arr| && arr[result] == elem && forall i :: result < i < |arr| ==> arr[i] != elem\n  ensures result == -1 ==> forall i :: 0 <= i < |arr| ==> arr[i] != elem\n{\n  var i := |arr|;\n  while i > 0\n    invariant 0 <= i <= |arr|\n    invariant forall j :: i <= j < |arr| ==> arr[j] != elem\n  {\n    i := i - 1;\n    if arr[i] == elem {\n      return i;\n    }\n  }\n  result := -1;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda arr: all(arr[i] <= arr[i + 1] for i in range(len(arr) - 1)))\n@icontract.ensure(lambda arr, elem, result: result < 0 or (result < len(arr) and arr[result] == elem and all(x != elem for x in arr[result + 1:])))\n@icontract.ensure(lambda arr, elem, result: result != -1 or all(x != elem for x in arr))\ndef lastPosition(arr: List[int], elem: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda arr: all(arr[i] <= arr[i + 1] for i in range(len(arr) - 1)))\n@icontract.ensure(lambda arr, elem, result: result < 0 or (result < len(arr) and arr[result] == elem and all(x != elem for x in arr[result + 1:])))\n@icontract.ensure(lambda arr, elem, result: result != -1 or all(x != elem for x in arr))\ndef lastPosition(arr: List[int], elem: int) -> int:\n    i = len(arr) - 1\n    while i >= 0:\n        if arr[i] == elem:\n            return i\n        i -= 1\n    return -1\n"
+  },
+  "notes": "VERINA reads the output index with Lean's arr[i]!, which yields 0 for an out-of-range index. Both specs instead require a non-negative result to be a valid index (result < length), so they reject only the degenerate outputs that VERINA accepts through that default value (an out-of-range index when the searched value is 0, where the empty suffix makes VERINA's condition hold). As in VERINA, negative results other than -1 are not constrained."
+}

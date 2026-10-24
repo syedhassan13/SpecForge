@@ -1,0 +1,79 @@
+{
+  "task_id": "vb_053",
+  "verina_id": "verina_basic_53",
+  "upstream": "clover/Clover_cal_sum",
+  "entry_point": "CalSum",
+  "description": "Given a non-negative integer N, return the sum of the first N positive integers, 1 + 2 + ... + N, which is 0 when N is 0. The result r must satisfy 2 * r = N * (N + 1).",
+  "params": [
+    {
+      "name": "N",
+      "type": "nat"
+    }
+  ],
+  "returns": "nat",
+  "tests": [
+    {
+      "input": {
+        "N": 0
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "input": {
+        "N": 1
+      },
+      "expected": 1,
+      "unexpected": [
+        0,
+        2,
+        3
+      ]
+    },
+    {
+      "input": {
+        "N": 5
+      },
+      "expected": 15,
+      "unexpected": [
+        10,
+        16,
+        20
+      ]
+    },
+    {
+      "input": {
+        "N": 10
+      },
+      "expected": 55,
+      "unexpected": [
+        54,
+        56,
+        50
+      ]
+    },
+    {
+      "input": {
+        "N": 20
+      },
+      "expected": 210,
+      "unexpected": [
+        200,
+        220,
+        205
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method CalSum(N: nat) returns (result: nat)\n  ensures 2 * result == N * (N + 1)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method CalSum(N: nat) returns (result: nat)\n  ensures 2 * result == N * (N + 1)\n{\n  result := 0;\n  var i := 0;\n  while i < N\n    invariant 0 <= i <= N\n    invariant 2 * result == i * (i + 1)\n  {\n    i := i + 1;\n    result := result + i;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.require(lambda N: N >= 0)\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda N, result: 2 * result == N * (N + 1))\ndef CalSum(N: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.require(lambda N: N >= 0)\n@icontract.ensure(lambda result: result >= 0)\n@icontract.ensure(lambda N, result: 2 * result == N * (N + 1))\ndef CalSum(N: int) -> int:\n    result = 0\n    for i in range(1, N + 1):\n        result += i\n    return result\n"
+  }
+}

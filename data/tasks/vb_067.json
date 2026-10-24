@@ -1,0 +1,88 @@
+{
+  "task_id": "vb_067",
+  "verina_id": "verina_basic_67",
+  "upstream": "clover/Clover_is_palindrome",
+  "entry_point": "IsPalindrome",
+  "description": "Given a list of characters x, return true if it is a palindrome, i.e. x[i] equals x[len(x) - 1 - i] for every index i, and false otherwise. The empty list is a palindrome.",
+  "params": [
+    {
+      "name": "x",
+      "type": "list<char>"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "x": []
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "x": [
+          "a"
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "x": [
+          "a",
+          "b",
+          "a"
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "x": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "x": [
+          "r",
+          "a",
+          "c",
+          "e",
+          "c",
+          "a",
+          "r"
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "// true iff x[k] == x[|x| - k - 1] for every index k >= i\npredicate {:fuel 10} MirroredFrom(x: seq<char>, i: nat)\n  decreases |x| - i\n{\n  i >= |x| || (x[i] == x[|x| - i - 1] && MirroredFrom(x, i + 1))\n}\n\nmethod IsPalindrome(x: seq<char>) returns (result: bool)\n  ensures result <==> MirroredFrom(x, 0)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "// true iff x[k] == x[|x| - k - 1] for every index k >= i\npredicate {:fuel 10} MirroredFrom(x: seq<char>, i: nat)\n  decreases |x| - i\n{\n  i >= |x| || (x[i] == x[|x| - i - 1] && MirroredFrom(x, i + 1))\n}\n\nmethod IsPalindrome(x: seq<char>) returns (result: bool)\n  ensures result <==> MirroredFrom(x, 0)\n{\n  var i := 0;\n  while i < |x|\n    invariant 0 <= i <= |x|\n    invariant MirroredFrom(x, 0) <==> MirroredFrom(x, i)\n  {\n    if x[i] != x[|x| - i - 1] {\n      result := false;\n      return;\n    }\n    i := i + 1;\n  }\n  result := true;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda x, result: result == all(x[i] == x[len(x) - i - 1] for i in range(len(x))))\ndef IsPalindrome(x: List[str]) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda x, result: result == all(x[i] == x[len(x) - i - 1] for i in range(len(x))))\ndef IsPalindrome(x: List[str]) -> bool:\n    i, j = 0, len(x) - 1\n    while i < j:\n        if x[i] != x[j]:\n            return False\n        i += 1\n        j -= 1\n    return True\n"
+  },
+  "notes": "The palindrome condition is stated in Dafny with the recursive predicate MirroredFrom ({:fuel 10}), equivalent to forall i < |x|, x[i] == x[|x| - i - 1]; with the plain quantifier Dafny cannot decide the false cases on concrete inputs. The Python spec keeps VERINA's form."
+}

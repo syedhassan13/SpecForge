@@ -1,0 +1,48 @@
+{
+  "task_id": "vb_055",
+  "verina_id": "verina_basic_55",
+  "upstream": "clover/Clover_compare",
+  "entry_point": "Compare",
+  "description": "Given two integers a and b, return true if a equals b and false if they are different.",
+  "params": [
+    {
+      "name": "a",
+      "type": "int"
+    },
+    {
+      "name": "b",
+      "type": "int"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "a": 1,
+        "b": 1
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": 1,
+        "b": 2
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method Compare(a: int, b: int) returns (result: bool)\n  ensures a == b ==> result == true\n  ensures a != b ==> result == false\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method Compare(a: int, b: int) returns (result: bool)\n  ensures a == b ==> result == true\n  ensures a != b ==> result == false\n{\n  result := a == b;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.ensure(lambda a, b, result: a != b or result == True)\n@icontract.ensure(lambda a, b, result: a == b or result == False)\ndef Compare(a: int, b: int) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.ensure(lambda a, b, result: a != b or result == True)\n@icontract.ensure(lambda a, b, result: a == b or result == False)\ndef Compare(a: int, b: int) -> bool:\n    return a == b\n"
+  }
+}

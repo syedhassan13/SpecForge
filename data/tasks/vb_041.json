@@ -1,0 +1,109 @@
+{
+  "task_id": "vb_041",
+  "verina_id": "verina_basic_41",
+  "upstream": "dafny-synthesis/task_id_760",
+  "entry_point": "hasOnlyOneDistinctElement",
+  "description": "Given a non-empty list of integers a, return true if all elements of a are equal (the list contains only one distinct value), and false if a contains at least two different values.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          1,
+          1
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          1
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          7
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method hasOnlyOneDistinctElement(a: seq<int>) returns (result: bool)\n  requires |a| > 0\n  ensures result ==> (forall i, j :: 0 <= i < j < |a| ==> a[i] == a[j])\n  ensures !result ==> (exists i :: 0 <= i < |a| && a[i] != a[0])\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method hasOnlyOneDistinctElement(a: seq<int>) returns (result: bool)\n  requires |a| > 0\n  ensures result ==> (forall i, j :: 0 <= i < j < |a| ==> a[i] == a[j])\n  ensures !result ==> (exists i :: 0 <= i < |a| && a[i] != a[0])\n{\n  var i := 1;\n  while i < |a|\n    invariant 1 <= i <= |a|\n    invariant forall k :: 0 <= k < i ==> a[k] == a[0]\n  {\n    if a[i] != a[0] {\n      return false;\n    }\n    i := i + 1;\n  }\n  return true;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: len(a) > 0)\n@icontract.ensure(lambda a, result: (not result) or all(\n    a[i] == a[j] for i in range(len(a)) for j in range(i + 1, len(a))))\n@icontract.ensure(lambda a, result: result or any(a[i] != a[0] for i in range(len(a))))\ndef hasOnlyOneDistinctElement(a: List[int]) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: len(a) > 0)\n@icontract.ensure(lambda a, result: (not result) or all(\n    a[i] == a[j] for i in range(len(a)) for j in range(i + 1, len(a))))\n@icontract.ensure(lambda a, result: result or any(a[i] != a[0] for i in range(len(a))))\ndef hasOnlyOneDistinctElement(a: List[int]) -> bool:\n    for x in a:\n        if x != a[0]:\n            return False\n    return True\n"
+  },
+  "notes": "VERINA's description says an empty array gives true, but its Lean precondition requires a non-empty array; both specs follow the precondition (non-empty list).",
+  "probe_exempt": {
+    "dafny": {
+      "accept": "Dafny cannot prove the accept probes whose expected output is false: they need an existential witness index into a sequence that the probe pins to a literal, and Z3 gets no ground index terms to instantiate the quantifier with. The spec is the direct translation of VERINA's quantified postcondition; all reject probes and the accept probes with expected output true pass. The only reformulation found that Dafny decides was a recursive predicate with a {:fuel} attribute, which would make the spec unnatural and change the proof task."
+    }
+  }
+}

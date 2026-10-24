@@ -1,0 +1,79 @@
+{
+  "task_id": "vb_050",
+  "verina_id": "verina_basic_50",
+  "upstream": "clover/Clover_abs",
+  "entry_point": "Abs",
+  "description": "Given an integer x, return its absolute value: x itself when x is non-negative, and the negation of x (the value y with x + y = 0) when x is negative.",
+  "params": [
+    {
+      "name": "x",
+      "type": "int"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "x": 5
+      },
+      "expected": 5,
+      "unexpected": [
+        -5,
+        0,
+        10
+      ]
+    },
+    {
+      "input": {
+        "x": 0
+      },
+      "expected": 0,
+      "unexpected": [
+        -1,
+        1,
+        -5
+      ]
+    },
+    {
+      "input": {
+        "x": -5
+      },
+      "expected": 5,
+      "unexpected": [
+        -5,
+        -10,
+        0
+      ]
+    },
+    {
+      "input": {
+        "x": 10
+      },
+      "expected": 10,
+      "unexpected": [
+        -10,
+        0,
+        5
+      ]
+    },
+    {
+      "input": {
+        "x": -10
+      },
+      "expected": 10,
+      "unexpected": [
+        -10,
+        -1,
+        0
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method Abs(x: int) returns (result: int)\n  ensures x >= 0 ==> x == result\n  ensures x < 0 ==> x + result == 0\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method Abs(x: int) returns (result: int)\n  ensures x >= 0 ==> x == result\n  ensures x < 0 ==> x + result == 0\n{\n  if x < 0 {\n    result := -x;\n  } else {\n    result := x;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.ensure(lambda x, result: x < 0 or x == result)\n@icontract.ensure(lambda x, result: x >= 0 or x + result == 0)\ndef Abs(x: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.ensure(lambda x, result: x < 0 or x == result)\n@icontract.ensure(lambda x, result: x >= 0 or x + result == 0)\ndef Abs(x: int) -> int:\n    if x < 0:\n        return -x\n    return x\n"
+  }
+}

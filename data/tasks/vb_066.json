@@ -1,0 +1,70 @@
+{
+  "task_id": "vb_066",
+  "verina_id": "verina_basic_66",
+  "upstream": "clover/Clover_is_even",
+  "entry_point": "ComputeIsEven",
+  "description": "Return true if the integer x is even, that is x = 2 * k for some integer k (equivalently x is divisible by 2), and false otherwise. Zero and negative numbers are handled normally (0 and -2 are even, -3 is odd).",
+  "params": [
+    {
+      "name": "x",
+      "type": "int"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "x": 4
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "x": 7
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "x": 0
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "x": -2
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "x": -3
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method ComputeIsEven(x: int) returns (result: bool)\n  ensures result <==> x % 2 == 0\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method ComputeIsEven(x: int) returns (result: bool)\n  ensures result <==> x % 2 == 0\n{\n  result := x % 2 == 0;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.ensure(lambda x, result: result == (x % 2 == 0))\ndef ComputeIsEven(x: int) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.ensure(lambda x, result: result == (x % 2 == 0))\ndef ComputeIsEven(x: int) -> bool:\n    return x % 2 == 0\n"
+  },
+  "notes": "VERINA states the postcondition as result <-> (exists k : Int, x = 2 * k). Both specs use the equivalent x % 2 == 0: an unbounded existential cannot be evaluated by iContract, and Dafny cannot find the witness k for concrete probes."
+}

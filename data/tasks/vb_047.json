@@ -1,0 +1,87 @@
+{
+  "task_id": "vb_047",
+  "verina_id": "verina_basic_47",
+  "upstream": "dafny-synthesis/task_id_798",
+  "entry_point": "arraySum",
+  "description": "Return the sum of all elements of a non-empty list of integers.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": 15,
+      "unexpected": [
+        14,
+        10,
+        16
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          13,
+          14,
+          15,
+          16,
+          17
+        ]
+      },
+      "expected": 75,
+      "unexpected": [
+        74,
+        76,
+        70
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -1,
+          -2,
+          -3
+        ]
+      },
+      "expected": -6,
+      "unexpected": [
+        -5,
+        -7,
+        0
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10,
+          -10
+        ]
+      },
+      "expected": 0,
+      "unexpected": [
+        5,
+        -5,
+        10
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "// sum of the first n elements of a\nfunction {:fuel 10} SumTo(a: seq<int>, n: nat): int\n  requires n <= |a|\n{\n  if n == 0 then 0 else SumTo(a, n - 1) + a[n - 1]\n}\n\nmethod arraySum(a: seq<int>) returns (result: int)\n  requires |a| > 0\n  ensures result == SumTo(a, |a|)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "// sum of the first n elements of a\nfunction {:fuel 10} SumTo(a: seq<int>, n: nat): int\n  requires n <= |a|\n{\n  if n == 0 then 0 else SumTo(a, n - 1) + a[n - 1]\n}\n\nmethod arraySum(a: seq<int>) returns (result: int)\n  requires |a| > 0\n  ensures result == SumTo(a, |a|)\n{\n  result := 0;\n  var i := 0;\n  while i < |a|\n    invariant 0 <= i <= |a|\n    invariant result == SumTo(a, i)\n  {\n    result := result + a[i];\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\ndef sum_to(a: List[int], n: int) -> int:\n    \"\"\"Sum of the first n elements of a.\"\"\"\n    total = 0\n    for i in range(n):\n        total += a[i]\n    return total\n\n\n@icontract.require(lambda a: len(a) > 0)\n@icontract.ensure(lambda a, result: result == sum_to(a, len(a)))\ndef arraySum(a: List[int]) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\ndef sum_to(a: List[int], n: int) -> int:\n    \"\"\"Sum of the first n elements of a.\"\"\"\n    total = 0\n    for i in range(n):\n        total += a[i]\n    return total\n\n\n@icontract.require(lambda a: len(a) > 0)\n@icontract.ensure(lambda a, result: result == sum_to(a, len(a)))\ndef arraySum(a: List[int]) -> int:\n    result = 0\n    for x in a:\n        result += x\n    return result\n"
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "task_id": "vb_040",
+  "verina_id": "verina_basic_40",
+  "upstream": "dafny-synthesis/task_id_755",
+  "entry_point": "secondSmallest",
+  "description": "Given a list of integers s with at least two elements that contains at least two different values, return the second-smallest value: the smallest element of s that is strictly greater than the minimum of s. The returned value must occur in s.",
+  "params": [
+    {
+      "name": "s",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "s": [
+          5,
+          3,
+          1,
+          4,
+          2
+        ]
+      },
+      "expected": 2,
+      "unexpected": [
+        1,
+        3,
+        4
+      ]
+    },
+    {
+      "input": {
+        "s": [
+          7,
+          2,
+          5,
+          3
+        ]
+      },
+      "expected": 3,
+      "unexpected": [
+        2,
+        5,
+        7
+      ]
+    },
+    {
+      "input": {
+        "s": [
+          10,
+          20
+        ]
+      },
+      "expected": 20,
+      "unexpected": [
+        10,
+        30,
+        25
+      ]
+    },
+    {
+      "input": {
+        "s": [
+          20,
+          10
+        ]
+      },
+      "expected": 20,
+      "unexpected": [
+        10,
+        30,
+        15
+      ]
+    },
+    {
+      "input": {
+        "s": [
+          3,
+          1,
+          2
+        ]
+      },
+      "expected": 2,
+      "unexpected": [
+        1,
+        3,
+        4
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "function {:fuel 10} Min(s: seq<int>): int\n  requires |s| > 0\n{\n  if |s| == 1 then s[0] else if s[0] <= Min(s[1..]) then s[0] else Min(s[1..])\n}\n\nmethod secondSmallest(s: seq<int>) returns (result: int)\n  requires |s| > 1\n  requires exists i, j :: 0 <= i < |s| && 0 <= j < |s| && s[i] != s[j]\n  ensures result in s\n  ensures Min(s) < result\n  ensures forall k :: 0 <= k < |s| && s[k] != Min(s) ==> s[k] >= result\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "function {:fuel 10} Min(s: seq<int>): int\n  requires |s| > 0\n{\n  if |s| == 1 then s[0] else if s[0] <= Min(s[1..]) then s[0] else Min(s[1..])\n}\n\nmethod secondSmallest(s: seq<int>) returns (result: int)\n  requires |s| > 1\n  requires exists i, j :: 0 <= i < |s| && 0 <= j < |s| && s[i] != s[j]\n  ensures result in s\n  ensures Min(s) < result\n  ensures forall k :: 0 <= k < |s| && s[k] != Min(s) ==> s[k] >= result\n{\n  var m := s[0];\n  var i := 1;\n  while i < |s|\n    invariant 1 <= i <= |s|\n    invariant m in s\n    invariant forall k :: 0 <= k < i ==> m <= s[k]\n  {\n    if s[i] < m {\n      m := s[i];\n    }\n    i := i + 1;\n  }\n  MinIsMinimum(s);\n  assert m == Min(s);\n  var found := false;\n  var r := 0;\n  i := 0;\n  while i < |s|\n    invariant 0 <= i <= |s|\n    invariant found ==> r in s && m < r && forall k :: 0 <= k < i && s[k] != m ==> s[k] >= r\n    invariant !found ==> forall k :: 0 <= k < i ==> s[k] == m\n  {\n    if s[i] != m && (!found || s[i] < r) {\n      found := true;\n      r := s[i];\n    }\n    i := i + 1;\n  }\n  if !found {\n    ghost var p, q :| 0 <= p < |s| && 0 <= q < |s| && s[p] != s[q];\n    assert s[p] == m && s[q] == m;\n    assert false;\n  }\n  result := r;\n}\n\nlemma MinIsMinimum(s: seq<int>)\n  requires |s| > 0\n  ensures Min(s) in s\n  ensures forall k :: 0 <= k < |s| ==> Min(s) <= s[k]\n{\n  if |s| > 1 {\n    MinIsMinimum(s[1..]);\n    assert forall k :: 1 <= k < |s| ==> s[k] == s[1..][k - 1];\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda s: len(s) > 1)\n@icontract.require(lambda s: any(s[i] != s[j] for i in range(len(s)) for j in range(len(s))))\n@icontract.ensure(lambda s, result: result in s)\n@icontract.ensure(lambda s, result: any(\n    s[j] < result and all(s[k] >= result for k in range(len(s)) if s[k] != s[j]) for j in range(len(s))))\ndef secondSmallest(s: List[int]) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda s: len(s) > 1)\n@icontract.require(lambda s: any(s[i] != s[j] for i in range(len(s)) for j in range(len(s))))\n@icontract.ensure(lambda s, result: result in s)\n@icontract.ensure(lambda s, result: any(\n    s[j] < result and all(s[k] >= result for k in range(len(s)) if s[k] != s[j]) for j in range(len(s))))\ndef secondSmallest(s: List[int]) -> int:\n    m = s[0]\n    for x in s:\n        if x < m:\n            m = x\n    found = False\n    r = 0\n    for x in s:\n        if x != m and (not found or x < r):\n            found = True\n            r = x\n    return r\n"
+  },
+  "notes": "VERINA's second conjunct (exists j with s[j] < result such that every element different from s[j] is >= result) forces s[j] to be the minimum of s, so the Dafny spec states it with a recursive Min function ({:fuel 10}): Min(s) < result and every element different from Min(s) is >= result. 'exists i, s[i] == result' is written result in s. Both rewrites are equivalent and avoid existential postconditions, whose witnesses Dafny cannot find on concrete inputs. The Python spec keeps VERINA's form. VERINA's own Lean implementation returns the duplicated minimum for inputs such as [1, 1, 2] and so violates its own postcondition; the references follow the postcondition (smallest value strictly above the minimum)."
+}

@@ -1,0 +1,121 @@
+{
+  "task_id": "vb_037",
+  "verina_id": "verina_basic_37",
+  "upstream": "dafny-synthesis/task_id_733",
+  "entry_point": "findFirstOccurrence",
+  "description": "Given a list of integers arr sorted in non-decreasing order and an integer target, return the index of the first occurrence of target in arr, or -1 if target does not occur. A non-negative result must be a valid index whose element equals target, with no earlier element equal to target; a result of -1 means that no element equals target. The input list is not modified.",
+  "params": [
+    {
+      "name": "arr",
+      "type": "list<int>"
+    },
+    {
+      "name": "target",
+      "type": "int"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          2,
+          3,
+          4,
+          5
+        ],
+        "target": 2
+      },
+      "expected": 1,
+      "unexpected": [
+        0,
+        2,
+        -1
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          2,
+          3,
+          4,
+          5
+        ],
+        "target": 6
+      },
+      "expected": -1,
+      "unexpected": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "target": 1
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        -1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "target": 5
+      },
+      "expected": 4,
+      "unexpected": [
+        3,
+        5,
+        0
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "target": 0
+      },
+      "expected": -1,
+      "unexpected": [
+        0,
+        1,
+        2
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method findFirstOccurrence(arr: seq<int>, target: int) returns (result: int)\n  requires forall i, j :: 0 <= i < j < |arr| ==> arr[i] <= arr[j]\n  ensures result >= 0 ==> result < |arr| && arr[result] == target && forall i :: 0 <= i < result ==> arr[i] != target\n  ensures result == -1 ==> forall i :: 0 <= i < |arr| ==> arr[i] != target\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method findFirstOccurrence(arr: seq<int>, target: int) returns (result: int)\n  requires forall i, j :: 0 <= i < j < |arr| ==> arr[i] <= arr[j]\n  ensures result >= 0 ==> result < |arr| && arr[result] == target && forall i :: 0 <= i < result ==> arr[i] != target\n  ensures result == -1 ==> forall i :: 0 <= i < |arr| ==> arr[i] != target\n{\n  var i := 0;\n  while i < |arr|\n    invariant 0 <= i <= |arr|\n    invariant forall j :: 0 <= j < i ==> arr[j] != target\n  {\n    if arr[i] == target {\n      return i;\n    }\n    if arr[i] > target {\n      return -1;\n    }\n    i := i + 1;\n  }\n  result := -1;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda arr: all(arr[i] <= arr[i + 1] for i in range(len(arr) - 1)))\n@icontract.ensure(lambda arr, target, result: result < 0 or (result < len(arr) and arr[result] == target and all(arr[i] != target for i in range(result))))\n@icontract.ensure(lambda arr, target, result: result != -1 or all(x != target for x in arr))\ndef findFirstOccurrence(arr: List[int], target: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda arr: all(arr[i] <= arr[i + 1] for i in range(len(arr) - 1)))\n@icontract.ensure(lambda arr, target, result: result < 0 or (result < len(arr) and arr[result] == target and all(arr[i] != target for i in range(result))))\n@icontract.ensure(lambda arr, target, result: result != -1 or all(x != target for x in arr))\ndef findFirstOccurrence(arr: List[int], target: int) -> int:\n    for i in range(len(arr)):\n        if arr[i] == target:\n            return i\n        if arr[i] > target:\n            return -1\n    return -1\n"
+  },
+  "notes": "VERINA reads the output index with Lean's arr[i]!, which yields 0 for an out-of-range index. Both specs instead require a non-negative result to be a valid index (result < length), so they reject only the degenerate outputs that VERINA accepts through that default value (an out-of-range index when the searched value is 0). As in VERINA, negative results other than -1 are not constrained."
+}

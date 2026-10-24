@@ -1,0 +1,118 @@
+{
+  "task_id": "vb_044",
+  "verina_id": "verina_basic_44",
+  "upstream": "dafny-synthesis/task_id_775",
+  "entry_point": "isOddAtIndexOdd",
+  "description": "Given a list of integers a, return true if every element at an odd index (1, 3, 5, ...) is an odd number, and false if some odd index holds an even number. Indices start at 0, and a number counts as odd when its remainder modulo 2 is 1 (negative odd numbers included). An empty list gives true.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          3,
+          5,
+          7,
+          9
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          2,
+          4,
+          6,
+          8,
+          10
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": []
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          7
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          0,
+          1,
+          0,
+          1
+        ]
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          0,
+          2,
+          4,
+          6
+        ]
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "predicate IsOdd(n: int)\n{\n  n % 2 == 1\n}\n\n// true iff every odd index k >= i of a holds an odd value\npredicate {:fuel 10} OddIndicesOddFrom(a: seq<int>, i: nat)\n  decreases |a| - i\n{\n  i >= |a| || ((IsOdd(i) ==> IsOdd(a[i])) && OddIndicesOddFrom(a, i + 1))\n}\n\nmethod isOddAtIndexOdd(a: seq<int>) returns (result: bool)\n  ensures result <==> OddIndicesOddFrom(a, 0)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "predicate IsOdd(n: int)\n{\n  n % 2 == 1\n}\n\n// true iff every odd index k >= i of a holds an odd value\npredicate {:fuel 10} OddIndicesOddFrom(a: seq<int>, i: nat)\n  decreases |a| - i\n{\n  i >= |a| || ((IsOdd(i) ==> IsOdd(a[i])) && OddIndicesOddFrom(a, i + 1))\n}\n\nmethod isOddAtIndexOdd(a: seq<int>) returns (result: bool)\n  ensures result <==> OddIndicesOddFrom(a, 0)\n{\n  var i := 0;\n  while i < |a|\n    invariant 0 <= i <= |a|\n    invariant OddIndicesOddFrom(a, 0) <==> OddIndicesOddFrom(a, i)\n  {\n    if IsOdd(i) && !IsOdd(a[i]) {\n      result := false;\n      return;\n    }\n    i := i + 1;\n  }\n  result := true;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\ndef is_odd(n: int) -> bool:\n    return n % 2 == 1\n\n\n@icontract.ensure(lambda a, result: result == all(is_odd(a[i]) for i in range(len(a)) if is_odd(i)))\ndef isOddAtIndexOdd(a: List[int]) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\ndef is_odd(n: int) -> bool:\n    return n % 2 == 1\n\n\n@icontract.ensure(lambda a, result: result == all(is_odd(a[i]) for i in range(len(a)) if is_odd(i)))\ndef isOddAtIndexOdd(a: List[int]) -> bool:\n    i = 1\n    while i < len(a):\n        if a[i] % 2 != 1:\n            return False\n        i += 2\n    return True\n"
+  },
+  "notes": "The condition 'every odd index holds an odd value' is stated in Dafny with the recursive predicate OddIndicesOddFrom ({:fuel 10}), equivalent to forall i < |a|, IsOdd(i) ==> IsOdd(a[i]); with the plain quantifier Dafny cannot decide the false cases on concrete inputs (it needs a witness index). The Python spec keeps VERINA's form."
+}

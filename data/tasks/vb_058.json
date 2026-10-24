@@ -1,0 +1,160 @@
+{
+  "task_id": "vb_058",
+  "verina_id": "verina_basic_58",
+  "upstream": "clover/Clover_double_array_elements",
+  "entry_point": "double_array_elements",
+  "description": "Given a list of integers s, return a new list of the same length in which every element is twice the element at the same position in s. The input list may be empty.",
+  "params": [
+    {
+      "name": "s",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "s": []
+      },
+      "expected": [],
+      "unexpected": [
+        [
+          1
+        ],
+        [
+          0
+        ],
+        [
+          -1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "s": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": [
+        2,
+        4,
+        6,
+        8,
+        10
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          2,
+          4,
+          6,
+          8,
+          9
+        ],
+        [
+          0,
+          4,
+          6,
+          8,
+          10
+        ]
+      ]
+    },
+    {
+      "input": {
+        "s": [
+          0,
+          -1,
+          5
+        ]
+      },
+      "expected": [
+        0,
+        -2,
+        10
+      ],
+      "unexpected": [
+        [
+          0,
+          -1,
+          5
+        ],
+        [
+          1,
+          -2,
+          10
+        ],
+        [
+          0,
+          0,
+          10
+        ]
+      ]
+    },
+    {
+      "input": {
+        "s": [
+          100
+        ]
+      },
+      "expected": [
+        200
+      ],
+      "unexpected": [
+        [
+          100
+        ],
+        [
+          0
+        ],
+        [
+          201
+        ]
+      ]
+    },
+    {
+      "input": {
+        "s": [
+          -3,
+          -4
+        ]
+      },
+      "expected": [
+        -6,
+        -8
+      ],
+      "unexpected": [
+        [
+          3,
+          -4
+        ],
+        [
+          -6,
+          -7
+        ],
+        [
+          -6,
+          -9
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method double_array_elements(s: seq<int>) returns (result: seq<int>)\n  ensures |result| == |s|\n  ensures forall i :: 0 <= i < |s| ==> result[i] == 2 * s[i]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method double_array_elements(s: seq<int>) returns (result: seq<int>)\n  ensures |result| == |s|\n  ensures forall i :: 0 <= i < |s| ==> result[i] == 2 * s[i]\n{\n  result := s;\n  var i := 0;\n  while i < |s|\n    invariant 0 <= i <= |s|\n    invariant |result| == |s|\n    invariant forall k :: 0 <= k < i ==> result[k] == 2 * s[k]\n    invariant forall k :: i <= k < |s| ==> result[k] == s[k]\n  {\n    result := result[i := 2 * s[i]];\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda s, result: len(result) == len(s))\n@icontract.ensure(lambda s, result: len(result) == len(s) and all(result[i] == 2 * s[i] for i in range(len(s))))\ndef double_array_elements(s: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda s, result: len(result) == len(s))\n@icontract.ensure(lambda s, result: len(result) == len(s) and all(result[i] == 2 * s[i] for i in range(len(s))))\ndef double_array_elements(s: List[int]) -> List[int]:\n    result = list(s)\n    for i in range(len(s)):\n        result[i] = 2 * s[i]\n    return result\n"
+  }
+}

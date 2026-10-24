@@ -1,0 +1,115 @@
+{
+  "task_id": "vb_048",
+  "verina_id": "verina_basic_48",
+  "upstream": "dafny-synthesis/task_id_803",
+  "entry_point": "isPerfectSquare",
+  "description": "Given a non-negative integer n, return true if n is a perfect square, i.e. there is a non-negative integer i with i * i == n, and false otherwise. Zero is a perfect square.",
+  "params": [
+    {
+      "name": "n",
+      "type": "nat"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "n": 0
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 1
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 4
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 9
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 2
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "n": 3
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "n": 10
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "n": 16
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 25
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "n": 26
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "// true iff j * j == n for some j >= i\npredicate {:fuel 10} HasSquareRootFrom(n: nat, i: nat)\n  decreases n + 1 - i\n{\n  i * i <= n && (i * i == n || HasSquareRootFrom(n, i + 1))\n}\n\nmethod isPerfectSquare(n: nat) returns (result: bool)\n  ensures result <==> HasSquareRootFrom(n, 0)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "// true iff j * j == n for some j >= i\npredicate {:fuel 10} HasSquareRootFrom(n: nat, i: nat)\n  decreases n + 1 - i\n{\n  i * i <= n && (i * i == n || HasSquareRootFrom(n, i + 1))\n}\n\nmethod isPerfectSquare(n: nat) returns (result: bool)\n  ensures result <==> HasSquareRootFrom(n, 0)\n{\n  var i: nat := 0;\n  while i * i < n\n    invariant i <= n\n    invariant HasSquareRootFrom(n, 0) <==> HasSquareRootFrom(n, i)\n    decreases n - i\n  {\n    assert i < n by {\n      if i > 0 {\n        assert i <= i * i;\n      }\n    }\n    i := i + 1;\n  }\n  result := i * i == n;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.require(lambda n: n >= 0)\n@icontract.ensure(lambda n, result: result == any(i * i == n for i in range(n + 1)))\ndef isPerfectSquare(n: int) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.require(lambda n: n >= 0)\n@icontract.ensure(lambda n, result: result == any(i * i == n for i in range(n + 1)))\ndef isPerfectSquare(n: int) -> bool:\n    i = 0\n    while i * i < n:\n        i += 1\n    return i * i == n\n"
+  },
+  "notes": "'exists i : nat, i * i == n' is stated in Dafny with the recursive predicate HasSquareRootFrom ({:fuel 10}), which tries i = 0, 1, ... while i * i <= n and is equivalent to the existential; Dafny cannot find the witness of the existential on concrete inputs. The Python spec keeps VERINA's form (bounded by i <= n)."
+}

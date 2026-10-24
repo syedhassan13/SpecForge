@@ -1,0 +1,191 @@
+{
+  "task_id": "vb_052",
+  "verina_id": "verina_basic_52",
+  "upstream": "clover/Clover_bubble_sort",
+  "entry_point": "BubbleSort",
+  "description": "Sort a list of integers into non-decreasing order. The result must be sorted (each element is less than or equal to every later element) and must be a permutation of the input, containing exactly the same elements with the same multiplicities. The input may be empty.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "unexpected": [
+        [
+          5,
+          4,
+          3,
+          2,
+          1
+        ],
+        [
+          2,
+          3,
+          1,
+          4,
+          5
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "unexpected": [
+        [
+          5,
+          4,
+          3,
+          2,
+          1
+        ],
+        [
+          1,
+          3,
+          2,
+          4,
+          5
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          3,
+          1,
+          2,
+          1,
+          5
+        ]
+      },
+      "expected": [
+        1,
+        1,
+        2,
+        3,
+        5
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3,
+          1,
+          5
+        ],
+        [
+          3,
+          1,
+          2,
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10
+        ]
+      },
+      "expected": [
+        10
+      ],
+      "unexpected": [
+        [
+          0
+        ],
+        [
+          10,
+          10
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          4,
+          4,
+          4,
+          2,
+          2,
+          8
+        ]
+      },
+      "expected": [
+        2,
+        2,
+        4,
+        4,
+        4,
+        8
+      ],
+      "unexpected": [
+        [
+          2,
+          4,
+          4,
+          2,
+          4,
+          8
+        ],
+        [
+          4,
+          2,
+          4,
+          2,
+          4,
+          8
+        ],
+        [
+          2,
+          4,
+          2,
+          4,
+          4,
+          8
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method BubbleSort(a: seq<int>) returns (result: seq<int>)\n  ensures forall i, j :: 0 <= i < j < |result| ==> result[i] <= result[j]\n  ensures multiset(result) == multiset(a)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method BubbleSort(a: seq<int>) returns (result: seq<int>)\n  ensures forall i, j :: 0 <= i < j < |result| ==> result[i] <= result[j]\n  ensures multiset(result) == multiset(a)\n{\n  result := a;\n  var n := |result|;\n  var i := n;\n  while i > 1\n    invariant 0 <= i <= n\n    invariant |result| == n\n    invariant multiset(result) == multiset(a)\n    invariant forall x, y :: i <= x < y < n ==> result[x] <= result[y]\n    invariant forall x, y :: 0 <= x < i <= y < n ==> result[x] <= result[y]\n  {\n    var j := 0;\n    while j < i - 1\n      invariant 0 <= j <= i - 1\n      invariant |result| == n\n      invariant multiset(result) == multiset(a)\n      invariant forall x, y :: i <= x < y < n ==> result[x] <= result[y]\n      invariant forall x, y :: 0 <= x < i <= y < n ==> result[x] <= result[y]\n      invariant forall x :: 0 <= x < j ==> result[x] <= result[j]\n    {\n      if result[j] > result[j + 1] {\n        result := result[j := result[j + 1]][j + 1 := result[j]];\n      }\n      j := j + 1;\n    }\n    i := i - 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda result: all(result[i] <= result[i + 1] for i in range(len(result) - 1)))\n@icontract.ensure(lambda a, result: sorted(result) == sorted(a))\ndef BubbleSort(a: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda result: all(result[i] <= result[i + 1] for i in range(len(result) - 1)))\n@icontract.ensure(lambda a, result: sorted(result) == sorted(a))\ndef BubbleSort(a: List[int]) -> List[int]:\n    res = list(a)\n    n = len(res)\n    i = n - 1\n    while i > 0:\n        for j in range(i):\n            if res[j] > res[j + 1]:\n                res[j], res[j + 1] = res[j + 1], res[j]\n        i -= 1\n    return res\n"
+  }
+}

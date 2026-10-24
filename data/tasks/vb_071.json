@@ -1,0 +1,157 @@
+{
+  "task_id": "vb_071",
+  "verina_id": "verina_basic_71",
+  "upstream": "clover/Clover_longest_prefix",
+  "entry_point": "LongestCommonPrefix",
+  "description": "Given two lists of characters str1 and str2, return their longest common prefix: the longest list that is a prefix of both. The result is a prefix of str1 and of str2, and it cannot be extended: either it has the full length of one of the inputs, or the characters of str1 and str2 right after it differ. In particular the result is empty if either input is empty or the first characters differ.",
+  "params": [
+    {
+      "name": "str1",
+      "type": "list<char>"
+    },
+    {
+      "name": "str2",
+      "type": "list<char>"
+    }
+  ],
+  "returns": "list<char>",
+  "tests": [
+    {
+      "input": {
+        "str1": [
+          "a",
+          "b",
+          "c"
+        ],
+        "str2": [
+          "a",
+          "b",
+          "d"
+        ]
+      },
+      "expected": [
+        "a",
+        "b"
+      ],
+      "unexpected": [
+        [
+          "a"
+        ],
+        [
+          "a",
+          "b",
+          "c"
+        ]
+      ]
+    },
+    {
+      "input": {
+        "str1": [
+          "x",
+          "y",
+          "z"
+        ],
+        "str2": [
+          "x",
+          "y",
+          "z"
+        ]
+      },
+      "expected": [
+        "x",
+        "y",
+        "z"
+      ],
+      "unexpected": [
+        [
+          "x",
+          "y"
+        ],
+        [
+          "x",
+          "z"
+        ]
+      ]
+    },
+    {
+      "input": {
+        "str1": [
+          "w",
+          "o"
+        ],
+        "str2": [
+          "w",
+          "o",
+          "w"
+        ]
+      },
+      "expected": [
+        "w",
+        "o"
+      ],
+      "unexpected": [
+        [
+          "w"
+        ],
+        [
+          "o"
+        ],
+        [
+          "w",
+          "o",
+          "w"
+        ]
+      ]
+    },
+    {
+      "input": {
+        "str1": [
+          "a",
+          "x"
+        ],
+        "str2": [
+          "b",
+          "y"
+        ]
+      },
+      "expected": [],
+      "unexpected": [
+        [
+          "a"
+        ],
+        [
+          "b"
+        ]
+      ]
+    },
+    {
+      "input": {
+        "str1": [],
+        "str2": [
+          "h",
+          "e",
+          "l",
+          "l",
+          "o"
+        ]
+      },
+      "expected": [],
+      "unexpected": [
+        [
+          "h"
+        ],
+        [
+          "e"
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method LongestCommonPrefix(str1: seq<char>, str2: seq<char>) returns (result: seq<char>)\n  ensures |result| <= |str1| && result == str1[..|result|]\n  ensures |result| <= |str2| && result == str2[..|result|]\n  ensures |result| == |str1| || |result| == |str2| || str1[|result|] != str2[|result|]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method LongestCommonPrefix(str1: seq<char>, str2: seq<char>) returns (result: seq<char>)\n  ensures |result| <= |str1| && result == str1[..|result|]\n  ensures |result| <= |str2| && result == str2[..|result|]\n  ensures |result| == |str1| || |result| == |str2| || str1[|result|] != str2[|result|]\n{\n  var i := 0;\n  while i < |str1| && i < |str2| && str1[i] == str2[i]\n    invariant 0 <= i <= |str1| && i <= |str2|\n    invariant str1[..i] == str2[..i]\n  {\n    i := i + 1;\n  }\n  result := str1[..i];\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda str1, result: len(result) <= len(str1) and result == str1[:len(result)])\n@icontract.ensure(lambda str2, result: len(result) <= len(str2) and result == str2[:len(result)])\n@icontract.ensure(lambda str1, str2, result: len(result) == len(str1) or len(result) == len(str2)\n                  or str1[len(result)] != str2[len(result)])\ndef LongestCommonPrefix(str1: List[str], str2: List[str]) -> List[str]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda str1, result: len(result) <= len(str1) and result == str1[:len(result)])\n@icontract.ensure(lambda str2, result: len(result) <= len(str2) and result == str2[:len(result)])\n@icontract.ensure(lambda str1, str2, result: len(result) == len(str1) or len(result) == len(str2)\n                  or str1[len(result)] != str2[len(result)])\ndef LongestCommonPrefix(str1: List[str], str2: List[str]) -> List[str]:\n    i = 0\n    while i < len(str1) and i < len(str2) and str1[i] == str2[i]:\n        i += 1\n    return str1[:i]\n"
+  }
+}
