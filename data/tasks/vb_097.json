@@ -1,0 +1,164 @@
+{
+  "task_id": "vb_097",
+  "verina_id": "verina_basic_97",
+  "upstream": "clover/Clover_test_array",
+  "entry_point": "TestArrayElements",
+  "description": "Given a list of integers a and a valid index j (0 <= j < length of a), return the list obtained from a by setting the element at index j to 60, leaving every other element unchanged.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    },
+    {
+      "name": "j",
+      "type": "nat"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "j": 2
+      },
+      "expected": [
+        1,
+        2,
+        60,
+        4,
+        5
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          1,
+          60,
+          3,
+          4,
+          5
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          60,
+          30,
+          20
+        ],
+        "j": 1
+      },
+      "expected": [
+        60,
+        60,
+        20
+      ],
+      "unexpected": [
+        [
+          60,
+          30,
+          20
+        ],
+        [
+          60,
+          30,
+          60
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10,
+          20,
+          30
+        ],
+        "j": 0
+      },
+      "expected": [
+        60,
+        20,
+        30
+      ],
+      "unexpected": [
+        [
+          10,
+          20,
+          30
+        ],
+        [
+          10,
+          60,
+          30
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          5,
+          10,
+          15
+        ],
+        "j": 2
+      },
+      "expected": [
+        5,
+        10,
+        60
+      ],
+      "unexpected": [
+        [
+          5,
+          10,
+          15
+        ],
+        [
+          5,
+          60,
+          15
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          0
+        ],
+        "j": 0
+      },
+      "expected": [
+        60
+      ],
+      "unexpected": [
+        [
+          0
+        ],
+        [
+          70
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method TestArrayElements(a: seq<int>, j: nat) returns (result: seq<int>)\n  requires j < |a|\n  ensures |result| >= |a|\n  ensures result[j] == 60\n  ensures forall k :: 0 <= k < |a| && k != j ==> result[k] == a[k]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method TestArrayElements(a: seq<int>, j: nat) returns (result: seq<int>)\n  requires j < |a|\n  ensures |result| >= |a|\n  ensures result[j] == 60\n  ensures forall k :: 0 <= k < |a| && k != j ==> result[k] == a[k]\n{\n  result := a[j := 60];\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda j: j >= 0)\n@icontract.require(lambda a, j: j < len(a))\n@icontract.ensure(lambda a, result: len(result) >= len(a))\n@icontract.ensure(lambda j, result: result[j] == 60)\n@icontract.ensure(lambda a, j, result: all(result[k] == a[k] for k in range(len(a)) if k != j))\ndef TestArrayElements(a: List[int], j: int) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda j: j >= 0)\n@icontract.require(lambda a, j: j < len(a))\n@icontract.ensure(lambda a, result: len(result) >= len(a))\n@icontract.ensure(lambda j, result: result[j] == 60)\n@icontract.ensure(lambda a, j, result: all(result[k] == a[k] for k in range(len(a)) if k != j))\ndef TestArrayElements(a: List[int], j: int) -> List[int]:\n    out = list(a)\n    out[j] = 60\n    return out\n"
+  },
+  "notes": "VERINA's postcondition (result[j]! = 60 and result[k]! = a[k]! for every other k < |a|) does not fix the length of the result. Reading result[k]! as an in-range access gives |result| >= |a|, which both specs state; like VERINA they do not require equal lengths."
+}

@@ -1,0 +1,176 @@
+{
+  "task_id": "vb_084",
+  "verina_id": "verina_basic_84",
+  "upstream": "clover/Clover_replace",
+  "entry_point": "replace",
+  "description": "Given a list of integers arr and an integer k, return a new list of the same length in which every element greater than k is replaced by -1 and every element less than or equal to k is kept unchanged. The list may be empty and k can be any integer.",
+  "params": [
+    {
+      "name": "arr",
+      "type": "list<int>"
+    },
+    {
+      "name": "k",
+      "type": "int"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "arr": [
+          1,
+          5,
+          3,
+          10
+        ],
+        "k": 4
+      },
+      "expected": [
+        1,
+        -1,
+        3,
+        -1
+      ],
+      "unexpected": [
+        [
+          1,
+          5,
+          3,
+          10
+        ],
+        [
+          1,
+          -1,
+          3,
+          10
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          -1,
+          0,
+          1,
+          2
+        ],
+        "k": 2
+      },
+      "expected": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "unexpected": [
+        [
+          0,
+          0,
+          1,
+          2
+        ],
+        [
+          -1,
+          0,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          100,
+          50,
+          100
+        ],
+        "k": 100
+      },
+      "expected": [
+        100,
+        50,
+        100
+      ],
+      "unexpected": [
+        [
+          100,
+          50,
+          -1
+        ],
+        [
+          100,
+          50,
+          50
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          -5,
+          -2,
+          0,
+          3
+        ],
+        "k": -3
+      },
+      "expected": [
+        -5,
+        -1,
+        -1,
+        -1
+      ],
+      "unexpected": [
+        [
+          -5,
+          -2,
+          -1,
+          -1
+        ],
+        [
+          -5,
+          -1,
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          3
+        ],
+        "k": 5
+      },
+      "expected": [
+        1,
+        2,
+        3
+      ],
+      "unexpected": [
+        [
+          1,
+          3,
+          3
+        ],
+        [
+          1,
+          2,
+          -1
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method replace(arr: seq<int>, k: int) returns (result: seq<int>)\n  ensures |result| == |arr|\n  ensures forall i :: 0 <= i < |arr| ==> (arr[i] > k ==> result[i] == -1)\n  ensures forall i :: 0 <= i < |arr| ==> (arr[i] <= k ==> result[i] == arr[i])\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method replace(arr: seq<int>, k: int) returns (result: seq<int>)\n  ensures |result| == |arr|\n  ensures forall i :: 0 <= i < |arr| ==> (arr[i] > k ==> result[i] == -1)\n  ensures forall i :: 0 <= i < |arr| ==> (arr[i] <= k ==> result[i] == arr[i])\n{\n  result := [];\n  var i := 0;\n  while i < |arr|\n    invariant 0 <= i <= |arr|\n    invariant |result| == i\n    invariant forall j :: 0 <= j < i ==> (arr[j] > k ==> result[j] == -1)\n    invariant forall j :: 0 <= j < i ==> (arr[j] <= k ==> result[j] == arr[j])\n  {\n    if arr[i] > k {\n      result := result + [-1];\n    } else {\n      result := result + [arr[i]];\n    }\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda arr, result: len(result) == len(arr))\n@icontract.ensure(lambda arr, k, result: len(result) == len(arr) and all(\n    result[i] == -1 for i in range(len(arr)) if arr[i] > k))\n@icontract.ensure(lambda arr, k, result: len(result) == len(arr) and all(\n    result[i] == arr[i] for i in range(len(arr)) if arr[i] <= k))\ndef replace(arr: List[int], k: int) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda arr, result: len(result) == len(arr))\n@icontract.ensure(lambda arr, k, result: len(result) == len(arr) and all(\n    result[i] == -1 for i in range(len(arr)) if arr[i] > k))\n@icontract.ensure(lambda arr, k, result: len(result) == len(arr) and all(\n    result[i] == arr[i] for i in range(len(arr)) if arr[i] <= k))\ndef replace(arr: List[int], k: int) -> List[int]:\n    return [-1 if x > k else x for x in arr]\n"
+  },
+  "notes": "VERINA's Lean postcondition does not state the length of the result (it reads result[i]! with a default value of 0 for out-of-range indices). Both specs add |result| == |arr|, which is what the upstream Dafny program (an in-place update of the array) and the task description mean, and what every VERINA test satisfies."
+}

@@ -1,0 +1,148 @@
+{
+  "task_id": "vb_081",
+  "verina_id": "verina_basic_81",
+  "upstream": "clover/Clover_quotient",
+  "entry_point": "DivisionFunction",
+  "description": "Given two non-negative integers x (the dividend) and y (the divisor), return the pair (r, q) of remainder and quotient. If y is not zero, they must satisfy q * y + r == x with 0 <= r < y and q >= 0. If y is zero, no division is performed and the result is (x, 0), i.e. remainder x and quotient 0.",
+  "params": [
+    {
+      "name": "x",
+      "type": "nat"
+    },
+    {
+      "name": "y",
+      "type": "nat"
+    }
+  ],
+  "returns": "tuple<int, int>",
+  "tests": [
+    {
+      "input": {
+        "x": 10,
+        "y": 3
+      },
+      "expected": [
+        1,
+        3
+      ],
+      "unexpected": [
+        [
+          2,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          4
+        ]
+      ]
+    },
+    {
+      "input": {
+        "x": 15,
+        "y": 5
+      },
+      "expected": [
+        0,
+        3
+      ],
+      "unexpected": [
+        [
+          3,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          4
+        ]
+      ]
+    },
+    {
+      "input": {
+        "x": 7,
+        "y": 2
+      },
+      "expected": [
+        1,
+        3
+      ],
+      "unexpected": [
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "input": {
+        "x": 0,
+        "y": 4
+      },
+      "expected": [
+        0,
+        0
+      ],
+      "unexpected": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "x": 10,
+        "y": 0
+      },
+      "expected": [
+        10,
+        0
+      ],
+      "unexpected": [
+        [
+          0,
+          10
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          5,
+          5
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method DivisionFunction(x: nat, y: nat) returns (result: (int, int))\n  ensures y == 0 ==> result.0 == x && result.1 == 0\n  ensures y != 0 ==> result.1 * y + result.0 == x && 0 <= result.0 < y && 0 <= result.1\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method DivisionFunction(x: nat, y: nat) returns (result: (int, int))\n  ensures y == 0 ==> result.0 == x && result.1 == 0\n  ensures y != 0 ==> result.1 * y + result.0 == x && 0 <= result.0 < y && 0 <= result.1\n{\n  if y == 0 {\n    result := (x, 0);\n  } else {\n    var r: int := x;\n    var q: int := 0;\n    while y <= r\n      invariant q * y + r == x && r >= 0 && q >= 0\n      decreases r\n    {\n      r := r - y;\n      q := q + 1;\n    }\n    result := (r, q);\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import Tuple\n\n\n@icontract.require(lambda x: x >= 0)\n@icontract.require(lambda y: y >= 0)\n@icontract.ensure(lambda x, y, result: y != 0 or (result[0] == x and result[1] == 0))\n@icontract.ensure(lambda x, y, result: y == 0 or (\n    result[1] * y + result[0] == x and 0 <= result[0] < y and 0 <= result[1]))\ndef DivisionFunction(x: int, y: int) -> Tuple[int, int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import Tuple\n\n\n@icontract.require(lambda x: x >= 0)\n@icontract.require(lambda y: y >= 0)\n@icontract.ensure(lambda x, y, result: y != 0 or (result[0] == x and result[1] == 0))\n@icontract.ensure(lambda x, y, result: y == 0 or (\n    result[1] * y + result[0] == x and 0 <= result[0] < y and 0 <= result[1]))\ndef DivisionFunction(x: int, y: int) -> Tuple[int, int]:\n    if y == 0:\n        return (x, 0)\n    r, q = x, 0\n    while y <= r:\n        r -= y\n        q += 1\n    return (r, q)\n"
+  }
+}

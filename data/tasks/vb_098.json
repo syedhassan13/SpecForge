@@ -1,0 +1,79 @@
+{
+  "task_id": "vb_098",
+  "verina_id": "verina_basic_98",
+  "upstream": "clover/Clover_triple",
+  "entry_point": "Triple",
+  "description": "Return three times the integer x. The result r must satisfy: r divided by 3 (integer division rounding down) equals x, and r is a multiple of 3.",
+  "params": [
+    {
+      "name": "x",
+      "type": "int"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "x": 0
+      },
+      "expected": 0,
+      "unexpected": [
+        -1,
+        1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "x": 2
+      },
+      "expected": 6,
+      "unexpected": [
+        4,
+        5,
+        7
+      ]
+    },
+    {
+      "input": {
+        "x": -4
+      },
+      "expected": -12,
+      "unexpected": [
+        -8,
+        -10,
+        -16
+      ]
+    },
+    {
+      "input": {
+        "x": 10
+      },
+      "expected": 30,
+      "unexpected": [
+        20,
+        25,
+        35
+      ]
+    },
+    {
+      "input": {
+        "x": -1
+      },
+      "expected": -3,
+      "unexpected": [
+        -2,
+        -4,
+        0
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method Triple(x: int) returns (result: int)\n  ensures result / 3 == x && result / 3 * 3 == result\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method Triple(x: int) returns (result: int)\n  ensures result / 3 == x && result / 3 * 3 == result\n{\n  result := x * 3;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.ensure(lambda x, result: result // 3 == x and result // 3 * 3 == result)\ndef Triple(x: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.ensure(lambda x, result: result // 3 == x and result // 3 * 3 == result)\ndef Triple(x: int) -> int:\n    return x * 3\n"
+  }
+}

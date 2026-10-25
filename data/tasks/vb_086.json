@@ -1,0 +1,186 @@
+{
+  "task_id": "vb_086",
+  "verina_id": "verina_basic_86",
+  "upstream": "clover/Clover_rotate",
+  "entry_point": "rotate",
+  "description": "Given a list of integers a and a non-negative integer offset, return a rotated to the left by offset positions. The result has the same length n as a, and for every index i its element is a[(i + offset) mod n]. The offset may be larger than n; an empty list gives an empty result.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    },
+    {
+      "name": "offset",
+      "type": "int"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "offset": 2
+      },
+      "expected": [
+        3,
+        4,
+        5,
+        1,
+        2
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          2,
+          3,
+          4,
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10,
+          20,
+          30,
+          40
+        ],
+        "offset": 1
+      },
+      "expected": [
+        20,
+        30,
+        40,
+        10
+      ],
+      "unexpected": [
+        [
+          10,
+          20,
+          30,
+          40
+        ],
+        [
+          40,
+          10,
+          20,
+          30
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [],
+        "offset": 5
+      },
+      "expected": [],
+      "unexpected": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          7
+        ],
+        "offset": 0
+      },
+      "expected": [
+        7
+      ],
+      "unexpected": [
+        [
+          0
+        ],
+        [
+          8
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -1,
+          -2,
+          -3,
+          -4
+        ],
+        "offset": 3
+      },
+      "expected": [
+        -4,
+        -1,
+        -2,
+        -3
+      ],
+      "unexpected": [
+        [
+          -1,
+          -2,
+          -3,
+          -4
+        ],
+        [
+          -3,
+          -4,
+          -1,
+          -2
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          5,
+          10,
+          15
+        ],
+        "offset": 5
+      },
+      "expected": [
+        15,
+        5,
+        10
+      ],
+      "unexpected": [
+        [
+          5,
+          10,
+          15
+        ],
+        [
+          10,
+          15,
+          5
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method rotate(a: seq<int>, offset: int) returns (result: seq<int>)\n  requires offset >= 0\n  ensures |result| == |a|\n  ensures forall i :: 0 <= i < |a| ==> result[i] == a[(i + offset) % |a|]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method rotate(a: seq<int>, offset: int) returns (result: seq<int>)\n  requires offset >= 0\n  ensures |result| == |a|\n  ensures forall i :: 0 <= i < |a| ==> result[i] == a[(i + offset) % |a|]\n{\n  result := [];\n  var i := 0;\n  while i < |a|\n    invariant 0 <= i <= |a|\n    invariant |result| == i\n    invariant forall k :: 0 <= k < i ==> result[k] == a[(k + offset) % |a|]\n  {\n    result := result + [a[(i + offset) % |a|]];\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda offset: offset >= 0)\n@icontract.ensure(lambda a, result: len(result) == len(a))\n@icontract.ensure(lambda a, offset, result: all(result[i] == a[(i + offset) % len(a)] for i in range(len(a))))\ndef rotate(a: List[int], offset: int) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda offset: offset >= 0)\n@icontract.ensure(lambda a, result: len(result) == len(a))\n@icontract.ensure(lambda a, offset, result: all(result[i] == a[(i + offset) % len(a)] for i in range(len(a))))\ndef rotate(a: List[int], offset: int) -> List[int]:\n    n = len(a)\n    return [a[(i + offset) % n] for i in range(n)]\n"
+  }
+}

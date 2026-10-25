@@ -1,0 +1,189 @@
+{
+  "task_id": "vb_095",
+  "verina_id": "verina_basic_95",
+  "upstream": "clover/Clover_swap_in_array",
+  "entry_point": "swap",
+  "description": "Given a list of integers arr and two indices i and j, both non-negative and smaller than the length of arr, return a new list of the same length in which the element originally at position i is at position j, the element originally at position j is at position i, and every other element is unchanged. If i equals j the list is returned unchanged.",
+  "params": [
+    {
+      "name": "arr",
+      "type": "list<int>"
+    },
+    {
+      "name": "i",
+      "type": "int"
+    },
+    {
+      "name": "j",
+      "type": "int"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "i": 1,
+        "j": 3
+      },
+      "expected": [
+        1,
+        4,
+        3,
+        2,
+        5
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          1,
+          3,
+          2,
+          4,
+          5
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          10,
+          20,
+          30,
+          40
+        ],
+        "i": 0,
+        "j": 3
+      },
+      "expected": [
+        40,
+        20,
+        30,
+        10
+      ],
+      "unexpected": [
+        [
+          10,
+          40,
+          30,
+          20
+        ],
+        [
+          10,
+          20,
+          40,
+          30
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          7,
+          8,
+          9
+        ],
+        "i": 1,
+        "j": 2
+      },
+      "expected": [
+        7,
+        9,
+        8
+      ],
+      "unexpected": [
+        [
+          8,
+          7,
+          9
+        ],
+        [
+          9,
+          8,
+          7
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "i": 0,
+        "j": 0
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          4,
+          3
+        ],
+        [
+          4,
+          2,
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "arr": [
+          -1,
+          -2,
+          -3
+        ],
+        "i": 0,
+        "j": 2
+      },
+      "expected": [
+        -3,
+        -2,
+        -1
+      ],
+      "unexpected": [
+        [
+          -1,
+          -2,
+          -3
+        ],
+        [
+          -3,
+          -1,
+          -2
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method swap(arr: seq<int>, i: int, j: int) returns (result: seq<int>)\n  requires i >= 0 && j >= 0 && i < |arr| && j < |arr|\n  ensures |result| == |arr|\n  ensures result[i] == arr[j]\n  ensures result[j] == arr[i]\n  ensures forall k :: 0 <= k < |arr| && k != i && k != j ==> result[k] == arr[k]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method swap(arr: seq<int>, i: int, j: int) returns (result: seq<int>)\n  requires i >= 0 && j >= 0 && i < |arr| && j < |arr|\n  ensures |result| == |arr|\n  ensures result[i] == arr[j]\n  ensures result[j] == arr[i]\n  ensures forall k :: 0 <= k < |arr| && k != i && k != j ==> result[k] == arr[k]\n{\n  var tmp := arr[i];\n  result := arr[i := arr[j]];\n  result := result[j := tmp];\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda arr, i, j: i >= 0 and j >= 0 and i < len(arr) and j < len(arr))\n@icontract.ensure(lambda arr, result: len(result) == len(arr))\n@icontract.ensure(lambda arr, i, j, result: len(result) == len(arr) and result[i] == arr[j])\n@icontract.ensure(lambda arr, i, j, result: len(result) == len(arr) and result[j] == arr[i])\n@icontract.ensure(lambda arr, i, j, result: len(result) == len(arr) and all(\n    result[k] == arr[k] for k in range(len(arr)) if k != i and k != j))\ndef swap(arr: List[int], i: int, j: int) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda arr, i, j: i >= 0 and j >= 0 and i < len(arr) and j < len(arr))\n@icontract.ensure(lambda arr, result: len(result) == len(arr))\n@icontract.ensure(lambda arr, i, j, result: len(result) == len(arr) and result[i] == arr[j])\n@icontract.ensure(lambda arr, i, j, result: len(result) == len(arr) and result[j] == arr[i])\n@icontract.ensure(lambda arr, i, j, result: len(result) == len(arr) and all(\n    result[k] == arr[k] for k in range(len(arr)) if k != i and k != j))\ndef swap(arr: List[int], i: int, j: int) -> List[int]:\n    result = list(arr)\n    tmp = result[i]\n    result[i] = result[j]\n    result[j] = tmp\n    return result\n"
+  },
+  "notes": "VERINA's Lean postcondition reads result[k]! (with a default value for out-of-range indices) and does not state the length of the result. Both specs add len(result) == len(arr), which the VERINA description states explicitly (\"Has the same size as the input array\") and which is needed for the indexing to be well defined."
+}

@@ -1,0 +1,176 @@
+{
+  "task_id": "vb_087",
+  "verina_id": "verina_basic_87",
+  "upstream": "clover/Clover_selectionsort",
+  "entry_point": "SelectionSort",
+  "description": "Sort a list of integers into non-decreasing order. The result must be sorted (each element is less than or equal to every later element) and must be a permutation of the input, containing exactly the same elements with the same multiplicities. The input may be empty.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          3,
+          1,
+          2
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3
+      ],
+      "unexpected": [
+        [
+          3,
+          1,
+          2
+        ],
+        [
+          2,
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          0
+        ]
+      },
+      "expected": [
+        0
+      ],
+      "unexpected": [
+        [
+          0,
+          0
+        ],
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "unexpected": [
+        [
+          5,
+          4,
+          3,
+          2,
+          1
+        ],
+        [
+          1,
+          5,
+          4,
+          3,
+          2
+        ],
+        [
+          1,
+          2,
+          4,
+          3,
+          5
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          2,
+          2,
+          1,
+          4
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        2,
+        4
+      ],
+      "unexpected": [
+        [
+          2,
+          1,
+          2,
+          4
+        ],
+        [
+          1,
+          2,
+          4,
+          2
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10,
+          -5,
+          0,
+          3
+        ]
+      },
+      "expected": [
+        -5,
+        0,
+        3,
+        10
+      ],
+      "unexpected": [
+        [
+          10,
+          -5,
+          3,
+          0
+        ],
+        [
+          0,
+          -5,
+          3,
+          10
+        ],
+        [
+          3,
+          -5,
+          10,
+          0
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method SelectionSort(a: seq<int>) returns (result: seq<int>)\n  ensures forall i, j :: 0 <= i < j < |result| ==> result[i] <= result[j]\n  ensures multiset(result) == multiset(a)\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method SelectionSort(a: seq<int>) returns (result: seq<int>)\n  ensures forall i, j :: 0 <= i < j < |result| ==> result[i] <= result[j]\n  ensures multiset(result) == multiset(a)\n{\n  result := a;\n  var n := |result|;\n  var i := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant |result| == n\n    invariant multiset(result) == multiset(a)\n    invariant forall x, y :: 0 <= x < y < i ==> result[x] <= result[y]\n    invariant forall x, y :: 0 <= x < i <= y < n ==> result[x] <= result[y]\n  {\n    var m := i;\n    var j := i + 1;\n    while j < n\n      invariant i <= m < n\n      invariant i + 1 <= j <= n\n      invariant forall k :: i <= k < j ==> result[m] <= result[k]\n    {\n      if result[j] < result[m] {\n        m := j;\n      }\n      j := j + 1;\n    }\n    result := result[i := result[m]][m := result[i]];\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda result: all(result[i] <= result[i + 1] for i in range(len(result) - 1)))\n@icontract.ensure(lambda a, result: sorted(result) == sorted(a))\ndef SelectionSort(a: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda result: all(result[i] <= result[i + 1] for i in range(len(result) - 1)))\n@icontract.ensure(lambda a, result: sorted(result) == sorted(a))\ndef SelectionSort(a: List[int]) -> List[int]:\n    res = list(a)\n    n = len(res)\n    for i in range(n):\n        m = i\n        for j in range(i + 1, n):\n            if res[j] < res[m]:\n                m = j\n        res[i], res[m] = res[m], res[i]\n    return res\n"
+  }
+}

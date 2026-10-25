@@ -1,0 +1,102 @@
+{
+  "task_id": "vb_074",
+  "verina_id": "verina_basic_74",
+  "upstream": "clover/Clover_max_array",
+  "entry_point": "maxArray",
+  "description": "Given a non-empty list of integers, return its maximum element: a value that is greater than or equal to every element of the list and that occurs in the list.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": 5,
+      "unexpected": [
+        4,
+        3
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          5,
+          3,
+          4,
+          1,
+          2
+        ]
+      },
+      "expected": 5,
+      "unexpected": [
+        4,
+        3,
+        2
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          7
+        ]
+      },
+      "expected": 7,
+      "unexpected": [
+        6,
+        8
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -1,
+          -5,
+          -3,
+          -4
+        ]
+      },
+      "expected": -1,
+      "unexpected": [
+        -3,
+        -4
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -10,
+          -20,
+          -30,
+          -5,
+          -15
+        ]
+      },
+      "expected": -5,
+      "unexpected": [
+        -10,
+        -15,
+        -20
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method maxArray(a: seq<int>) returns (result: int)\n  requires |a| > 0\n  ensures forall k :: 0 <= k < |a| ==> result >= a[k]\n  ensures result in a\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method maxArray(a: seq<int>) returns (result: int)\n  requires |a| > 0\n  ensures forall k :: 0 <= k < |a| ==> result >= a[k]\n  ensures result in a\n{\n  result := a[0];\n  var i := 1;\n  while i < |a|\n    invariant 1 <= i <= |a|\n    invariant forall k :: 0 <= k < i ==> result >= a[k]\n    invariant result in a\n  {\n    if a[i] > result {\n      result := a[i];\n    }\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: len(a) > 0)\n@icontract.ensure(lambda a, result: all(result >= x for x in a))\n@icontract.ensure(lambda a, result: result in a)\ndef maxArray(a: List[int]) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: len(a) > 0)\n@icontract.ensure(lambda a, result: all(result >= x for x in a))\n@icontract.ensure(lambda a, result: result in a)\ndef maxArray(a: List[int]) -> int:\n    best = a[0]\n    for x in a:\n        if x > best:\n            best = x\n    return best\n"
+  },
+  "notes": "VERINA's 'exists k < |a|, result = a[k]' is written as the equivalent membership test 'result in a', which the Dafny verifier can decide on concrete lists."
+}

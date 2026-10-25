@@ -1,0 +1,83 @@
+{
+  "task_id": "vb_073",
+  "verina_id": "verina_basic_73",
+  "upstream": "clover/Clover_match",
+  "entry_point": "Match",
+  "description": "Given two strings s and p of the same length, where p is a pattern in which the character '?' is a wildcard that matches any single character, return true if at every position the character of s equals the character of p or the character of p is '?', and false otherwise.",
+  "params": [
+    {
+      "name": "s",
+      "type": "string"
+    },
+    {
+      "name": "p",
+      "type": "string"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "s": "abc",
+        "p": "a?c"
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "s": "hello",
+        "p": "he?lo"
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "s": "world",
+        "p": "w?rld"
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "s": "test",
+        "p": "te?t"
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "s": "abc",
+        "p": "abd"
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method Match(s: string, p: string) returns (result: bool)\n  requires |s| == |p|\n  ensures result <==> (forall n :: 0 <= n < |s| ==> s[n] == p[n] || p[n] == '?')\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method Match(s: string, p: string) returns (result: bool)\n  requires |s| == |p|\n  ensures result <==> (forall n :: 0 <= n < |s| ==> s[n] == p[n] || p[n] == '?')\n{\n  var i := 0;\n  while i < |s|\n    invariant 0 <= i <= |s|\n    invariant forall n :: 0 <= n < i ==> s[n] == p[n] || p[n] == '?'\n  {\n    if s[i] != p[i] && p[i] != '?' {\n      return false;\n    }\n    i := i + 1;\n  }\n  return true;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.require(lambda s, p: len(s) == len(p))\n@icontract.ensure(lambda s, p, result: result == all(s[n] == p[n] or p[n] == '?' for n in range(len(s))))\ndef Match(s: str, p: str) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.require(lambda s, p: len(s) == len(p))\n@icontract.ensure(lambda s, p, result: result == all(s[n] == p[n] or p[n] == '?' for n in range(len(s))))\ndef Match(s: str, p: str) -> bool:\n    for i in range(len(s)):\n        if s[i] != p[i] and p[i] != '?':\n            return False\n    return True\n"
+  },
+  "probe_exempt": {
+    "dafny": {
+      "accept": "Dafny cannot prove the accept probes whose expected output is false: they need an existential witness index into a sequence that the probe pins to a literal, and Z3 gets no ground index terms to instantiate the quantifier with. The spec is the direct translation of VERINA's quantified postcondition; all reject probes and the accept probes with expected output true pass. The only reformulation found that Dafny decides was a recursive predicate with a {:fuel} attribute, which would make the spec unnatural and change the proof task."
+    }
+  }
+}

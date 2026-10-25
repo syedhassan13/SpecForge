@@ -1,0 +1,96 @@
+{
+  "task_id": "vb_080",
+  "verina_id": "verina_basic_80",
+  "upstream": "clover/Clover_only_once",
+  "entry_point": "only_once",
+  "description": "Given a list of integers a and an integer key, return true if key occurs exactly once in a, and false otherwise (when key does not occur at all or occurs more than once). The list may be empty.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    },
+    {
+      "name": "key",
+      "type": "int"
+    }
+  ],
+  "returns": "bool",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "key": 2
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          2,
+          3,
+          4
+        ],
+        "key": 2
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "key": 1
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10
+        ],
+        "key": 10
+      },
+      "expected": true,
+      "unexpected": [
+        false
+      ]
+    },
+    {
+      "input": {
+        "a": [],
+        "key": 5
+      },
+      "expected": false,
+      "unexpected": [
+        true
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method only_once(a: seq<int>, key: int) returns (result: bool)\n  ensures multiset(a)[key] == 1 ==> result\n  ensures multiset(a)[key] != 1 ==> !result\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method only_once(a: seq<int>, key: int) returns (result: bool)\n  ensures multiset(a)[key] == 1 ==> result\n  ensures multiset(a)[key] != 1 ==> !result\n{\n  var count := 0;\n  var i := 0;\n  while i < |a|\n    invariant 0 <= i <= |a|\n    invariant count == multiset(a[..i])[key]\n  {\n    assert a[..i + 1] == a[..i] + [a[i]];\n    if a[i] == key {\n      count := count + 1;\n    }\n    i := i + 1;\n  }\n  assert a[..|a|] == a;\n  result := count == 1;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda a, key, result: (a.count(key) == 1) == result)\ndef only_once(a: List[int], key: int) -> bool:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda a, key, result: (a.count(key) == 1) == result)\ndef only_once(a: List[int], key: int) -> bool:\n    count = 0\n    for x in a:\n        if x == key:\n            count += 1\n    return count == 1\n"
+  }
+}

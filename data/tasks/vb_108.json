@@ -1,0 +1,245 @@
+{
+  "task_id": "vb_108",
+  "verina_id": "verina_basic_108",
+  "upstream": "clover/Clover_below_zero",
+  "entry_point": "below_zero",
+  "description": "Given a list of integers operations, return a pair (s, neg). s is the list of running totals: it has one more element than operations, s[0] is 0, and s[i + 1] == s[i] + operations[i] for every index i of operations. neg is true if some running total after the initial 0 is negative, and false if all running totals are non-negative. An empty operations list gives ([0], false).",
+  "params": [
+    {
+      "name": "operations",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "tuple<list<int>, bool>",
+  "tests": [
+    {
+      "input": {
+        "operations": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": [
+        [
+          0,
+          1,
+          3,
+          6
+        ],
+        false
+      ],
+      "unexpected": [
+        [
+          [
+            0,
+            1,
+            3,
+            5
+          ],
+          false
+        ],
+        [
+          [
+            0,
+            2,
+            3,
+            6
+          ],
+          false
+        ],
+        [
+          [
+            0,
+            1,
+            3,
+            6
+          ],
+          true
+        ]
+      ]
+    },
+    {
+      "input": {
+        "operations": [
+          -1,
+          2,
+          -1
+        ]
+      },
+      "expected": [
+        [
+          0,
+          -1,
+          1,
+          0
+        ],
+        true
+      ],
+      "unexpected": [
+        [
+          [
+            0,
+            -1,
+            1,
+            0
+          ],
+          false
+        ],
+        [
+          [
+            0,
+            -1,
+            0,
+            0
+          ],
+          true
+        ],
+        [
+          [
+            0,
+            -2,
+            1,
+            0
+          ],
+          true
+        ]
+      ]
+    },
+    {
+      "input": {
+        "operations": []
+      },
+      "expected": [
+        [
+          0
+        ],
+        false
+      ],
+      "unexpected": [
+        [
+          [
+            0
+          ],
+          true
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          false
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          false
+        ]
+      ]
+    },
+    {
+      "input": {
+        "operations": [
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        false
+      ],
+      "unexpected": [
+        [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          true
+        ],
+        [
+          [
+            0,
+            0,
+            0
+          ],
+          false
+        ],
+        [
+          [
+            0,
+            0,
+            1,
+            0
+          ],
+          false
+        ]
+      ]
+    },
+    {
+      "input": {
+        "operations": [
+          10,
+          -20,
+          5
+        ]
+      },
+      "expected": [
+        [
+          0,
+          10,
+          -10,
+          -5
+        ],
+        true
+      ],
+      "unexpected": [
+        [
+          [
+            0,
+            10,
+            -10,
+            -5
+          ],
+          false
+        ],
+        [
+          [
+            0,
+            10,
+            -9,
+            -5
+          ],
+          true
+        ],
+        [
+          [
+            0,
+            10,
+            -10,
+            -6
+          ],
+          true
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "// true iff some element of s at a position >= i is negative\npredicate {:fuel 10} HasNegativeFrom(s: seq<int>, i: nat)\n  decreases |s| - i\n{\n  i < |s| && (s[i] < 0 || HasNegativeFrom(s, i + 1))\n}\n\nmethod below_zero(operations: seq<int>) returns (result: (seq<int>, bool))\n  ensures |result.0| == |operations| + 1\n  ensures result.0[0] == 0\n  ensures forall i :: 0 <= i < |result.0| - 1 ==> result.0[i + 1] == result.0[i] + operations[i]\n  ensures result.1 ==> HasNegativeFrom(result.0, 1)\n  ensures !result.1 ==> forall i :: 0 <= i < |result.0| ==> result.0[i] >= 0\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "// true iff some element of s at a position >= i is negative\npredicate {:fuel 10} HasNegativeFrom(s: seq<int>, i: nat)\n  decreases |s| - i\n{\n  i < |s| && (s[i] < 0 || HasNegativeFrom(s, i + 1))\n}\n\nmethod below_zero(operations: seq<int>) returns (result: (seq<int>, bool))\n  ensures |result.0| == |operations| + 1\n  ensures result.0[0] == 0\n  ensures forall i :: 0 <= i < |result.0| - 1 ==> result.0[i + 1] == result.0[i] + operations[i]\n  ensures result.1 ==> HasNegativeFrom(result.0, 1)\n  ensures !result.1 ==> forall i :: 0 <= i < |result.0| ==> result.0[i] >= 0\n{\n  var s: seq<int> := [0];\n  var i := 0;\n  while i < |operations|\n    invariant 0 <= i <= |operations|\n    invariant |s| == i + 1\n    invariant s[0] == 0\n    invariant forall k :: 0 <= k < i ==> s[k + 1] == s[k] + operations[k]\n  {\n    s := s + [s[i] + operations[i]];\n    i := i + 1;\n  }\n  var neg := false;\n  var k := 0;\n  while k < |s|\n    invariant 0 <= k <= |s|\n    invariant forall m :: 0 <= m < k ==> s[m] >= 0\n  {\n    if s[k] < 0 {\n      NegativeOccurs(s, k, 1);\n      neg := true;\n      break;\n    }\n    k := k + 1;\n  }\n  result := (s, neg);\n}\n\nlemma NegativeOccurs(s: seq<int>, k: nat, i: nat)\n  requires i <= k < |s| && s[k] < 0\n  ensures HasNegativeFrom(s, i)\n  decreases k - i\n{\n  if i < k {\n    NegativeOccurs(s, k, i + 1);\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List, Tuple\n\n\n@icontract.ensure(lambda operations, result: len(result[0]) == len(operations) + 1)\n@icontract.ensure(lambda result: len(result[0]) > 0 and result[0][0] == 0)\n@icontract.ensure(lambda operations, result: len(result[0]) == len(operations) + 1 and all(\n    result[0][i + 1] == result[0][i] + operations[i] for i in range(len(result[0]) - 1)))\n@icontract.ensure(lambda operations, result: (not result[1]) or (\n    len(result[0]) == len(operations) + 1 and any(result[0][i + 1] < 0 for i in range(len(operations)))))\n@icontract.ensure(lambda result: result[1] or all(x >= 0 for x in result[0]))\ndef below_zero(operations: List[int]) -> Tuple[List[int], bool]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List, Tuple\n\n\n@icontract.ensure(lambda operations, result: len(result[0]) == len(operations) + 1)\n@icontract.ensure(lambda result: len(result[0]) > 0 and result[0][0] == 0)\n@icontract.ensure(lambda operations, result: len(result[0]) == len(operations) + 1 and all(\n    result[0][i + 1] == result[0][i] + operations[i] for i in range(len(result[0]) - 1)))\n@icontract.ensure(lambda operations, result: (not result[1]) or (\n    len(result[0]) == len(operations) + 1 and any(result[0][i + 1] < 0 for i in range(len(operations)))))\n@icontract.ensure(lambda result: result[1] or all(x >= 0 for x in result[0]))\ndef below_zero(operations: List[int]) -> Tuple[List[int], bool]:\n    s = [0]\n    for op in operations:\n        s.append(s[-1] + op)\n    neg = False\n    for x in s:\n        if x < 0:\n            neg = True\n            break\n    return (s, neg)\n"
+  },
+  "notes": "The existential (some running total after the initial 0 is negative) is stated in Dafny with the recursive predicate HasNegativeFrom(result.0, 1) ({:fuel 10}) so that Dafny can decide it on concrete outputs. The Python spec keeps VERINA's form."
+}

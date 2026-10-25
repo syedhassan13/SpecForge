@@ -1,0 +1,148 @@
+{
+  "task_id": "vb_078",
+  "verina_id": "verina_basic_78",
+  "upstream": "clover/Clover_multi_return",
+  "entry_point": "MultipleReturns",
+  "description": "Given two integers x and y, return a pair whose first component is their sum x + y and whose second component is their difference x - y.",
+  "params": [
+    {
+      "name": "x",
+      "type": "int"
+    },
+    {
+      "name": "y",
+      "type": "int"
+    }
+  ],
+  "returns": "tuple<int, int>",
+  "tests": [
+    {
+      "input": {
+        "x": 3,
+        "y": 2
+      },
+      "expected": [
+        5,
+        1
+      ],
+      "unexpected": [
+        [
+          6,
+          2
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "x": -2,
+        "y": 3
+      },
+      "expected": [
+        1,
+        -5
+      ],
+      "unexpected": [
+        [
+          -1,
+          5
+        ],
+        [
+          2,
+          -3
+        ],
+        [
+          1,
+          5
+        ]
+      ]
+    },
+    {
+      "input": {
+        "x": 0,
+        "y": 0
+      },
+      "expected": [
+        0,
+        0
+      ],
+      "unexpected": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          -1,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "x": 10,
+        "y": 5
+      },
+      "expected": [
+        15,
+        5
+      ],
+      "unexpected": [
+        [
+          14,
+          5
+        ],
+        [
+          15,
+          6
+        ],
+        [
+          10,
+          5
+        ]
+      ]
+    },
+    {
+      "input": {
+        "x": -5,
+        "y": -10
+      },
+      "expected": [
+        -15,
+        5
+      ],
+      "unexpected": [
+        [
+          -15,
+          -5
+        ],
+        [
+          -5,
+          15
+        ],
+        [
+          -10,
+          0
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method MultipleReturns(x: int, y: int) returns (result: (int, int))\n  ensures result.0 == x + y\n  ensures result.1 + y == x\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method MultipleReturns(x: int, y: int) returns (result: (int, int))\n  ensures result.0 == x + y\n  ensures result.1 + y == x\n{\n  result := (x + y, x - y);\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import Tuple\n\n\n@icontract.ensure(lambda x, y, result: result[0] == x + y)\n@icontract.ensure(lambda x, y, result: result[1] + y == x)\ndef MultipleReturns(x: int, y: int) -> Tuple[int, int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import Tuple\n\n\n@icontract.ensure(lambda x, y, result: result[0] == x + y)\n@icontract.ensure(lambda x, y, result: result[1] + y == x)\ndef MultipleReturns(x: int, y: int) -> Tuple[int, int]:\n    return (x + y, x - y)\n"
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "task_id": "vb_088",
+  "verina_id": "verina_basic_88",
+  "upstream": "clover/Clover_seq_to_array",
+  "entry_point": "ToArray",
+  "description": "Given a list of integers xs, return a list with the same elements in the same order: the result has the same length as xs and its element at every index i equals xs[i]. The input may be empty.",
+  "params": [
+    {
+      "name": "xs",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "xs": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3
+      ],
+      "unexpected": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          3,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "xs": []
+      },
+      "expected": [],
+      "unexpected": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "xs": [
+          0,
+          -1,
+          5
+        ]
+      },
+      "expected": [
+        0,
+        -1,
+        5
+      ],
+      "unexpected": [
+        [
+          -1,
+          0,
+          5
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          0,
+          -1,
+          4
+        ]
+      ]
+    },
+    {
+      "input": {
+        "xs": [
+          7
+        ]
+      },
+      "expected": [
+        7
+      ],
+      "unexpected": [
+        [],
+        [
+          0,
+          7
+        ],
+        [
+          8
+        ]
+      ]
+    },
+    {
+      "input": {
+        "xs": [
+          100,
+          200,
+          300,
+          400
+        ]
+      },
+      "expected": [
+        100,
+        200,
+        300,
+        400
+      ],
+      "unexpected": [
+        [
+          100,
+          200,
+          300
+        ],
+        [
+          100,
+          300,
+          200,
+          400
+        ],
+        [
+          400,
+          300,
+          200,
+          100
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method ToArray(xs: seq<int>) returns (result: seq<int>)\n  ensures |result| == |xs|\n  ensures forall i :: 0 <= i < |xs| ==> result[i] == xs[i]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method ToArray(xs: seq<int>) returns (result: seq<int>)\n  ensures |result| == |xs|\n  ensures forall i :: 0 <= i < |xs| ==> result[i] == xs[i]\n{\n  result := [];\n  var i := 0;\n  while i < |xs|\n    invariant 0 <= i <= |xs|\n    invariant result == xs[..i]\n  {\n    result := result + [xs[i]];\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda xs, result: len(result) == len(xs) and all(\n    result[i] == xs[i] for i in range(len(xs))))\ndef ToArray(xs: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda xs, result: len(result) == len(xs) and all(\n    result[i] == xs[i] for i in range(len(xs))))\ndef ToArray(xs: List[int]) -> List[int]:\n    return [x for x in xs]\n"
+  }
+}

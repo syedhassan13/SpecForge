@@ -1,0 +1,165 @@
+{
+  "task_id": "vb_082",
+  "verina_id": "verina_basic_82",
+  "upstream": "clover/Clover_remove_front",
+  "entry_point": "remove_front",
+  "description": "Given a non-empty list of integers a, return the list obtained by removing its first element. The result has length one less than a, and for every index i of the result, its element at i equals the element of a at index i + 1.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          3,
+          4,
+          5
+        ],
+        [
+          2,
+          3,
+          4
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10,
+          20,
+          30
+        ]
+      },
+      "expected": [
+        20,
+        30
+      ],
+      "unexpected": [
+        [
+          10,
+          20,
+          30
+        ],
+        [
+          10,
+          30
+        ],
+        [
+          10,
+          20
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          0,
+          -1,
+          -2,
+          -3
+        ]
+      },
+      "expected": [
+        -1,
+        -2,
+        -3
+      ],
+      "unexpected": [
+        [
+          0,
+          -1,
+          -2,
+          -3
+        ],
+        [
+          -1,
+          -3
+        ],
+        [
+          -2,
+          -3
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          7
+        ]
+      },
+      "expected": [],
+      "unexpected": [
+        [
+          7
+        ],
+        [
+          0
+        ],
+        [
+          7,
+          7
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          100,
+          0,
+          50
+        ]
+      },
+      "expected": [
+        0,
+        50
+      ],
+      "unexpected": [
+        [
+          100,
+          0,
+          50
+        ],
+        [
+          50
+        ],
+        [
+          0
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method remove_front(a: seq<int>) returns (result: seq<int>)\n  requires |a| > 0\n  ensures |a| > 0\n  ensures |result| == |a| - 1\n  ensures forall i :: 0 <= i < |result| ==> result[i] == a[i + 1]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method remove_front(a: seq<int>) returns (result: seq<int>)\n  requires |a| > 0\n  ensures |a| > 0\n  ensures |result| == |a| - 1\n  ensures forall i :: 0 <= i < |result| ==> result[i] == a[i + 1]\n{\n  result := a[1..];\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: len(a) > 0)\n@icontract.ensure(lambda a: len(a) > 0)\n@icontract.ensure(lambda a, result: len(result) == len(a) - 1)\n@icontract.ensure(lambda a, result: all(result[i] == a[i + 1] for i in range(len(result))))\ndef remove_front(a: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: len(a) > 0)\n@icontract.ensure(lambda a: len(a) > 0)\n@icontract.ensure(lambda a, result: len(result) == len(a) - 1)\n@icontract.ensure(lambda a, result: all(result[i] == a[i + 1] for i in range(len(result))))\ndef remove_front(a: List[int]) -> List[int]:\n    return a[1:]\n"
+  }
+}

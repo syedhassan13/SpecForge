@@ -1,0 +1,79 @@
+{
+  "task_id": "vb_099",
+  "verina_id": "verina_basic_99",
+  "upstream": "clover/Clover_triple2",
+  "entry_point": "Triple",
+  "description": "Given an integer x (which may be negative), return three times x.",
+  "params": [
+    {
+      "name": "x",
+      "type": "int"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "x": 10
+      },
+      "expected": 30,
+      "unexpected": [
+        20,
+        25,
+        35
+      ]
+    },
+    {
+      "input": {
+        "x": 18
+      },
+      "expected": 54,
+      "unexpected": [
+        50,
+        56,
+        60
+      ]
+    },
+    {
+      "input": {
+        "x": 0
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        -1,
+        5
+      ]
+    },
+    {
+      "input": {
+        "x": -5
+      },
+      "expected": -15,
+      "unexpected": [
+        -10,
+        -20,
+        0
+      ]
+    },
+    {
+      "input": {
+        "x": 25
+      },
+      "expected": 75,
+      "unexpected": [
+        70,
+        80,
+        65
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method Triple(x: int) returns (result: int)\n  ensures result / 3 == x && result / 3 * 3 == result\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method Triple(x: int) returns (result: int)\n  ensures result / 3 == x && result / 3 * 3 == result\n{\n  if x < 18 {\n    var a := 2 * x;\n    var b := 4 * x;\n    result := (a + b) / 2;\n  } else {\n    var y := 2 * x;\n    result := x + y;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.ensure(lambda x, result: result // 3 == x and result // 3 * 3 == result)\ndef Triple(x: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.ensure(lambda x, result: result // 3 == x and result // 3 * 3 == result)\ndef Triple(x: int) -> int:\n    if x < 18:\n        a = 2 * x\n        b = 4 * x\n        return (a + b) // 2\n    y = 2 * x\n    return x + y\n"
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "task_id": "vb_106",
+  "verina_id": "verina_basic_106",
+  "upstream": "clover/Clover_array_sum",
+  "entry_point": "arraySum",
+  "description": "Given two lists of integers a and b of the same length, return their element-wise sum: a list of the same length whose element at every index i equals a[i] + b[i].",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    },
+    {
+      "name": "b",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3
+        ],
+        "b": [
+          4,
+          5,
+          6
+        ]
+      },
+      "expected": [
+        5,
+        7,
+        9
+      ],
+      "unexpected": [
+        [
+          5,
+          6,
+          9
+        ],
+        [
+          4,
+          7,
+          9
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          0,
+          0,
+          0
+        ],
+        "b": [
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ],
+      "unexpected": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -1,
+          2,
+          3
+        ],
+        "b": [
+          1,
+          -2,
+          4
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        7
+      ],
+      "unexpected": [
+        [
+          0,
+          1,
+          7
+        ],
+        [
+          0,
+          0,
+          6
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10
+        ],
+        "b": [
+          -10
+        ]
+      },
+      "expected": [
+        0
+      ],
+      "unexpected": [
+        [
+          1
+        ],
+        [
+          -1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          100,
+          200,
+          300
+        ],
+        "b": [
+          100,
+          200,
+          300
+        ]
+      },
+      "expected": [
+        200,
+        400,
+        600
+      ],
+      "unexpected": [
+        [
+          200,
+          400,
+          601
+        ],
+        [
+          199,
+          400,
+          600
+        ],
+        [
+          200,
+          399,
+          600
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method arraySum(a: seq<int>, b: seq<int>) returns (result: seq<int>)\n  requires |a| == |b|\n  ensures |result| == |a|\n  ensures forall i :: 0 <= i < |a| ==> a[i] + b[i] == result[i]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method arraySum(a: seq<int>, b: seq<int>) returns (result: seq<int>)\n  requires |a| == |b|\n  ensures |result| == |a|\n  ensures forall i :: 0 <= i < |a| ==> a[i] + b[i] == result[i]\n{\n  result := [];\n  var i := 0;\n  while i < |a|\n    invariant 0 <= i <= |a|\n    invariant |result| == i\n    invariant forall k :: 0 <= k < i ==> a[k] + b[k] == result[k]\n  {\n    result := result + [a[i] + b[i]];\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a, b: len(a) == len(b))\n@icontract.ensure(lambda a, result: len(result) == len(a))\n@icontract.ensure(lambda a, b, result: all(a[i] + b[i] == result[i] for i in range(len(a))))\ndef arraySum(a: List[int], b: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a, b: len(a) == len(b))\n@icontract.ensure(lambda a, result: len(result) == len(a))\n@icontract.ensure(lambda a, b, result: all(a[i] + b[i] == result[i] for i in range(len(a))))\ndef arraySum(a: List[int], b: List[int]) -> List[int]:\n    return [a[i] + b[i] for i in range(len(a))]\n"
+  }
+}

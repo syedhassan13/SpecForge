@@ -1,0 +1,102 @@
+{
+  "task_id": "vb_075",
+  "verina_id": "verina_basic_75",
+  "upstream": "clover/Clover_min_array",
+  "entry_point": "minArray",
+  "description": "Return the minimum element of a non-empty list of integers: a value that occurs in the list and is less than or equal to every element of the list.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          5,
+          3,
+          8,
+          2,
+          7
+        ]
+      },
+      "expected": 2,
+      "unexpected": [
+        3,
+        5,
+        7
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10,
+          10,
+          10
+        ]
+      },
+      "expected": 10,
+      "unexpected": [
+        0,
+        5,
+        11
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -1,
+          -5,
+          3,
+          0
+        ]
+      },
+      "expected": -5,
+      "unexpected": [
+        -1,
+        0,
+        3
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          42
+        ]
+      },
+      "expected": 42,
+      "unexpected": [
+        0,
+        -42,
+        100
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          3,
+          -2,
+          0,
+          -2,
+          5
+        ]
+      },
+      "expected": -2,
+      "unexpected": [
+        0,
+        3,
+        5
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method minArray(a: seq<int>) returns (result: int)\n  requires |a| > 0\n  ensures forall i :: 0 <= i < |a| ==> result <= a[i]\n  ensures result in a\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method minArray(a: seq<int>) returns (result: int)\n  requires |a| > 0\n  ensures forall i :: 0 <= i < |a| ==> result <= a[i]\n  ensures result in a\n{\n  result := a[0];\n  var i := 1;\n  while i < |a|\n    invariant 1 <= i <= |a|\n    invariant forall j :: 0 <= j < i ==> result <= a[j]\n    invariant result in a\n  {\n    if a[i] < result {\n      result := a[i];\n    }\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: len(a) > 0)\n@icontract.ensure(lambda a, result: all(result <= x for x in a))\n@icontract.ensure(lambda a, result: result in a)\ndef minArray(a: List[int]) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: len(a) > 0)\n@icontract.ensure(lambda a, result: all(result <= x for x in a))\n@icontract.ensure(lambda a, result: result in a)\ndef minArray(a: List[int]) -> int:\n    result = a[0]\n    for x in a[1:]:\n        if x < result:\n            result = x\n    return result\n"
+  }
+}

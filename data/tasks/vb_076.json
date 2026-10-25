@@ -1,0 +1,83 @@
+{
+  "task_id": "vb_076",
+  "verina_id": "verina_basic_76",
+  "upstream": "clover/Clover_min_of_two",
+  "entry_point": "myMin",
+  "description": "Given two integers x and y, return the smaller of the two: x when x <= y, and y when x > y.",
+  "params": [
+    {
+      "name": "x",
+      "type": "int"
+    },
+    {
+      "name": "y",
+      "type": "int"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "x": 3,
+        "y": 5
+      },
+      "expected": 3,
+      "unexpected": [
+        5,
+        8
+      ]
+    },
+    {
+      "input": {
+        "x": 10,
+        "y": 7
+      },
+      "expected": 7,
+      "unexpected": [
+        10,
+        17
+      ]
+    },
+    {
+      "input": {
+        "x": 4,
+        "y": 4
+      },
+      "expected": 4,
+      "unexpected": [
+        0,
+        8
+      ]
+    },
+    {
+      "input": {
+        "x": -5,
+        "y": 0
+      },
+      "expected": -5,
+      "unexpected": [
+        0,
+        -4
+      ]
+    },
+    {
+      "input": {
+        "x": 0,
+        "y": -10
+      },
+      "expected": -10,
+      "unexpected": [
+        0,
+        -8
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method myMin(x: int, y: int) returns (result: int)\n  ensures x <= y ==> result == x\n  ensures x > y ==> result == y\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method myMin(x: int, y: int) returns (result: int)\n  ensures x <= y ==> result == x\n  ensures x > y ==> result == y\n{\n  if x < y {\n    result := x;\n  } else {\n    result := y;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.ensure(lambda x, y, result: not (x <= y) or result == x)\n@icontract.ensure(lambda x, y, result: not (x > y) or result == y)\ndef myMin(x: int, y: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.ensure(lambda x, y, result: not (x <= y) or result == x)\n@icontract.ensure(lambda x, y, result: not (x > y) or result == y)\ndef myMin(x: int, y: int) -> int:\n    if x < y:\n        return x\n    return y\n"
+  }
+}

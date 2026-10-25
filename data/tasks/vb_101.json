@@ -1,0 +1,80 @@
+{
+  "task_id": "vb_101",
+  "verina_id": "verina_basic_101",
+  "upstream": "clover/Clover_triple4",
+  "entry_point": "Triple",
+  "description": "Given an integer x, return three times x, i.e. 3 * x.",
+  "params": [
+    {
+      "name": "x",
+      "type": "int"
+    }
+  ],
+  "returns": "int",
+  "tests": [
+    {
+      "input": {
+        "x": 0
+      },
+      "expected": 0,
+      "unexpected": [
+        1,
+        -1,
+        2
+      ]
+    },
+    {
+      "input": {
+        "x": 1
+      },
+      "expected": 3,
+      "unexpected": [
+        2,
+        4,
+        5
+      ]
+    },
+    {
+      "input": {
+        "x": -1
+      },
+      "expected": -3,
+      "unexpected": [
+        -2,
+        0,
+        -1
+      ]
+    },
+    {
+      "input": {
+        "x": 5
+      },
+      "expected": 15,
+      "unexpected": [
+        14,
+        16,
+        10
+      ]
+    },
+    {
+      "input": {
+        "x": -10
+      },
+      "expected": -30,
+      "unexpected": [
+        -20,
+        -40,
+        -10
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method Triple(x: int) returns (result: int)\n  ensures result / 3 == x\n  ensures result / 3 * 3 == result\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method Triple(x: int) returns (result: int)\n  ensures result / 3 == x\n  ensures result / 3 * 3 == result\n{\n  var y := x * 2;\n  result := y + x;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\n\n\n@icontract.ensure(lambda x, result: result // 3 == x)\n@icontract.ensure(lambda result: result // 3 * 3 == result)\ndef Triple(x: int) -> int:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\n\n\n@icontract.ensure(lambda x, result: result // 3 == x)\n@icontract.ensure(lambda result: result // 3 * 3 == result)\ndef Triple(x: int) -> int:\n    y = x * 2\n    return y + x\n"
+  },
+  "notes": "Integer division rounds differently in Lean, Dafny (Euclidean) and Python (floor), but the second condition forces result to be a multiple of 3, where all three agree, so each spec is equivalent to result == 3 * x."
+}

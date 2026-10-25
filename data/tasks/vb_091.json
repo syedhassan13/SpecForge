@@ -1,0 +1,128 @@
+{
+  "task_id": "vb_091",
+  "verina_id": "verina_basic_91",
+  "upstream": "clover/Clover_swap",
+  "entry_point": "Swap",
+  "description": "Given two integers X and Y, return the pair (Y, X): the first component is Y and the second component is X. In particular, when X and Y differ, the first component differs from X and the second differs from Y.",
+  "params": [
+    {
+      "name": "X",
+      "type": "int"
+    },
+    {
+      "name": "Y",
+      "type": "int"
+    }
+  ],
+  "returns": "tuple<int, int>",
+  "tests": [
+    {
+      "input": {
+        "X": 1,
+        "Y": 2
+      },
+      "expected": [
+        2,
+        1
+      ],
+      "unexpected": [
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ]
+      ]
+    },
+    {
+      "input": {
+        "X": 0,
+        "Y": 0
+      },
+      "expected": [
+        0,
+        0
+      ],
+      "unexpected": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "X": -1,
+        "Y": 5
+      },
+      "expected": [
+        5,
+        -1
+      ],
+      "unexpected": [
+        [
+          -1,
+          5
+        ],
+        [
+          5,
+          5
+        ]
+      ]
+    },
+    {
+      "input": {
+        "X": 100,
+        "Y": -100
+      },
+      "expected": [
+        -100,
+        100
+      ],
+      "unexpected": [
+        [
+          100,
+          -100
+        ],
+        [
+          -100,
+          -100
+        ]
+      ]
+    },
+    {
+      "input": {
+        "X": 42,
+        "Y": 42
+      },
+      "expected": [
+        42,
+        42
+      ],
+      "unexpected": [
+        [
+          41,
+          42
+        ],
+        [
+          42,
+          41
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method Swap(X: int, Y: int) returns (result: (int, int))\n  ensures result.0 == Y && result.1 == X\n  ensures X != Y ==> result.0 != X && result.1 != Y\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method Swap(X: int, Y: int) returns (result: (int, int))\n  ensures result.0 == Y && result.1 == X\n  ensures X != Y ==> result.0 != X && result.1 != Y\n{\n  var x, y := X, Y;\n  var tmp := x;\n  x := y;\n  y := tmp;\n  result := (x, y);\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import Tuple\n\n\n@icontract.ensure(lambda X, Y, result: result[0] == Y and result[1] == X)\n@icontract.ensure(lambda X, Y, result: X == Y or (result[0] != X and result[1] != Y))\ndef Swap(X: int, Y: int) -> Tuple[int, int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import Tuple\n\n\n@icontract.ensure(lambda X, Y, result: result[0] == Y and result[1] == X)\n@icontract.ensure(lambda X, Y, result: X == Y or (result[0] != X and result[1] != Y))\ndef Swap(X: int, Y: int) -> Tuple[int, int]:\n    x, y = X, Y\n    tmp = x\n    x = y\n    y = tmp\n    return (x, y)\n"
+  }
+}

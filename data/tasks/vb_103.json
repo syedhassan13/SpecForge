@@ -1,0 +1,267 @@
+{
+  "task_id": "vb_103",
+  "verina_id": "verina_basic_103",
+  "upstream": "clover/Clover_update_array",
+  "entry_point": "UpdateElements",
+  "description": "Given a list of integers a with at least 8 elements, return a new list of the same length that equals a except that the element at index 4 is increased by 3 and the element at index 7 is replaced by 516. Indices start at 0.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ]
+      },
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        7,
+        5,
+        6,
+        516,
+        8
+      ],
+      "unexpected": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          516,
+          8
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          7,
+          5,
+          6,
+          7,
+          8
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80
+        ]
+      },
+      "expected": [
+        10,
+        20,
+        30,
+        40,
+        53,
+        60,
+        70,
+        516
+      ],
+      "unexpected": [
+        [
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80
+        ],
+        [
+          10,
+          20,
+          30,
+          40,
+          53,
+          60,
+          70,
+          80
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -1,
+          -2,
+          -3,
+          -4,
+          -5,
+          -6,
+          -7,
+          -8,
+          -9,
+          -10
+        ]
+      },
+      "expected": [
+        -1,
+        -2,
+        -3,
+        -4,
+        -2,
+        -6,
+        -7,
+        516,
+        -9,
+        -10
+      ],
+      "unexpected": [
+        [
+          -1,
+          -2,
+          -3,
+          -4,
+          -5,
+          -6,
+          -7,
+          516,
+          -9,
+          -10
+        ],
+        [
+          -1,
+          -2,
+          -3,
+          -4,
+          -2,
+          -6,
+          -7,
+          -8,
+          -9,
+          -10
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        516
+      ],
+      "unexpected": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          516
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          3,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ]
+      },
+      "expected": [
+        5,
+        5,
+        5,
+        5,
+        8,
+        5,
+        5,
+        516
+      ],
+      "unexpected": [
+        [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          8,
+          5,
+          5,
+          5
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method UpdateElements(a: seq<int>) returns (result: seq<int>)\n  requires |a| >= 8\n  ensures |result| == |a|\n  ensures result[4] == a[4] + 3\n  ensures result[7] == 516\n  ensures forall i :: 0 <= i < |a| && i != 4 && i != 7 ==> result[i] == a[i]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method UpdateElements(a: seq<int>) returns (result: seq<int>)\n  requires |a| >= 8\n  ensures |result| == |a|\n  ensures result[4] == a[4] + 3\n  ensures result[7] == 516\n  ensures forall i :: 0 <= i < |a| && i != 4 && i != 7 ==> result[i] == a[i]\n{\n  result := a[4 := a[4] + 3];\n  result := result[7 := 516];\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: len(a) >= 8)\n@icontract.ensure(lambda a, result: len(result) == len(a))\n@icontract.ensure(lambda a, result: len(result) == len(a) and result[4] == a[4] + 3)\n@icontract.ensure(lambda a, result: len(result) == len(a) and result[7] == 516)\n@icontract.ensure(lambda a, result: len(result) == len(a) and all(\n    result[i] == a[i] for i in range(len(a)) if i != 4 and i != 7))\ndef UpdateElements(a: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.require(lambda a: len(a) >= 8)\n@icontract.ensure(lambda a, result: len(result) == len(a))\n@icontract.ensure(lambda a, result: len(result) == len(a) and result[4] == a[4] + 3)\n@icontract.ensure(lambda a, result: len(result) == len(a) and result[7] == 516)\n@icontract.ensure(lambda a, result: len(result) == len(a) and all(\n    result[i] == a[i] for i in range(len(a)) if i != 4 and i != 7))\ndef UpdateElements(a: List[int]) -> List[int]:\n    result = list(a)\n    result[4] = result[4] + 3\n    result[7] = 516\n    return result\n"
+  },
+  "notes": "VERINA's Lean postcondition reads result[i]! (with a default value for out-of-range indices) and does not state the length of the result. Both specs add len(result) == len(a), which is implied by the task (only two positions change) and is needed for the indexing to be well defined."
+}

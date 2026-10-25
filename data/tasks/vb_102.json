@@ -1,0 +1,201 @@
+{
+  "task_id": "vb_102",
+  "verina_id": "verina_basic_102",
+  "upstream": "clover/Clover_two_sum",
+  "entry_point": "twoSum",
+  "description": "Given a list of integers nums with at least two elements and an integer target, where at least one pair of positions i < j satisfies nums[i] + nums[j] = target, return the pair (i, j) of 0-based indices with i < j and nums[i] + nums[j] = target that comes first lexicographically: i is as small as possible, and for that i, j is as small as possible.",
+  "params": [
+    {
+      "name": "nums",
+      "type": "list<int>"
+    },
+    {
+      "name": "target",
+      "type": "int"
+    }
+  ],
+  "returns": "tuple<nat, nat>",
+  "tests": [
+    {
+      "input": {
+        "nums": [
+          2,
+          7,
+          11,
+          15
+        ],
+        "target": 9
+      },
+      "expected": [
+        0,
+        1
+      ],
+      "unexpected": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          3
+        ]
+      ]
+    },
+    {
+      "input": {
+        "nums": [
+          3,
+          2,
+          4
+        ],
+        "target": 6
+      },
+      "expected": [
+        1,
+        2
+      ],
+      "unexpected": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "nums": [
+          -1,
+          0,
+          1,
+          2
+        ],
+        "target": 1
+      },
+      "expected": [
+        0,
+        3
+      ],
+      "unexpected": [
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "input": {
+        "nums": [
+          5,
+          75,
+          25
+        ],
+        "target": 100
+      },
+      "expected": [
+        1,
+        2
+      ],
+      "unexpected": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "target": 9
+      },
+      "expected": [
+        3,
+        4
+      ],
+      "unexpected": [
+        [
+          2,
+          4
+        ],
+        [
+          1,
+          3
+        ]
+      ]
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          5,
+          3,
+          5
+        ],
+        "target": 8
+      },
+      "expected": [
+        1,
+        2
+      ],
+      "unexpected": [
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0,
+          0
+        ],
+        "target": 0
+      },
+      "expected": [
+        0,
+        1
+      ],
+      "unexpected": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method twoSum(nums: seq<int>, target: int) returns (result: (nat, nat))\n  requires |nums| > 1\n  requires exists i, j :: 0 <= i < j < |nums| && nums[i] + nums[j] == target\n  ensures result.0 < result.1 < |nums|\n  ensures nums[result.0] + nums[result.1] == target\n  ensures forall i, j :: 0 <= i < result.0 && i < j < |nums| ==> nums[i] + nums[j] != target\n  ensures forall j :: result.0 < j < result.1 ==> nums[result.0] + nums[j] != target\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "\n\nmethod twoSum(nums: seq<int>, target: int) returns (result: (nat, nat))\n  requires |nums| > 1\n  requires exists i, j :: 0 <= i < j < |nums| && nums[i] + nums[j] == target\n  ensures result.0 < result.1 < |nums|\n  ensures nums[result.0] + nums[result.1] == target\n  ensures forall i, j :: 0 <= i < result.0 && i < j < |nums| ==> nums[i] + nums[j] != target\n  ensures forall j :: result.0 < j < result.1 ==> nums[result.0] + nums[j] != target\n{\n  var i := 0;\n  while i < |nums| - 1\n    invariant 0 <= i <= |nums| - 1\n    invariant forall i', j' :: 0 <= i' < i && i' < j' < |nums| ==> nums[i'] + nums[j'] != target\n  {\n    var j := i + 1;\n    while j < |nums|\n      invariant i + 1 <= j <= |nums|\n      invariant forall j' :: i < j' < j ==> nums[i] + nums[j'] != target\n    {\n      if nums[i] + nums[j] == target {\n        return (i, j);\n      }\n      j := j + 1;\n    }\n    i := i + 1;\n  }\n  assert false;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List, Tuple\n\n\n@icontract.require(lambda nums: len(nums) > 1)\n@icontract.require(lambda nums, target: any(\n    nums[i] + nums[j] == target for i in range(len(nums)) for j in range(i + 1, len(nums))))\n@icontract.ensure(lambda result: result[0] >= 0 and result[1] >= 0)\n@icontract.ensure(lambda nums, result: result[0] < result[1] < len(nums))\n@icontract.ensure(lambda nums, target, result: nums[result[0]] + nums[result[1]] == target)\n@icontract.ensure(lambda nums, target, result: all(\n    nums[i] + nums[j] != target for i in range(result[0]) for j in range(i + 1, len(nums))))\n@icontract.ensure(lambda nums, target, result: all(\n    nums[result[0]] + nums[j] != target for j in range(result[0] + 1, result[1])))\ndef twoSum(nums: List[int], target: int) -> Tuple[int, int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List, Tuple\n\n\n@icontract.require(lambda nums: len(nums) > 1)\n@icontract.require(lambda nums, target: any(\n    nums[i] + nums[j] == target for i in range(len(nums)) for j in range(i + 1, len(nums))))\n@icontract.ensure(lambda result: result[0] >= 0 and result[1] >= 0)\n@icontract.ensure(lambda nums, result: result[0] < result[1] < len(nums))\n@icontract.ensure(lambda nums, target, result: nums[result[0]] + nums[result[1]] == target)\n@icontract.ensure(lambda nums, target, result: all(\n    nums[i] + nums[j] != target for i in range(result[0]) for j in range(i + 1, len(nums))))\n@icontract.ensure(lambda nums, target, result: all(\n    nums[result[0]] + nums[j] != target for j in range(result[0] + 1, result[1])))\ndef twoSum(nums: List[int], target: int) -> Tuple[int, int]:\n    n = len(nums)\n    for i in range(n - 1):\n        for j in range(i + 1, n):\n            if nums[i] + nums[j] == target:\n                return (i, j)\n    raise ValueError(\"no pair sums to target\")\n"
+  }
+}

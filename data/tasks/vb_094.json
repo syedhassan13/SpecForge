@@ -1,0 +1,152 @@
+{
+  "task_id": "vb_094",
+  "verina_id": "verina_basic_94",
+  "upstream": "clover/Clover_array_copy",
+  "entry_point": "iter_copy",
+  "description": "Return a copy of the list of integers s: the result has the same length as s and the same element as s at every index. The input may be empty.",
+  "params": [
+    {
+      "name": "s",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "s": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3
+      ],
+      "unexpected": [
+        [
+          1,
+          3,
+          2
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "input": {
+        "s": [
+          10,
+          20,
+          30,
+          40
+        ]
+      },
+      "expected": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "unexpected": [
+        [
+          10,
+          20,
+          30
+        ],
+        [
+          10,
+          20,
+          40,
+          30
+        ]
+      ]
+    },
+    {
+      "input": {
+        "s": []
+      },
+      "expected": [],
+      "unexpected": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "input": {
+        "s": [
+          -1,
+          -2,
+          -3
+        ]
+      },
+      "expected": [
+        -1,
+        -2,
+        -3
+      ],
+      "unexpected": [
+        [
+          -1,
+          -3,
+          -2
+        ],
+        [
+          -1,
+          -2
+        ]
+      ]
+    },
+    {
+      "input": {
+        "s": [
+          5,
+          5,
+          5,
+          5
+        ]
+      },
+      "expected": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "unexpected": [
+        [
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          0
+        ],
+        [
+          0,
+          5,
+          5,
+          5
+        ]
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method iter_copy(s: seq<int>) returns (result: seq<int>)\n  ensures |s| == |result|\n  ensures forall i :: 0 <= i < |s| ==> s[i] == result[i]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method iter_copy(s: seq<int>) returns (result: seq<int>)\n  ensures |s| == |result|\n  ensures forall i :: 0 <= i < |s| ==> s[i] == result[i]\n{\n  result := [];\n  var i := 0;\n  while i < |s|\n    invariant 0 <= i <= |s|\n    invariant |result| == i\n    invariant forall j :: 0 <= j < i ==> s[j] == result[j]\n  {\n    result := result + [s[i]];\n    i := i + 1;\n  }\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda s, result: len(s) == len(result) and all(\n    s[i] == result[i] for i in range(len(s))))\ndef iter_copy(s: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda s, result: len(s) == len(result) and all(\n    s[i] == result[i] for i in range(len(s))))\ndef iter_copy(s: List[int]) -> List[int]:\n    result = []\n    for x in s:\n        result.append(x)\n    return result\n"
+  }
+}

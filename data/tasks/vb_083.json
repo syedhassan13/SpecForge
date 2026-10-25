@@ -1,0 +1,172 @@
+{
+  "task_id": "vb_083",
+  "verina_id": "verina_basic_83",
+  "upstream": "clover/Clover_array_concat",
+  "entry_point": "concat",
+  "description": "Given two lists of integers a and b, return their concatenation: a list whose length is the sum of their lengths, whose first elements are those of a in order, and whose remaining elements are those of b in order.",
+  "params": [
+    {
+      "name": "a",
+      "type": "list<int>"
+    },
+    {
+      "name": "b",
+      "type": "list<int>"
+    }
+  ],
+  "returns": "list<int>",
+  "tests": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3
+        ],
+        "b": [
+          4,
+          5
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "unexpected": [
+        [
+          1,
+          2,
+          3,
+          5,
+          4
+        ],
+        [
+          4,
+          5,
+          1,
+          2,
+          3
+        ],
+        [
+          1,
+          2,
+          4,
+          3,
+          5
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [],
+        "b": []
+      },
+      "expected": [],
+      "unexpected": [
+        [
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          10
+        ],
+        "b": [
+          20,
+          30,
+          40
+        ]
+      },
+      "expected": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "unexpected": [
+        [
+          10,
+          20,
+          30
+        ],
+        [
+          20,
+          30,
+          40,
+          10
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          -1,
+          -2
+        ],
+        "b": [
+          0
+        ]
+      },
+      "expected": [
+        -1,
+        -2,
+        0
+      ],
+      "unexpected": [
+        [
+          -1,
+          0,
+          -2
+        ],
+        [
+          0,
+          -1,
+          -2
+        ]
+      ]
+    },
+    {
+      "input": {
+        "a": [
+          7,
+          8,
+          9
+        ],
+        "b": []
+      },
+      "expected": [
+        7,
+        8,
+        9
+      ],
+      "unexpected": [
+        [
+          7,
+          8
+        ],
+        [
+          8,
+          9
+        ],
+        []
+      ]
+    }
+  ],
+  "dafny": {
+    "spec": "method concat(a: seq<int>, b: seq<int>) returns (result: seq<int>)\n  ensures |result| == |a| + |b|\n  ensures forall k :: 0 <= k < |a| ==> result[k] == a[k]\n  ensures forall k :: 0 <= k < |b| ==> result[k + |a|] == b[k]\n{\n  // IMPLEMENT HERE\n}\n",
+    "reference": "method concat(a: seq<int>, b: seq<int>) returns (result: seq<int>)\n  ensures |result| == |a| + |b|\n  ensures forall k :: 0 <= k < |a| ==> result[k] == a[k]\n  ensures forall k :: 0 <= k < |b| ==> result[k + |a|] == b[k]\n{\n  result := a + b;\n}\n"
+  },
+  "python": {
+    "spec": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda a, b, result: len(result) == len(a) + len(b))\n@icontract.ensure(lambda a, result: all(result[k] == a[k] for k in range(len(a))))\n@icontract.ensure(lambda a, b, result: all(result[k + len(a)] == b[k] for k in range(len(b))))\ndef concat(a: List[int], b: List[int]) -> List[int]:\n    # IMPLEMENT HERE\n    pass\n",
+    "reference": "import icontract\nfrom typing import List\n\n\n@icontract.ensure(lambda a, b, result: len(result) == len(a) + len(b))\n@icontract.ensure(lambda a, result: all(result[k] == a[k] for k in range(len(a))))\n@icontract.ensure(lambda a, b, result: all(result[k + len(a)] == b[k] for k in range(len(b))))\ndef concat(a: List[int], b: List[int]) -> List[int]:\n    out = []\n    for x in a:\n        out.append(x)\n    for x in b:\n        out.append(x)\n    return out\n"
+  }
+}
