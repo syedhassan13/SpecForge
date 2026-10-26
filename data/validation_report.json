@@ -1,0 +1,4376 @@
+[
+ {
+  "file": "vb_001.json",
+  "task_id": "vb_001",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    11,
+    11
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     11,
+     11
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    11,
+    11
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     11,
+     11
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_003.json",
+  "task_id": "vb_003",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    12,
+    12
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     12,
+     12
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    12,
+    12
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     12,
+     12
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_004.json",
+  "task_id": "vb_004",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    10,
+    10
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     10,
+     10
+    ],
+    "reject": [
+     23,
+     23
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    10,
+    10
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     10,
+     10
+    ],
+    "reject": [
+     23,
+     23
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_005.json",
+  "task_id": "vb_005",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     21,
+     21
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     21,
+     21
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_006.json",
+  "task_id": "vb_006",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    9,
+    9
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     9,
+     9
+    ],
+    "reject": [
+     26,
+     26
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    9,
+    9
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     9,
+     9
+    ],
+    "reject": [
+     26,
+     26
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_007.json",
+  "task_id": "vb_007",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     20,
+     20
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     20,
+     20
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_008.json",
+  "task_id": "vb_008",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    8,
+    8
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     8,
+     8
+    ],
+    "reject": [
+     24,
+     24
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    8,
+    8
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     8,
+     8
+    ],
+    "reject": [
+     24,
+     24
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_009.json",
+  "task_id": "vb_009",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    8,
+    8
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     8,
+     8
+    ],
+    "reject": [
+     8,
+     8
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    8,
+    8
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     8,
+     8
+    ],
+    "reject": [
+     8,
+     8
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_010.json",
+  "task_id": "vb_010",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     3,
+     7
+    ],
+    "reject": [
+     7,
+     7
+    ]
+   },
+   "probe_exempt": {
+    "accept": "Dafny cannot prove the accept probes whose expected output is false: they need an existential witness index into a sequence that the probe pins to a literal, and Z3 gets no ground index terms to instantiate the quantifier with. The spec is the direct translation of VERINA's quantified postcondition; all reject probes and the accept probes with expected output true pass. The only reformulation found that Dafny decides was a recursive predicate with a {:fuel} attribute, which would make the spec unnatural and change the proof task."
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     7,
+     7
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_011.json",
+  "task_id": "vb_011",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    8,
+    8
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     8,
+     8
+    ],
+    "reject": [
+     24,
+     24
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    8,
+    8
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     8,
+     8
+    ],
+    "reject": [
+     24,
+     24
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_012.json",
+  "task_id": "vb_012",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_013.json",
+  "task_id": "vb_013",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_014.json",
+  "task_id": "vb_014",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    9,
+    9
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     9,
+     9
+    ],
+    "reject": [
+     9,
+     9
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    9,
+    9
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     9,
+     9
+    ],
+    "reject": [
+     9,
+     9
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_015.json",
+  "task_id": "vb_015",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    8,
+    8
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     8,
+     8
+    ],
+    "reject": [
+     8,
+     8
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    8,
+    8
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     8,
+     8
+    ],
+    "reject": [
+     8,
+     8
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_016.json",
+  "task_id": "vb_016",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     20,
+     20
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     20,
+     20
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_017.json",
+  "task_id": "vb_017",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     17,
+     17
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     17,
+     17
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_018.json",
+  "task_id": "vb_018",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     18,
+     18
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     18,
+     18
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_019.json",
+  "task_id": "vb_019",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     7,
+     7
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     7,
+     7
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_020.json",
+  "task_id": "vb_020",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     21,
+     21
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     21,
+     21
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_021.json",
+  "task_id": "vb_021",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    8,
+    8
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     8,
+     8
+    ],
+    "reject": [
+     8,
+     8
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    8,
+    8
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     8,
+     8
+    ],
+    "reject": [
+     8,
+     8
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_022.json",
+  "task_id": "vb_022",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     21,
+     21
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     21,
+     21
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_023.json",
+  "task_id": "vb_023",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     18,
+     18
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     18,
+     18
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_024.json",
+  "task_id": "vb_024",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_026.json",
+  "task_id": "vb_026",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     5,
+     5
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     5,
+     5
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_028.json",
+  "task_id": "vb_028",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    8,
+    8
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     8,
+     8
+    ],
+    "reject": [
+     8,
+     8
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    8,
+    8
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     8,
+     8
+    ],
+    "reject": [
+     8,
+     8
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_029.json",
+  "task_id": "vb_029",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    4,
+    4
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     4,
+     4
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    4,
+    4
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     4,
+     4
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_030.json",
+  "task_id": "vb_030",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    3,
+    3
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     3,
+     3
+    ],
+    "reject": [
+     7,
+     7
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    3,
+    3
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     3,
+     3
+    ],
+    "reject": [
+     7,
+     7
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_031.json",
+  "task_id": "vb_031",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_032.json",
+  "task_id": "vb_032",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    4,
+    4
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     4,
+     4
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    4,
+    4
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     4,
+     4
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_033.json",
+  "task_id": "vb_033",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_034.json",
+  "task_id": "vb_034",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_035.json",
+  "task_id": "vb_035",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_036.json",
+  "task_id": "vb_036",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    4,
+    4
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     4,
+     4
+    ],
+    "reject": [
+     9,
+     9
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    4,
+    4
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     4,
+     4
+    ],
+    "reject": [
+     9,
+     9
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_037.json",
+  "task_id": "vb_037",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_038.json",
+  "task_id": "vb_038",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     6,
+     6
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     6,
+     6
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_040.json",
+  "task_id": "vb_040",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_041.json",
+  "task_id": "vb_041",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     3,
+     6
+    ],
+    "reject": [
+     6,
+     6
+    ]
+   },
+   "probe_exempt": {
+    "accept": "Dafny cannot prove the accept probes whose expected output is false: they need an existential witness index into a sequence that the probe pins to a literal, and Z3 gets no ground index terms to instantiate the quantifier with. The spec is the direct translation of VERINA's quantified postcondition; all reject probes and the accept probes with expected output true pass. The only reformulation found that Dafny decides was a recursive predicate with a {:fuel} attribute, which would make the spec unnatural and change the proof task."
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     6,
+     6
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_042.json",
+  "task_id": "vb_042",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     21,
+     21
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     21,
+     21
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_043.json",
+  "task_id": "vb_043",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     17,
+     17
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     17,
+     17
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_044.json",
+  "task_id": "vb_044",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     7,
+     7
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     7,
+     7
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_045.json",
+  "task_id": "vb_045",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    3,
+    3
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     3,
+     3
+    ],
+    "reject": [
+     9,
+     9
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    3,
+    3
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     3,
+     3
+    ],
+    "reject": [
+     9,
+     9
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_046.json",
+  "task_id": "vb_046",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     18,
+     18
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     18,
+     18
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_047.json",
+  "task_id": "vb_047",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    4,
+    4
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     4,
+     4
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    4,
+    4
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     4,
+     4
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_048.json",
+  "task_id": "vb_048",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    10,
+    10
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     10,
+     10
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    10,
+    10
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     10,
+     10
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_050.json",
+  "task_id": "vb_050",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_051.json",
+  "task_id": "vb_051",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_052.json",
+  "task_id": "vb_052",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_053.json",
+  "task_id": "vb_053",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_054.json",
+  "task_id": "vb_054",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_055.json",
+  "task_id": "vb_055",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    2,
+    2
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     2,
+     2
+    ],
+    "reject": [
+     2,
+     2
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    2,
+    2
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     2,
+     2
+    ],
+    "reject": [
+     2,
+     2
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_056.json",
+  "task_id": "vb_056",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_057.json",
+  "task_id": "vb_057",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_058.json",
+  "task_id": "vb_058",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_059.json",
+  "task_id": "vb_059",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_060.json",
+  "task_id": "vb_060",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_061.json",
+  "task_id": "vb_061",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     5,
+     5
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     5,
+     5
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_062.json",
+  "task_id": "vb_062",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     14,
+     14
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     14,
+     14
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_064.json",
+  "task_id": "vb_064",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_065.json",
+  "task_id": "vb_065",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     13,
+     13
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     13,
+     13
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_066.json",
+  "task_id": "vb_066",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     5,
+     5
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     5,
+     5
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_067.json",
+  "task_id": "vb_067",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     5,
+     5
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     5,
+     5
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_068.json",
+  "task_id": "vb_068",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_069.json",
+  "task_id": "vb_069",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_071.json",
+  "task_id": "vb_071",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_072.json",
+  "task_id": "vb_072",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_073.json",
+  "task_id": "vb_073",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     4,
+     5
+    ],
+    "reject": [
+     5,
+     5
+    ]
+   },
+   "probe_exempt": {
+    "accept": "Dafny cannot prove the accept probes whose expected output is false: they need an existential witness index into a sequence that the probe pins to a literal, and Z3 gets no ground index terms to instantiate the quantifier with. The spec is the direct translation of VERINA's quantified postcondition; all reject probes and the accept probes with expected output true pass. The only reformulation found that Dafny decides was a recursive predicate with a {:fuel} attribute, which would make the spec unnatural and change the proof task."
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     5,
+     5
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_074.json",
+  "task_id": "vb_074",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_075.json",
+  "task_id": "vb_075",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_076.json",
+  "task_id": "vb_076",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_078.json",
+  "task_id": "vb_078",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_079.json",
+  "task_id": "vb_079",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_080.json",
+  "task_id": "vb_080",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     5,
+     5
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     5,
+     5
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_081.json",
+  "task_id": "vb_081",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_082.json",
+  "task_id": "vb_082",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_083.json",
+  "task_id": "vb_083",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_084.json",
+  "task_id": "vb_084",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_085.json",
+  "task_id": "vb_085",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_086.json",
+  "task_id": "vb_086",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    6,
+    6
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     6,
+     6
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_087.json",
+  "task_id": "vb_087",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     12,
+     12
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_088.json",
+  "task_id": "vb_088",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_089.json",
+  "task_id": "vb_089",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_091.json",
+  "task_id": "vb_091",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_092.json",
+  "task_id": "vb_092",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_094.json",
+  "task_id": "vb_094",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_095.json",
+  "task_id": "vb_095",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_096.json",
+  "task_id": "vb_096",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_097.json",
+  "task_id": "vb_097",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_098.json",
+  "task_id": "vb_098",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_099.json",
+  "task_id": "vb_099",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_100.json",
+  "task_id": "vb_100",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_101.json",
+  "task_id": "vb_101",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_102.json",
+  "task_id": "vb_102",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     14,
+     14
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    7,
+    7
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     7,
+     7
+    ],
+    "reject": [
+     14,
+     14
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_103.json",
+  "task_id": "vb_103",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     10,
+     10
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_105.json",
+  "task_id": "vb_105",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_106.json",
+  "task_id": "vb_106",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     11,
+     11
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_107.json",
+  "task_id": "vb_107",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ },
+ {
+  "file": "vb_108.json",
+  "task_id": "vb_108",
+  "dafny": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "python": {
+   "guard_ok": true,
+   "verified": true,
+   "tests": [
+    5,
+    5
+   ],
+   "stub_rejected": true,
+   "probes": {
+    "accept": [
+     5,
+     5
+    ],
+    "reject": [
+     15,
+     15
+    ]
+   },
+   "ok": true
+  },
+  "ok": true
+ }
+]

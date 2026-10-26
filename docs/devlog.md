@@ -45,3 +45,21 @@ Python, explicit escape-hatch rules, and Dafny's own bodyless/assume warnings
 **Effect.** On the stress test (`experiments/guard_stress.py`, all tasks) the
 guard rejects every tampering mutant and accepts every benign one; see
 `results/guard_stress_summary.json` (numbers in the paper, Table on reliability).
+
+---
+
+### 2026-10-26 · Rebuilding the benchmark from VERINA-BASIC
+**Missing.** 7 tasks were too few for any significance test (supervisor
+feedback) and the language comparison was not controlled.
+
+**Changed.** Extracted VERINA-BASIC (108 tasks), kept 97 whose types exist in
+both languages, wrote paired Dafny and Python/iContract specs plus verified
+references, and added `validate_tasks.py` with five admission checks
+including spec probes (`docs/benchmark.md`).
+
+**Effect.** 97/97 tasks admitted (`data/validation_report.json`). Building
+the probes exposed a real problem: Dafny cannot decide existential
+postconditions on concrete inputs, so several Dafny specs were rewritten into
+equivalent decidable forms (32 tasks carry a `notes` field explaining a
+reformulation or a deviation from VERINA), and 3 tasks
+keep a documented `probe_exempt` for accept-probes Dafny cannot decide.

@@ -1,0 +1,686 @@
+{
+ "seed": 2026,
+ "n_per_task": 40,
+ "tasks": [
+  {
+   "task_id": "vb_001",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_003",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_004",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_005",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_006",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_007",
+   "inputs": 39,
+   "agree": 39,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_008",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_009",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_010",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_011",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_012",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_013",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_014",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_015",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_016",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_017",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_018",
+   "inputs": 39,
+   "agree": 39,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_019",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_020",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_021",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_022",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_023",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_024",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_026",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_028",
+   "inputs": 39,
+   "agree": 39,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_029",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_030",
+   "inputs": 28,
+   "agree": 28,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_031",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_032",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_033",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_034",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_035",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_036",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_037",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_038",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_040",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_041",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_042",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_043",
+   "inputs": 39,
+   "agree": 39,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_044",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_045",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_046",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_047",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_048",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_050",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_051",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_052",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_053",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_054",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_055",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_056",
+   "inputs": 12,
+   "agree": 12,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_057",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_058",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_059",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_060",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_061",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_062",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_064",
+   "inputs": 18,
+   "agree": 18,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_065",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_066",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_067",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_068",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_069",
+   "inputs": 33,
+   "agree": 33,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_071",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_072",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_073",
+   "inputs": 28,
+   "agree": 28,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_074",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_075",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_076",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_078",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_079",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_080",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_081",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_082",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_083",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_084",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_085",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_086",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_087",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_088",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_089",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_091",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_092",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_094",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_095",
+   "inputs": 6,
+   "agree": 6,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_096",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_097",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_098",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_099",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_100",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_101",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_102",
+   "inputs": 33,
+   "agree": 33,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_103",
+   "inputs": 0,
+   "agree": 0,
+   "note": "no random input met the precondition"
+  },
+  {
+   "task_id": "vb_105",
+   "inputs": 31,
+   "agree": 31,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_106",
+   "inputs": 33,
+   "agree": 33,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_107",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  },
+  {
+   "task_id": "vb_108",
+   "inputs": 40,
+   "agree": 40,
+   "python_crashes": 0,
+   "disagreements": []
+  }
+ ],
+ "total_inputs": 3698,
+ "total_agree": 3698
+}
