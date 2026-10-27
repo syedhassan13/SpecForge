@@ -63,3 +63,15 @@ postconditions on concrete inputs, so several Dafny specs were rewritten into
 equivalent decidable forms (32 tasks carry a `notes` field explaining a
 reformulation or a deviation from VERINA), and 3 tasks
 keep a documented `probe_exempt` for accept-probes Dafny cannot decide.
+
+---
+
+### 2026-10-27 · Model choice under the API budget
+**Constraint.** The project budget for API calls was capped at 2 USD in
+total. The Phase 1 plan (GPT-4o and Claude Sonnet) and our later plan
+(GPT-4.1 + GPT-4o-mini) do not fit.
+
+**Changed.** All experiments use gpt-4o-mini-2024-07-18, which VERINA also
+evaluates (44.0% CodeGen pass@1 on VERINA-BASIC). A global spend cap read
+from the response cache stops any run that would cross the budget
+(`src/pipeline.py`). E2 uses 3 samples per task instead of VERINA's 5.
