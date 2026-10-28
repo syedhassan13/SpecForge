@@ -1,0 +1,39 @@
+{
+  "experiment": "dev",
+  "description": "Development iterations on the dev split only (see docs/devlog.md). Never run on the test split.",
+  "split": "dev",
+  "languages": [
+    "dafny",
+    "python_icontract"
+  ],
+  "models": [
+    "gpt-4o-mini"
+  ],
+  "seeds": [
+    0
+  ],
+  "configs": [
+    {
+      "name": "it0_phase1_combined",
+      "mode": "combined",
+      "normalizer": false,
+      "router": false,
+      "stagnation": false
+    },
+    {
+      "name": "it1_normalizer",
+      "mode": "combined",
+      "router": false,
+      "stagnation": false
+    },
+    {
+      "name": "it2_router",
+      "mode": "combined",
+      "stagnation": false
+    },
+    {
+      "name": "it3_stagnation",
+      "mode": "combined"
+    }
+  ]
+}

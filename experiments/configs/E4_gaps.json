@@ -1,0 +1,11 @@
+{
+  "experiment": "E4_gaps",
+  "description": "Extra arm needed for the gap-wise hypotheses: verifier-only feedback (Gap 2 and Gap 3). Gap analyses also reuse E1 and E3 runs.",
+  "split": "test",
+  "languages": ["dafny", "python_icontract"],
+  "models": ["gpt-4o-mini"],
+  "seeds": [0, 1, 2],
+  "configs": [
+    {"name": "verifier_only", "mode": "verifier_feedback"}
+  ]
+}

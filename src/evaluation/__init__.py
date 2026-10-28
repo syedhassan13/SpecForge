@@ -1,1 +1,1 @@
-"""Evaluation init module."""
+"""Oracle, statistics and the VERINA protocol runner."""

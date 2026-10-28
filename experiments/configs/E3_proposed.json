@@ -1,0 +1,11 @@
+{
+  "experiment": "E3_proposed",
+  "description": "Full SpecLoop agent: verifier + test feedback, normaliser, router, guard, stagnation monitor.",
+  "split": "test",
+  "languages": ["dafny", "python_icontract"],
+  "models": ["gpt-4o-mini"],
+  "seeds": [0, 1, 2],
+  "configs": [
+    {"name": "specloop_full", "mode": "combined"}
+  ]
+}

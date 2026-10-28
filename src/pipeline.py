@@ -1,180 +1,131 @@
 """
-Pipeline orchestrator — the main entry point for running the
-specification-verification feedback loop.
+Experiment runner.
 
-Ties together: benchmark loading → agent selection → code generation →
-verification → testing → feedback → evaluation.
+A run unit is (task, agent configuration, model, seed). Units are executed in
+a thread pool (LLM calls and verifier subprocesses release the GIL). Results
+are appended to results/raw/<experiment>/<config>__<model>.jsonl and
+trajectories to logs/trajectories/<experiment>/<config>__<model>.jsonl.gz.
+
+The runner is resumable: units whose run_id is already in the results file
+are skipped, so an interrupted experiment can simply be started again.
+A dollar budget stops new units from being launched once it is reached.
 """
 
+from __future__ import annotations
+
 import json
-import os
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import dataclass
+from pathlib import Path
 from typing import Optional
 
-from src.schemas import AgentMode, Language, PipelineResult, TaskSpec
-from src.agents.coding_agent import create_agent
-from src.providers.llm_provider import LLMProvider, MockProvider
-from src.evaluation.evaluator import Evaluator
+from src.agents.controller import AgentConfig, SpecLoopAgent
+from src.providers.cache import LLMCache, total_spend
+from src.providers.llm_provider import create_provider
+from src.schemas import PipelineResult, TaskSpec
+from src.tracing.trajectory import TrajectoryWriter
+
+ROOT = Path(__file__).resolve().parents[1]
+CACHE_PATH = ROOT / "cache" / "llm_cache.sqlite"
 
 
-class SpecLoopPipeline:
-    """Main pipeline orchestrator for the SpecLoop system.
+def result_to_dict(r: PipelineResult) -> dict:
+    return {
+        "run_id": r.trajectory_id, "task_id": r.task_id, "pair_id": r.pair_id, "model": r.model,
+        "config": r.config_name, "mode": r.agent_mode.value, "language": r.language.value, "seed": r.seed,
+        "correct": r.correct, "spec_intact": r.spec_intact, "attempts": r.attempts,
+        "solved_at_attempt": r.solved_at_attempt, "stop_reason": r.stop_reason,
+        "first_attempt_tests_ok": r.first_attempt_tests_passed,
+        "first_attempt_verified": r.first_attempt_verified,
+        "llm_calls": r.llm_calls, "prompt_tokens": r.prompt_tokens, "completion_tokens": r.completion_tokens,
+        "cost_usd": round(r.cost_usd, 6), "verifier_calls": r.verifier_calls, "test_calls": r.test_calls,
+        "guard_blocks": r.guard_blocks, "strategy_switches": r.strategy_switches,
+        "llm_seconds": round(r.llm_seconds, 2), "tool_seconds": round(r.tool_seconds, 2),
+        "wall_seconds": round(r.total_time_seconds, 2), "failure_classes": r.failure_classes,
+        "final_failure_class": r.final_failure_class, **r.extra,
+    }
 
-    Usage:
-        pipeline = SpecLoopPipeline(provider=OpenAIProvider())
-        pipeline.load_tasks("benchmarks/dafny_tasks/")
-        results = pipeline.run_evaluation(
-            modes=[AgentMode.TESTING_ONLY, AgentMode.VERIFIER_FEEDBACK],
-        )
-        pipeline.save_results()
-    """
 
-    def __init__(
-        self,
-        provider: Optional[LLMProvider] = None,
-        max_attempts: int = 5,
-        output_dir: str = "results",
-    ):
-        self.provider = provider or MockProvider()
-        self.max_attempts = max_attempts
-        self.output_dir = output_dir
-        self.tasks: list[TaskSpec] = []
-        self.evaluator = Evaluator()
+@dataclass
+class RunSpec:
+    experiment: str
+    config: AgentConfig
+    model: str
+    seeds: list[int]
 
-    def load_tasks(self, tasks_dir: str) -> int:
-        """Load benchmark tasks from a directory of JSON files.
 
-        Each JSON file should contain a TaskSpec-compatible dict.
+class Runner:
+    def __init__(self, workers: int = 12, budget_usd: float = 2.0, offline: bool = False,
+                 results_dir: Path = ROOT / "results" / "raw", logs_dir: Path = ROOT / "logs" / "trajectories"):
+        self.workers = workers
+        self.budget = budget_usd
+        self.offline = offline
+        self.results_dir = Path(results_dir)
+        self.logs_dir = Path(logs_dir)
+        self.cache = LLMCache(CACHE_PATH)
+        self.skip_units: set = set()
+        self.spent = 0.0
+        # global cap: money spent by earlier runs counts against it
+        self.already_spent = total_spend(self.cache)
+        print(f"budget: ${self.already_spent:.3f} already spent, cap ${self.budget:.2f}")
+        self._lock = threading.Lock()
 
-        Args:
-            tasks_dir: Path to directory containing task JSON files.
+    def _done_ids(self, path: Path) -> set[str]:
+        if not path.exists():
+            return set()
+        with open(path, encoding="utf-8") as f:
+            return {json.loads(l)["run_id"] for l in f if l.strip()}
 
-        Returns:
-            Number of tasks loaded.
-        """
-        self.tasks = []
+    def run(self, spec: RunSpec, tasks: list[TaskSpec], verbose: bool = True) -> list[dict]:
+        provider = create_provider(spec.model, cache=self.cache, offline=self.offline)
+        tag = f"{spec.config.name}__{spec.model.replace('/', '_').replace(':', '_')}"
+        out_path = self.results_dir / spec.experiment / f"{tag}.jsonl"
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        writer = TrajectoryWriter(self.logs_dir / spec.experiment / f"{tag}.jsonl.gz")
+        done = self._done_ids(out_path)
+        units = [(t, s) for s in spec.seeds for t in tasks
+                 if f"{spec.experiment}:{tag}:{t.task_id}:s{s}" not in done
+                 and (t.task_id, s) not in self.skip_units]
+        if verbose:
+            print(f"[{spec.experiment}] {tag}: {len(units)} units to run ({len(done)} already done)")
+        results: list[dict] = []
+        write_lock = threading.Lock()
 
-        if not os.path.exists(tasks_dir):
-            print(f"Warning: {tasks_dir} not found")
-            return 0
+        def work(task: TaskSpec, seed: int):
+            with self._lock:
+                if self.already_spent + self.spent >= self.budget:
+                    return None
+            agent = SpecLoopAgent(provider, spec.config, seed=seed)
+            run_id = f"{spec.experiment}:{tag}:{task.task_id}:s{seed}"
+            res, traj = agent.run(task, run_id=run_id)
+            row = result_to_dict(res)
+            row["experiment"] = spec.experiment
+            row["task_hash"] = task.content_hash
+            with self._lock:
+                self.spent += res.cost_usd
+            with write_lock:
+                with open(out_path, "a", encoding="utf-8") as f:
+                    f.write(json.dumps(row) + "\n")
+                writer.write(traj)
+            return row
 
-        for filename in sorted(os.listdir(tasks_dir)):
-            if not filename.endswith(".json"):
-                continue
-
-            filepath = os.path.join(tasks_dir, filename)
-            try:
-                with open(filepath, "r") as f:
-                    data = json.load(f)
-
-                task = TaskSpec(
-                    task_id=data["task_id"],
-                    description=data["description"],
-                    language=Language(data["language"]),
-                    specification=data["specification"],
-                    reference_solution=data.get("reference_solution", ""),
-                    test_cases=data.get("test_cases", []),
-                    difficulty=data.get("difficulty", "medium"),
-                    source_benchmark=data.get("source_benchmark", "custom"),
-                )
-                self.tasks.append(task)
-            except (json.JSONDecodeError, KeyError) as e:
-                print(f"Warning: Could not load {filename}: {e}")
-
-        print(f"Loaded {len(self.tasks)} tasks from {tasks_dir}")
-        return len(self.tasks)
-
-    def run_single_task(
-        self,
-        task: TaskSpec,
-        mode: AgentMode,
-    ) -> PipelineResult:
-        """Run a single task with the specified agent mode.
-
-        Args:
-            task: The benchmark task.
-            mode: Agent operating mode.
-
-        Returns:
-            PipelineResult for this task.
-        """
-        agent = create_agent(mode, self.provider, self.max_attempts)
-        result = agent.run(task)
-        self.evaluator.add_result(result)
-        return result
-
-    def run_evaluation(
-        self,
-        modes: Optional[list[AgentMode]] = None,
-        languages: Optional[list[Language]] = None,
-        task_limit: Optional[int] = None,
-    ) -> list[PipelineResult]:
-        """Run full evaluation across modes and tasks.
-
-        Args:
-            modes: Agent modes to evaluate. Defaults to all four.
-            languages: Filter tasks by language. Defaults to all.
-            task_limit: Maximum tasks to evaluate (for quick testing).
-
-        Returns:
-            List of all PipelineResults.
-        """
-        if modes is None:
-            modes = list(AgentMode)
-
-        tasks = self.tasks
-        if languages:
-            tasks = [t for t in tasks if t.language in languages]
-        if task_limit:
-            tasks = tasks[:task_limit]
-
-        print(f"\n{'='*60}")
-        print(f"SpecLoop Evaluation")
-        print(f"  Model: {self.provider.model_name()}")
-        print(f"  Tasks: {len(tasks)}")
-        print(f"  Modes: {[m.value for m in modes]}")
-        print(f"  Max Attempts: {self.max_attempts}")
-        print(f"{'='*60}\n")
-
-        all_results = []
-        total = len(tasks) * len(modes)
-        done = 0
-
-        for mode in modes:
-            print(f"\n--- Agent Mode: {mode.value} ---")
-            for task in tasks:
-                done += 1
-                print(f"  [{done}/{total}] Task {task.task_id}...", end=" ")
-
-                result = self.run_single_task(task, mode)
-                all_results.append(result)
-
-                status = "PASS" if result.correct else "FAIL"
-                print(f"{status} (attempts={result.attempts}, "
-                      f"time={result.total_time_seconds:.1f}s)")
-
-        return all_results
-
-    def print_summary(self):
-        """Print a formatted summary of evaluation results."""
-        table = self.evaluator.comparison_table()
-
-        if not table:
-            print("No results to summarize.")
-            return
-
-        print(f"\n{'='*80}")
-        print("EVALUATION SUMMARY")
-        print(f"{'='*80}")
-
-        try:
-            from tabulate import tabulate
-            print(tabulate(table, headers="keys", tablefmt="grid"))
-        except ImportError:
-            # Fallback: simple print
-            for row in table:
-                print(row)
-
-    def save_results(self) -> tuple[str, str]:
-        """Save all results to the output directory."""
-        return self.evaluator.save_results(self.output_dir)
+        t0 = time.time()
+        with ThreadPoolExecutor(self.workers) as ex:
+            futs = {ex.submit(work, t, s): (t.task_id, s) for t, s in units}
+            for i, fut in enumerate(as_completed(futs), 1):
+                try:
+                    row = fut.result()
+                except Exception as e:  # noqa: BLE001 - keep going, report at the end
+                    tid, s = futs[fut]
+                    print(f"  ! {tid} s{s} crashed: {type(e).__name__}: {str(e)[:200]}")
+                    continue
+                if row is None:
+                    continue
+                results.append(row)
+                if verbose and (i % 20 == 0 or i == len(units)):
+                    acc = sum(r["correct"] for r in results) / max(len(results), 1)
+                    print(f"  {i}/{len(units)} done, correct so far {acc:.1%}, "
+                          f"spent ${self.spent:.2f}, {time.time() - t0:.0f}s")
+        return results

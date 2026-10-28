@@ -1,0 +1,12 @@
+{
+  "experiment": "E1_baseline",
+  "description": "Phase 1 baselines: single-shot generation and the testing-only repair agent (no verifier feedback).",
+  "split": "test",
+  "languages": ["dafny", "python_icontract"],
+  "models": ["gpt-4o-mini"],
+  "seeds": [0, 1, 2],
+  "configs": [
+    {"name": "single_shot", "mode": "single_shot"},
+    {"name": "testing_only", "mode": "testing_only"}
+  ]
+}

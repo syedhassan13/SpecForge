@@ -1,0 +1,32 @@
+{
+  "experiment": "E2_base_paper",
+  "description": "VERINA CodeGen protocol reproduced on our Dafny/Python versions of VERINA-BASIC: 2-shot prompt, temperature 1.0, 3 samples per task (VERINA used 5; reduced to fit the $2 API budget, pass@1 stays unbiased), pass@1 on unit tests.",
+  "split": "test",
+  "languages": [
+    "dafny",
+    "python_icontract"
+  ],
+  "models": [
+    "gpt-4o-mini"
+  ],
+  "samples": 3,
+  "temperature": 1.0,
+  "reported": {
+    "source": "Ye et al., VERINA, Table 9 (CodeGen on VERINA-A, Lean 4, pass@1)",
+    "gpt-4.1": {
+      "pass": 69.8,
+      "cannot_compile": 27.4,
+      "fail_tests": 2.8
+    },
+    "gpt-4o-mini": {
+      "pass": 44.0,
+      "cannot_compile": 54.9,
+      "fail_tests": 1.1
+    },
+    "deepseek-v3": {
+      "pass": 49.8,
+      "cannot_compile": 48.7,
+      "fail_tests": 1.5
+    }
+  }
+}
