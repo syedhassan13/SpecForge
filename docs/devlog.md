@@ -75,3 +75,39 @@ total. The Phase 1 plan (GPT-4o and Claude Sonnet) and our later plan
 evaluates (44.0% CodeGen pass@1 on VERINA-BASIC). A global spend cap read
 from the response cache stops any run that would cross the budget
 (`src/pipeline.py`). E2 uses 3 samples per task instead of VERINA's 5.
+
+---
+
+### 2026-10-28 · Iteration 1: diagnostic normaliser (Gap 1)
+**Observed (it0).** Phase 1 style combined agent (raw tool output, verifier
+and test output pasted together): Dafny 12/20 correct, Python 20/20.
+Raw Dafny output refers to `candidate.dfy(18,2)` positions the model never
+sees.
+
+**Changed.** Normaliser: one taxonomy for Dafny and CrossHair, offending
+line and spec clause quoted, one-line meaning per error kind.
+
+**Effect.** Dafny 12/20 (no change), all-tests-pass 16 -> 17/20, Python
+20/20. No measurable gain in correctness on dev with this model.
+
+---
+
+### 2026-10-29 · Iteration 2: feedback router (Gap 2)
+**Changed.** Router classifies every failed check (SPEC_TAMPER, SYNTAX,
+LOGIC_BUG, PROOF_GAP) and gives a class-specific instruction.
+
+**Effect.** Dafny 12/20, Python 20/20. Same tasks solved; vb_062 now solved
+(after 4 attempts) but vb_069 lost. Kept because the classification is also
+what the failure analysis needs, and because the effect is within noise.
+
+---
+
+### 2026-10-30 · Iteration 3: stagnation monitor
+**Observed.** In it2, 8 Dafny runs used all 5 attempts and 4 of them
+resubmitted an identical program at least once.
+
+**Changed.** Fingerprint each failure; on a repeat (or an identical program)
+the next call is a "rewrite" with temperature 0.6.
+
+**Effect.** Dafny 12/20 (no change), 10 strategy switches fired, none of
+them turned a failing task into a solved one on dev.
