@@ -57,6 +57,48 @@ KIND_HINTS = {
 }
 
 
+# Added in dev iteration 4 (docs/devlog.md): most persistent dev failures were
+# compile errors caused by habits from other languages. The messages Dafny
+# prints name the problem but not the fix, so we attach a generic fix hint.
+# The table is keyed on the error message only, never on a task.
+FIX_HINTS = [
+    (r"size operator expects a collection argument \(instead got array",
+     "for an array use a.Length; or keep the result as a seq and append with r := r + [x]"),
+    (r"new can be applied only to class types",
+     "Dafny has no StringBuilder or new string(...); build strings/sequences by concatenation, e.g. r := r + [c]"),
+    (r"lbrace expected",
+     "in statements write `if cond { ... } else { ... }`; `then` is only used in if-expressions"),
+    (r"Duplicate local-variable name: (result|r)\b",
+     "the out-parameter is already declared in `returns (...)`; assign to it instead of declaring `var` again"),
+    (r"LHS of array assignment must denote an array element \(found seq",
+     "sequences are immutable: use s := s[i := v] or build a new sequence"),
+    (r"unresolved identifier",
+     "this name does not exist; Dafny has almost no library functions for strings/lists, define a helper yourself"),
+    (r"(member|function) .* does not exist in type",
+     "this member does not exist in Dafny; check the type (seq, string, array) and write a helper if needed"),
+    (r"ghost",
+     "ghost functions/variables can only be used in specifications; compute the value with executable code in the body"),
+    (r"type mismatch|incorrect type|expected type",
+     "check int vs nat vs char vs string; convert explicitly (e.g. compare chars with chars, use 'a' not \"a\")"),
+    (r"cannot prove termination|decreases",
+     "add a decreases clause to the loop or recursive call, e.g. `decreases |s| - i`"),
+    (r"loop invariant could not be proved on entry",
+     "the invariant must already hold before the first iteration with the initial values of the variables"),
+    (r"invariant could not be proved to be maintained",
+     "the loop body breaks this invariant; strengthen other invariants or change the update order"),
+    (r"index out of range",
+     "add `invariant 0 <= i <= |a|` (or a guard) so every index is provably in bounds"),
+]
+_FIX_RE = [(re.compile(p, re.IGNORECASE), h) for p, h in FIX_HINTS]
+
+
+def fix_hint(message: str) -> str:
+    for pat, hint in _FIX_RE:
+        if pat.search(message):
+            return hint
+    return ""
+
+
 def _line(code_lines: list[str], n: int | None) -> str:
     if n is None or n < 1 or n > len(code_lines):
         return ""
@@ -137,8 +179,10 @@ def normalise_python(vr: VerificationResult, code: str) -> list[Diagnostic]:
 class DiagnosticNormalizer:
     """Turns raw verifier output into feedback text (or passes it through)."""
 
-    def __init__(self, enabled: bool = True, max_items: int = 4, raw_chars: int = 1500):
+    def __init__(self, enabled: bool = True, max_items: int = 4, raw_chars: int = 1500,
+                 hints: bool = True):
         self.enabled = enabled
+        self.hints = hints
         self.max_items = max_items
         self.raw_chars = raw_chars
 
@@ -165,6 +209,9 @@ class DiagnosticNormalizer:
             hint = KIND_HINTS.get(d.kind)
             if hint:
                 sub.append(f"    meaning: {hint}")
+            fix = fix_hint(d.message) if self.hints and language is Language.DAFNY else ""
+            if fix:
+                sub.append(f"    fix:     {fix}")
             parts.append("\n".join([head] + sub))
         if len(diags) > self.max_items:
             parts.append(f"(+{len(diags) - self.max_items} more of the same kind)")

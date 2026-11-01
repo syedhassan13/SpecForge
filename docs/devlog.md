@@ -111,3 +111,24 @@ the next call is a "rewrite" with temperature 0.6.
 
 **Effect.** Dafny 12/20 (no change), 10 strategy switches fired, none of
 them turned a failing task into a solved one on dev.
+
+---
+
+### 2026-11-01 · Iteration 4: fix hints and compile-error routing
+**Observed.** In it0-it3, three Dafny tasks (vb_017, vb_082, vb_105) failed
+with compile errors in **all five attempts of all four iterations**. The
+errors came from habits of other languages: `|arr|` on an array,
+`new string(...)`, `StringBuilder`, `if ... then {` in a statement, a second
+`var result` next to the out-parameter. The normalised message names the
+problem but not the fix. We also found a routing bug: when a program
+verifies but does not compile (ghost function in executable code), the
+router showed the verifier report instead of the compile error.
+
+**Changed.** A table of generic fix hints keyed on Dafny error messages
+(never on a task), and SYNTAX routing that shows the compile error from the
+test run when the verifier did not see it.
+
+**Effect.** Dafny 13/20 (+1). All three persistent compile-error tasks are
+now solved (vb_017 in 2 attempts, vb_082 and vb_105 in 3), but vb_032 and
+vb_062 are lost. Mean model calls per Dafny run 3.00 -> 2.75, cost 0.0194
+-> 0.0182 USD.

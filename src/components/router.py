@@ -89,7 +89,7 @@ _DIRECTIVES = {
 
 
 class FeedbackRouter:
-    def __init__(self, enabled: bool = True, max_tests: int = 3):
+    def __init__(self, enabled: bool = True, max_tests: int = 3, compile_from_tests: bool = True):
         self.enabled = enabled
         self.compile_from_tests = compile_from_tests
         self.max_tests = max_tests

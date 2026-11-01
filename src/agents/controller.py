@@ -103,7 +103,7 @@ class SpecLoopAgent:
         self.seed = seed
         self.normalizer = DiagnosticNormalizer(enabled=config.normalizer, hints=config.fix_hints,
                                                loop_check=config.loop_check)
-        self.router = FeedbackRouter(enabled=config.router)
+        self.router = FeedbackRouter(enabled=config.router, compile_from_tests=config.compile_from_tests)
         self.guard = SpecGuard(enabled=config.guard)
 
     # ------------------------------------------------------------------

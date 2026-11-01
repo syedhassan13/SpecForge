@@ -18,21 +18,33 @@
       "mode": "combined",
       "normalizer": false,
       "router": false,
-      "stagnation": false
+      "stagnation": false,
+      "fix_hints": false,
+      "compile_from_tests": false
     },
     {
       "name": "it1_normalizer",
       "mode": "combined",
       "router": false,
-      "stagnation": false
+      "stagnation": false,
+      "fix_hints": false,
+      "compile_from_tests": false
     },
     {
       "name": "it2_router",
       "mode": "combined",
-      "stagnation": false
+      "stagnation": false,
+      "fix_hints": false,
+      "compile_from_tests": false
     },
     {
       "name": "it3_stagnation",
+      "mode": "combined",
+      "fix_hints": false,
+      "compile_from_tests": false
+    },
+    {
+      "name": "it4_fix_hints",
       "mode": "combined"
     }
   ]
