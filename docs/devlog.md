@@ -132,3 +132,21 @@ test run when the verifier did not see it.
 now solved (vb_017 in 2 attempts, vb_082 and vb_105 in 3), but vb_032 and
 vb_062 are lost. Mean model calls per Dafny run 3.00 -> 2.75, cost 0.0194
 -> 0.0182 USD.
+
+---
+
+### 2026-11-02 · Iteration 5: loops without real invariants
+**Observed.** In it3/it4, vb_079 and vb_108 ended with loop invariants
+written as comments (`// invariant: ...`), which Dafny ignores; Dafny only
+says that the postcondition cannot be proved.
+
+**Changed.** The normaliser flags loops with no `invariant` clause, and says
+so explicitly when the invariants appear only in comments.
+
+**Effect.** Dafny 13/20, identical per-task outcomes to it4 on dev. The two
+target tasks still fail (the model now writes real invariants but too weak
+ones). Kept, because it does not hurt and its effect on the test split is
+measured by the `no_dev_fixes` ablation (E5).
+
+**Design frozen** after this entry. The test split was run with the it5
+configuration (`specloop_full`).

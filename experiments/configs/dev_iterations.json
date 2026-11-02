@@ -20,7 +20,8 @@
       "router": false,
       "stagnation": false,
       "fix_hints": false,
-      "compile_from_tests": false
+      "compile_from_tests": false,
+      "loop_check": false
     },
     {
       "name": "it1_normalizer",
@@ -28,23 +29,31 @@
       "router": false,
       "stagnation": false,
       "fix_hints": false,
-      "compile_from_tests": false
+      "compile_from_tests": false,
+      "loop_check": false
     },
     {
       "name": "it2_router",
       "mode": "combined",
       "stagnation": false,
       "fix_hints": false,
-      "compile_from_tests": false
+      "compile_from_tests": false,
+      "loop_check": false
     },
     {
       "name": "it3_stagnation",
       "mode": "combined",
       "fix_hints": false,
-      "compile_from_tests": false
+      "compile_from_tests": false,
+      "loop_check": false
     },
     {
       "name": "it4_fix_hints",
+      "mode": "combined",
+      "loop_check": false
+    },
+    {
+      "name": "it5_loop_check",
       "mode": "combined"
     }
   ]

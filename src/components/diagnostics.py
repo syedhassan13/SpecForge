@@ -54,6 +54,9 @@ KIND_HINTS = {
     "syntax": "the program does not parse",
     "resolution": "a name or type error stops the program from compiling",
     "timeout": "the verifier ran out of time",
+    "invariant_comment": "write each one as `invariant <expr>` between the `while` line and `{`",
+    "missing_invariant": ("add `invariant` clauses that bound the loop index and relate the partial "
+                          "result to the ensures clauses"),
 }
 
 
@@ -90,6 +93,28 @@ FIX_HINTS = [
      "add `invariant 0 <= i <= |a|` (or a guard) so every index is provably in bounds"),
 ]
 _FIX_RE = [(re.compile(p, re.IGNORECASE), h) for p, h in FIX_HINTS]
+
+
+_WHILE = re.compile(r"\bwhile\b")
+_INV_CLAUSE = re.compile(r"^\s*invariant\b", re.M)
+_INV_COMMENT = re.compile(r"(//|/\*).*\binvariant", re.I)
+
+
+def loop_annotation_diagnostics(code: str) -> list[Diagnostic]:
+    """Dev iteration 5: catch loops whose invariants are missing or only in comments.
+
+    Dafny reports both cases as an unprovable postcondition, which does not
+    tell the model that the loop itself carries no proof annotations.
+    """
+    if not _WHILE.search(code) or _INV_CLAUSE.search(code):
+        return []
+    lines = code.splitlines()
+    ln = next((i + 1 for i, l in enumerate(lines) if _WHILE.search(l)), None)
+    if _INV_COMMENT.search(code):
+        return [Diagnostic("invariant_comment", "loop invariants are written as comments, which Dafny ignores",
+                           line=ln, source_line=lines[ln - 1].strip() if ln else "")]
+    return [Diagnostic("missing_invariant", "the loop has no invariant clauses",
+                       line=ln, source_line=lines[ln - 1].strip() if ln else "")]
 
 
 def fix_hint(message: str) -> str:
@@ -180,9 +205,10 @@ class DiagnosticNormalizer:
     """Turns raw verifier output into feedback text (or passes it through)."""
 
     def __init__(self, enabled: bool = True, max_items: int = 4, raw_chars: int = 1500,
-                 hints: bool = True):
+                 hints: bool = True, loop_check: bool = True):
         self.enabled = enabled
         self.hints = hints
+        self.loop_check = loop_check
         self.max_items = max_items
         self.raw_chars = raw_chars
 
@@ -195,6 +221,9 @@ class DiagnosticNormalizer:
         if not self.enabled:
             return self.render_raw(vr)
         diags = self.diagnostics(language, vr, code)
+        if self.loop_check and language is Language.DAFNY and \
+                not any(d.kind in ("syntax", "resolution") for d in diags):
+            diags = loop_annotation_diagnostics(code) + diags
         vr.diagnostics = diags
         parts = []
         for d in diags[: self.max_items]:
