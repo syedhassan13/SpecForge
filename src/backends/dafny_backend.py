@@ -90,7 +90,8 @@ class DafnyBackend:
                                      time_seconds=time.time() - start,
                                      raw_output="TIMEOUT")
             with self._lock:
-                self._cache[key] = res
+                self._cache[key] = res
+            tool_cache.put(self._disk_key(key), res)
             return res
         except FileNotFoundError:
             return VerificationResult(VerificationStatus.ERROR,
@@ -121,7 +122,8 @@ class DafnyBackend:
                                  verified_conditions=verified,
                                  total_conditions=verified + failed, raw_output=out)
         with self._lock:
-            self._cache[key] = res
+            self._cache[key] = res
+        tool_cache.put(self._disk_key(key), res)
         return res
 
     # ------------------------------------------------------------------
@@ -150,13 +152,15 @@ class DafnyBackend:
                              failures=["test run timed out (possible infinite loop)"],
                              time_seconds=time.time() - start, raw_output="TIMEOUT")
             with self._lock:
-                self._cache[key] = res
+                self._cache[key] = res
+            tool_cache.put(self._disk_key(key), res)
             return res
         except FileNotFoundError:
             return TestResult(TestStatus.ERROR, total=len(cases), failures=["Dafny not found"])
         res = _collect(cases, out, rc, time.time() - start)
         with self._lock:
-            self._cache[key] = res
+            self._cache[key] = res
+        tool_cache.put(self._disk_key(key), res)
         return res
 
 

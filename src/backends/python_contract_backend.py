@@ -85,7 +85,8 @@ class PythonContractBackend:
             res = VerificationResult(VerificationStatus.FAILED, errors=[syn],
                                      time_seconds=time.time() - start, raw_output=syn)
             with self._lock:
-                self._cache[key] = res
+                self._cache[key] = res
+            tool_cache.put(self._disk_key(key), res)
             return res
         work, path = self._write(code)
         overall = max(60, self.crosshair_timeout * 12)
@@ -99,7 +100,8 @@ class PythonContractBackend:
                                      errors=[f"CrossHair timed out after {overall}s"],
                                      time_seconds=time.time() - start, raw_output="TIMEOUT")
             with self._lock:
-                self._cache[key] = res
+                self._cache[key] = res
+            tool_cache.put(self._disk_key(key), res)
             return res
         finally:
             shutil.rmtree(work, ignore_errors=True)
@@ -123,7 +125,8 @@ class PythonContractBackend:
                                  verified_conditions=0 if errors else n_cond,
                                  total_conditions=n_cond, raw_output=out)
         with self._lock:
-            self._cache[key] = res
+            self._cache[key] = res
+        tool_cache.put(self._disk_key(key), res)
         return res
 
     # ------------------------------------------------------------------
@@ -144,7 +147,7 @@ class PythonContractBackend:
         start = time.time()
         work, path = self._write(program)
         try:
-            rc, out = _run([self.python, path], cwd=work, timeout=self.test_timeout)
+            rc, out = run_tree([self.python, path], cwd=work, timeout=self.test_timeout)
             res = _collect(cases, out, rc, time.time() - start)
         except subprocess.TimeoutExpired:
             res = TestResult(TestStatus.TIMEOUT, total=len(cases),
@@ -153,5 +156,6 @@ class PythonContractBackend:
         finally:
             shutil.rmtree(work, ignore_errors=True)
         with self._lock:
-            self._cache[key] = res
+            self._cache[key] = res
+        tool_cache.put(self._disk_key(key), res)
         return res

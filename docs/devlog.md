@@ -150,3 +150,39 @@ measured by the `no_dev_fixes` ablation (E5).
 
 **Design frozen** after this entry. The test split was run with the it5
 configuration (`specloop_full`).
+
+---
+
+### 2026-11-03 to 2026-11-05 · Test-split runs
+E1, E2, E3, E4 and E5 on the 77 test tasks (154 instances), 3 seeds each.
+Results and analysis in `results/` and in the paper. Ablations were run
+on Dafny only: Python is at ceiling (about 96% of Python instances are
+solved by the shared first candidate, so no component can change them).
+For E5 we only executed the 122 Dafny units per variant where the full
+system needed feedback (`--reuse-first-attempt`); in the other units the
+shared first candidate passes every check, so each combined-mode variant
+would stop at the same candidate with the same verdict, and the analysis
+reuses that row. Main finding of the ablation: the normaliser (-6.9 pp)
+and the iteration 4-5 fixes (-6.5 pp) matter on the test split even though
+their effect was not visible on the 20 dev tasks.
+
+---
+
+### 2026-11-04 · A run that never finished, and repeated tool work
+**Observed.** On the test split, one unit (vb_087, Dafny, seed 1) never
+finished in E1, E3 or E4. Its candidate loops forever in the compiled tests.
+`subprocess.run(timeout=...)` killed `dafny.exe`, but on Windows the compiled
+program runs as a grandchild, kept the output pipes open, and the run waited
+for ever. Separately, every experiment re-verified the same first candidates
+(each configuration shares the first candidate of a task and seed), and
+CrossHair made this the slowest part of the runs.
+
+**Changed.** `src/backends/proc.py` kills the whole process tree on a
+timeout. Verifier and test results are stored in a shared on-disk cache keyed
+on tool, settings and program text (`src/backends/tool_cache.py`); cached
+results keep the run time measured the first time, so latency numbers are
+not affected.
+
+**Effect.** The stuck unit now ends with a test timeout like any other
+looping program. The remaining E3/E4 units ran several times faster, and
+E5 variants that never trigger their component cost almost nothing.
