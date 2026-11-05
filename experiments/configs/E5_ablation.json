@@ -1,0 +1,15 @@
+{
+  "experiment": "E5_ablation",
+  "description": "Remove one component at a time from the full system (Dafny only: Python is at ceiling because ~96% of Python tasks are solved by the shared first candidate, so ablations cannot change them). Removing the test channel = verifier_only (E4) and removing the verifier channel = testing_only (E1), so those arms are reused. no_dev_fixes removes the changes made in dev iterations 4-5.",
+  "split": "test",
+  "languages": ["dafny"],
+  "models": ["gpt-4o-mini"],
+  "seeds": [0, 1, 2],
+  "configs": [
+    {"name": "no_normalizer", "mode": "combined", "normalizer": false},
+    {"name": "no_router", "mode": "combined", "router": false},
+    {"name": "no_guard", "mode": "combined", "guard": false},
+    {"name": "no_stagnation", "mode": "combined", "stagnation": false},
+    {"name": "no_dev_fixes", "mode": "combined", "fix_hints": false, "loop_check": false, "compile_from_tests": false}
+  ]
+}

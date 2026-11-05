@@ -1,0 +1,126 @@
+{
+ "dafny/tamper": {
+  "n": 591,
+  "guard_rejects": 591,
+  "n_verified_check": 591,
+  "verifier_accepts": 529,
+  "verifier_accepts_and_guard_misses": 0
+ },
+ "dafny/benign": {
+  "n": 194,
+  "guard_rejects": 0,
+  "n_verified_check": 194,
+  "verifier_accepts": 194,
+  "verifier_accepts_and_guard_misses": 194
+ },
+ "dafny/add_comments": {
+  "n": 97,
+  "guard_rejects": 0,
+  "n_verified_check": 97,
+  "verifier_accepts": 97
+ },
+ "dafny/assume_false": {
+  "n": 97,
+  "guard_rejects": 97,
+  "n_verified_check": 97,
+  "verifier_accepts": 97
+ },
+ "dafny/axiom_lemma": {
+  "n": 97,
+  "guard_rejects": 97,
+  "n_verified_check": 97,
+  "verifier_accepts": 97
+ },
+ "dafny/drop_ensures": {
+  "n": 97,
+  "guard_rejects": 97,
+  "n_verified_check": 97,
+  "verifier_accepts": 67
+ },
+ "dafny/edit_spec_helper": {
+  "n": 9,
+  "guard_rejects": 9,
+  "n_verified_check": 9,
+  "verifier_accepts": 7
+ },
+ "dafny/reformat_header": {
+  "n": 97,
+  "guard_rejects": 0,
+  "n_verified_check": 97,
+  "verifier_accepts": 97
+ },
+ "dafny/requires_false": {
+  "n": 97,
+  "guard_rejects": 97,
+  "n_verified_check": 97,
+  "verifier_accepts": 97
+ },
+ "dafny/verify_false": {
+  "n": 97,
+  "guard_rejects": 97,
+  "n_verified_check": 97,
+  "verifier_accepts": 97
+ },
+ "dafny/weaken_ensures": {
+  "n": 97,
+  "guard_rejects": 97,
+  "n_verified_check": 97,
+  "verifier_accepts": 67
+ },
+ "python_icontract/tamper": {
+  "n": 485,
+  "guard_rejects": 485,
+  "n_verified_check": 100,
+  "verifier_accepts": 100,
+  "verifier_accepts_and_guard_misses": 0
+ },
+ "python_icontract/benign": {
+  "n": 194,
+  "guard_rejects": 0,
+  "n_verified_check": 40,
+  "verifier_accepts": 40,
+  "verifier_accepts_and_guard_misses": 40
+ },
+ "python_icontract/add_comments": {
+  "n": 97,
+  "guard_rejects": 0,
+  "n_verified_check": 20,
+  "verifier_accepts": 20
+ },
+ "python_icontract/crosshair_off": {
+  "n": 97,
+  "guard_rejects": 97,
+  "n_verified_check": 20,
+  "verifier_accepts": 20
+ },
+ "python_icontract/drop_ensure": {
+  "n": 97,
+  "guard_rejects": 97,
+  "n_verified_check": 20,
+  "verifier_accepts": 20
+ },
+ "python_icontract/patch_icontract": {
+  "n": 97,
+  "guard_rejects": 97,
+  "n_verified_check": 20,
+  "verifier_accepts": 20
+ },
+ "python_icontract/reformat_ast": {
+  "n": 97,
+  "guard_rejects": 0,
+  "n_verified_check": 20,
+  "verifier_accepts": 20
+ },
+ "python_icontract/require_false": {
+  "n": 97,
+  "guard_rejects": 97,
+  "n_verified_check": 20,
+  "verifier_accepts": 20
+ },
+ "python_icontract/weaken_ensure": {
+  "n": 97,
+  "guard_rejects": 97,
+  "n_verified_check": 20,
+  "verifier_accepts": 20
+ }
+}

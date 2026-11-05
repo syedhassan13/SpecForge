@@ -186,3 +186,32 @@ not affected.
 **Effect.** The stuck unit now ends with a test timeout like any other
 looping program. The remaining E3/E4 units ran several times faster, and
 E5 variants that never trigger their component cost almost nothing.
+
+---
+
+## Per-task dev table (Dafny, Y = correct, number = candidates used)
+
+| task | it0 | it1 | it2 | it3 | it4 | it5 |
+|---|---|---|---|---|---|---|
+| vb_001 | Y1 | Y1 | Y1 | Y1 | Y1 | Y1 |
+| vb_015 | Y1 | Y1 | Y1 | Y1 | Y1 | Y1 |
+| vb_017 | .5 | .5 | .5 | .5 | Y2 | Y2 |
+| vb_032 | Y3 | Y5 | Y4 | Y4 | .5 | .5 |
+| vb_034 | .5 | .5 | .5 | .5 | .5 | .5 |
+| vb_045 | Y1 | Y1 | Y1 | Y1 | Y1 | Y1 |
+| vb_059 | Y1 | Y1 | Y1 | Y1 | Y1 | Y1 |
+| vb_062 | .5 | Y2 | Y4 | Y4 | .5 | .5 |
+| vb_069 | Y5 | .5 | .5 | .5 | .5 | .5 |
+| vb_072 | Y1 | Y1 | Y1 | Y1 | Y1 | Y1 |
+| vb_073 | Y1 | Y1 | Y1 | Y1 | Y1 | Y1 |
+| vb_079 | .5 | .5 | .5 | .5 | .5 | .5 |
+| vb_080 | .5 | .5 | .5 | .5 | .5 | .5 |
+| vb_082 | .5 | .5 | .5 | .5 | Y3 | Y3 |
+| vb_084 | Y1 | Y1 | Y1 | Y1 | Y1 | Y1 |
+| vb_085 | Y2 | Y3 | Y2 | Y2 | Y2 | Y2 |
+| vb_088 | Y2 | Y2 | Y2 | Y2 | Y2 | Y2 |
+| vb_092 | Y1 | Y1 | Y1 | Y1 | Y1 | Y1 |
+| vb_105 | .5 | .5 | .5 | .5 | Y3 | Y3 |
+| vb_108 | .5 | .5 | .5 | .5 | .5 | .5 |
+
+Python: 20/20 in every iteration.
