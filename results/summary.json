@@ -1,0 +1,1000 @@
+{
+ "n_runs": 2515,
+ "n_reused_ablation_units": 488,
+ "models": [
+  "gpt-4o-mini"
+ ],
+ "main": [
+  {
+   "model": "gpt-4o-mini",
+   "language": "dafny",
+   "config": "single_shot",
+   "runs": 231,
+   "seeds": 3,
+   "correct_mean": 46.8,
+   "correct_sd": 1.3,
+   "verified_mean": 46.8,
+   "verified_sd": 1.3,
+   "tests_mean": 64.5,
+   "tests_sd": 5.2,
+   "spec_intact": 100.0,
+   "attempts": 1.0,
+   "llm_calls": 1.0,
+   "tokens": 684,
+   "cost_per_run": 0.00021,
+   "cost_per_solved": 0.0005,
+   "wall_s": 6.9,
+   "false_success": 0.0
+  },
+  {
+   "model": "gpt-4o-mini",
+   "language": "dafny",
+   "config": "testing_only",
+   "runs": 231,
+   "seeds": 3,
+   "correct_mean": 56.3,
+   "correct_sd": 2.7,
+   "verified_mean": 56.3,
+   "verified_sd": 2.7,
+   "tests_mean": 83.1,
+   "tests_sd": 3.4,
+   "spec_intact": 100.0,
+   "attempts": 1.97,
+   "llm_calls": 1.97,
+   "tokens": 1825,
+   "cost_per_run": 0.00052,
+   "cost_per_solved": 0.0009,
+   "wall_s": 19.2,
+   "false_success": 26.8
+  },
+  {
+   "model": "gpt-4o-mini",
+   "language": "dafny",
+   "config": "verifier_only",
+   "runs": 231,
+   "seeds": 3,
+   "correct_mean": 63.2,
+   "correct_sd": 2.0,
+   "verified_mean": 63.2,
+   "verified_sd": 2.0,
+   "tests_mean": 77.1,
+   "tests_sd": 2.7,
+   "spec_intact": 100.0,
+   "attempts": 2.74,
+   "llm_calls": 2.74,
+   "tokens": 2815,
+   "cost_per_run": 0.00079,
+   "cost_per_solved": 0.0012,
+   "wall_s": 26.3,
+   "false_success": 0.0
+  },
+  {
+   "model": "gpt-4o-mini",
+   "language": "dafny",
+   "config": "specloop_full",
+   "runs": 231,
+   "seeds": 3,
+   "correct_mean": 68.0,
+   "correct_sd": 2.7,
+   "verified_mean": 68.0,
+   "verified_sd": 2.7,
+   "tests_mean": 81.8,
+   "tests_sd": 4.5,
+   "spec_intact": 100.0,
+   "attempts": 2.65,
+   "llm_calls": 2.65,
+   "tokens": 2823,
+   "cost_per_run": 0.00078,
+   "cost_per_solved": 0.0012,
+   "wall_s": 29.7,
+   "false_success": 0.0
+  },
+  {
+   "model": "gpt-4o-mini",
+   "language": "python_icontract",
+   "config": "single_shot",
+   "runs": 231,
+   "seeds": 3,
+   "correct_mean": 96.5,
+   "correct_sd": 0.7,
+   "verified_mean": 96.5,
+   "verified_sd": 0.7,
+   "tests_mean": 98.7,
+   "tests_sd": 0.0,
+   "spec_intact": 100.0,
+   "attempts": 1.0,
+   "llm_calls": 1.0,
+   "tokens": 615,
+   "cost_per_run": 0.00019,
+   "cost_per_solved": 0.0002,
+   "wall_s": 11.4,
+   "false_success": 0.0
+  },
+  {
+   "model": "gpt-4o-mini",
+   "language": "python_icontract",
+   "config": "testing_only",
+   "runs": 231,
+   "seeds": 3,
+   "correct_mean": 97.8,
+   "correct_sd": 0.7,
+   "verified_mean": 97.8,
+   "verified_sd": 0.7,
+   "tests_mean": 100.0,
+   "tests_sd": 0.0,
+   "spec_intact": 100.0,
+   "attempts": 1.02,
+   "llm_calls": 1.02,
+   "tokens": 631,
+   "cost_per_run": 0.00019,
+   "cost_per_solved": 0.0002,
+   "wall_s": 9.9,
+   "false_success": 2.2
+  },
+  {
+   "model": "gpt-4o-mini",
+   "language": "python_icontract",
+   "config": "verifier_only",
+   "runs": 231,
+   "seeds": 3,
+   "correct_mean": 98.7,
+   "correct_sd": 0.0,
+   "verified_mean": 98.7,
+   "verified_sd": 0.0,
+   "tests_mean": 100.0,
+   "tests_sd": 0.0,
+   "spec_intact": 100.0,
+   "attempts": 1.09,
+   "llm_calls": 1.09,
+   "tokens": 705,
+   "cost_per_run": 0.00021,
+   "cost_per_solved": 0.0002,
+   "wall_s": 12.9,
+   "false_success": 0.0
+  },
+  {
+   "model": "gpt-4o-mini",
+   "language": "python_icontract",
+   "config": "specloop_full",
+   "runs": 231,
+   "seeds": 3,
+   "correct_mean": 98.7,
+   "correct_sd": 0.0,
+   "verified_mean": 98.7,
+   "verified_sd": 0.0,
+   "tests_mean": 100.0,
+   "tests_sd": 0.0,
+   "spec_intact": 100.0,
+   "attempts": 1.1,
+   "llm_calls": 1.1,
+   "tokens": 714,
+   "cost_per_run": 0.00021,
+   "cost_per_solved": 0.0002,
+   "wall_s": 10.0,
+   "false_success": 0.0
+  }
+ ],
+ "curves": {
+  "dafny/testing_only": [
+   47.2,
+   52.8,
+   54.5,
+   55.4,
+   56.3
+  ],
+  "dafny/verifier_only": [
+   47.2,
+   56.3,
+   60.6,
+   62.3,
+   63.2
+  ],
+  "dafny/specloop_full": [
+   47.2,
+   57.6,
+   63.6,
+   66.2,
+   68.0
+  ],
+  "python_icontract/testing_only": [
+   96.5,
+   97.4,
+   97.8,
+   97.8,
+   97.8
+  ],
+  "python_icontract/verifier_only": [
+   96.5,
+   97.4,
+   98.3,
+   98.7,
+   98.7
+  ],
+  "python_icontract/specloop_full": [
+   96.5,
+   97.0,
+   98.3,
+   98.7,
+   98.7
+  ]
+ },
+ "solved_by_repair": {
+  "dafny/testing_only": 21,
+  "dafny/verifier_only": 37,
+  "dafny/specloop_full": 48,
+  "python_icontract/testing_only": 3,
+  "python_icontract/verifier_only": 5,
+  "python_icontract/specloop_full": 5
+ },
+ "gaps": {
+  "gap1": {
+   "gpt-4o-mini/single_shot/correct": {
+    "n_tasks": 77,
+    "a": 0.4675324675324675,
+    "b": 0.9653679653679655,
+    "diff": -0.49783549783549785,
+    "ci95": [
+     -0.6060606060606061,
+     -0.38961038961038963
+    ],
+    "p_wilcoxon": 3.6981579859289776e-09,
+    "mcnemar_a_only": 3,
+    "mcnemar_b_only": 118,
+    "p_mcnemar": 2.222056719664464e-31
+   },
+   "gpt-4o-mini/single_shot/verified": {
+    "n_tasks": 77,
+    "a": 0.4675324675324675,
+    "b": 0.9653679653679655,
+    "diff": -0.49783549783549785,
+    "ci95": [
+     -0.6060606060606061,
+     -0.38961038961038963
+    ],
+    "p_wilcoxon": 3.6981579859289776e-09,
+    "mcnemar_a_only": 3,
+    "mcnemar_b_only": 118,
+    "p_mcnemar": 2.222056719664464e-31
+   },
+   "gpt-4o-mini/single_shot/tests_ok": {
+    "n_tasks": 77,
+    "a": 0.6450216450216449,
+    "b": 0.987012987012987,
+    "diff": -0.341991341991342,
+    "ci95": [
+     -0.4502164502164502,
+     -0.23809523809523814
+    ],
+    "p_wilcoxon": 1.049759433145776e-06,
+    "mcnemar_a_only": 3,
+    "mcnemar_b_only": 82,
+    "p_mcnemar": 5.295300088834776e-21
+   },
+   "gpt-4o-mini/testing_only/correct": {
+    "n_tasks": 77,
+    "a": 0.5627705627705628,
+    "b": 0.9783549783549785,
+    "diff": -0.4155844155844156,
+    "ci95": [
+     -0.5238095238095238,
+     -0.3030303030303031
+    ],
+    "p_wilcoxon": 7.970632470663305e-08,
+    "mcnemar_a_only": 3,
+    "mcnemar_b_only": 99,
+    "p_mcnemar": 6.979604631123946e-26
+   },
+   "gpt-4o-mini/testing_only/verified": {
+    "n_tasks": 77,
+    "a": 0.5627705627705628,
+    "b": 0.9783549783549785,
+    "diff": -0.4155844155844156,
+    "ci95": [
+     -0.5238095238095238,
+     -0.3030303030303031
+    ],
+    "p_wilcoxon": 7.970632470663305e-08,
+    "mcnemar_a_only": 3,
+    "mcnemar_b_only": 99,
+    "p_mcnemar": 6.979604631123946e-26
+   },
+   "gpt-4o-mini/testing_only/tests_ok": {
+    "n_tasks": 77,
+    "a": 0.8311688311688311,
+    "b": 1.0,
+    "diff": -0.16883116883116886,
+    "ci95": [
+     -0.24675324675324675,
+     -0.09956709956709957
+    ],
+    "p_wilcoxon": 0.00010342841121718541,
+    "mcnemar_a_only": 0,
+    "mcnemar_b_only": 39,
+    "p_mcnemar": 3.637978807091713e-12
+   },
+   "gpt-4o-mini/verifier_only/correct": {
+    "n_tasks": 77,
+    "a": 0.6320346320346321,
+    "b": 0.987012987012987,
+    "diff": -0.354978354978355,
+    "ci95": [
+     -0.4632034632034633,
+     -0.24675324675324675
+    ],
+    "p_wilcoxon": 1.2322402326092143e-06,
+    "mcnemar_a_only": 3,
+    "mcnemar_b_only": 85,
+    "p_mcnemar": 7.344652981131973e-22
+   },
+   "gpt-4o-mini/verifier_only/verified": {
+    "n_tasks": 77,
+    "a": 0.6320346320346321,
+    "b": 0.987012987012987,
+    "diff": -0.354978354978355,
+    "ci95": [
+     -0.4632034632034633,
+     -0.24675324675324675
+    ],
+    "p_wilcoxon": 1.2322402326092143e-06,
+    "mcnemar_a_only": 3,
+    "mcnemar_b_only": 85,
+    "p_mcnemar": 7.344652981131973e-22
+   },
+   "gpt-4o-mini/verifier_only/tests_ok": {
+    "n_tasks": 77,
+    "a": 0.7705627705627706,
+    "b": 1.0,
+    "diff": -0.22943722943722944,
+    "ci95": [
+     -0.31601731601731603,
+     -0.15151515151515152
+    ],
+    "p_wilcoxon": 1.2749674921097057e-05,
+    "mcnemar_a_only": 0,
+    "mcnemar_b_only": 53,
+    "p_mcnemar": 2.220446049250313e-16
+   },
+   "gpt-4o-mini/specloop_full/correct": {
+    "n_tasks": 77,
+    "a": 0.6796536796536797,
+    "b": 0.987012987012987,
+    "diff": -0.3073593073593074,
+    "ci95": [
+     -0.40692640692640697,
+     -0.2077922077922078
+    ],
+    "p_wilcoxon": 2.5666543298989266e-06,
+    "mcnemar_a_only": 3,
+    "mcnemar_b_only": 74,
+    "p_mcnemar": 1.0078897978938123e-18
+   },
+   "gpt-4o-mini/specloop_full/verified": {
+    "n_tasks": 77,
+    "a": 0.6796536796536797,
+    "b": 0.987012987012987,
+    "diff": -0.3073593073593074,
+    "ci95": [
+     -0.40692640692640697,
+     -0.2077922077922078
+    ],
+    "p_wilcoxon": 2.5666543298989266e-06,
+    "mcnemar_a_only": 3,
+    "mcnemar_b_only": 74,
+    "p_mcnemar": 1.0078897978938123e-18
+   },
+   "gpt-4o-mini/specloop_full/tests_ok": {
+    "n_tasks": 77,
+    "a": 0.8181818181818181,
+    "b": 1.0,
+    "diff": -0.18181818181818185,
+    "ci95": [
+     -0.25541125541125537,
+     -0.11688311688311688
+    ],
+    "p_wilcoxon": 1.3103694241781589e-05,
+    "mcnemar_a_only": 0,
+    "mcnemar_b_only": 42,
+    "p_mcnemar": 4.547473508864641e-13
+   },
+   "gpt-4o-mini/first_attempt_tests_ok": {
+    "n_tasks": 77,
+    "a": 0.6450216450216449,
+    "b": 0.987012987012987,
+    "diff": -0.341991341991342,
+    "ci95": [
+     -0.4502164502164502,
+     -0.23809523809523814
+    ],
+    "p_wilcoxon": 1.049759433145776e-06,
+    "mcnemar_a_only": 3,
+    "mcnemar_b_only": 82,
+    "p_mcnemar": 5.295300088834776e-21
+   }
+  },
+  "gap2": {
+   "gpt-4o-mini/dafny/full_vs_verifier": {
+    "n_tasks": 77,
+    "a": 0.6796536796536797,
+    "b": 0.6320346320346321,
+    "diff": 0.04761904761904762,
+    "ci95": [
+     0.008658008658008656,
+     0.0909090909090909
+    ],
+    "p_wilcoxon": 0.0809850089151117,
+    "mcnemar_a_only": 18,
+    "mcnemar_b_only": 7,
+    "p_mcnemar": 0.043285250663757324
+   },
+   "gpt-4o-mini/dafny/full_vs_testing": {
+    "n_tasks": 77,
+    "a": 0.6796536796536797,
+    "b": 0.5627705627705628,
+    "diff": 0.11688311688311688,
+    "ci95": [
+     0.0606060606060606,
+     0.17748917748917747
+    ],
+    "p_wilcoxon": 0.0018489649015731124,
+    "mcnemar_a_only": 31,
+    "mcnemar_b_only": 4,
+    "p_mcnemar": 3.4654513001441956e-06
+   },
+   "gpt-4o-mini/python_icontract/full_vs_verifier": {
+    "n_tasks": 77,
+    "a": 0.987012987012987,
+    "b": 0.987012987012987,
+    "diff": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "p_wilcoxon": 1.0,
+    "mcnemar_a_only": 0,
+    "mcnemar_b_only": 0,
+    "p_mcnemar": 1.0
+   },
+   "gpt-4o-mini/python_icontract/full_vs_testing": {
+    "n_tasks": 77,
+    "a": 0.987012987012987,
+    "b": 0.9783549783549785,
+    "diff": 0.00865800865800866,
+    "ci95": [
+     0.0,
+     0.025974025974025976
+    ],
+    "p_wilcoxon": 0.31731050786291415,
+    "mcnemar_a_only": 2,
+    "mcnemar_b_only": 0,
+    "p_mcnemar": 0.5
+   }
+  },
+  "gap3": {
+   "gpt-4o-mini/dafny/verifier_vs_testing": {
+    "n_tasks": 77,
+    "a": 0.6320346320346321,
+    "b": 0.5627705627705628,
+    "diff": 0.06926406926406928,
+    "ci95": [
+     0.025974025974025976,
+     0.11688311688311691
+    ],
+    "p_wilcoxon": 0.00774522418696852,
+    "mcnemar_a_only": 18,
+    "mcnemar_b_only": 2,
+    "p_mcnemar": 0.0004024505615234375
+   },
+   "gpt-4o-mini/dafny/full_vs_testing": {
+    "n_tasks": 77,
+    "a": 0.6796536796536797,
+    "b": 0.5627705627705628,
+    "diff": 0.11688311688311688,
+    "ci95": [
+     0.0606060606060606,
+     0.17748917748917747
+    ],
+    "p_wilcoxon": 0.0018489649015731124,
+    "mcnemar_a_only": 31,
+    "mcnemar_b_only": 4,
+    "p_mcnemar": 3.4654513001441956e-06
+   },
+   "gpt-4o-mini/python_icontract/verifier_vs_testing": {
+    "n_tasks": 77,
+    "a": 0.987012987012987,
+    "b": 0.9783549783549785,
+    "diff": 0.00865800865800866,
+    "ci95": [
+     0.0,
+     0.025974025974025976
+    ],
+    "p_wilcoxon": 0.31731050786291415,
+    "mcnemar_a_only": 2,
+    "mcnemar_b_only": 0,
+    "p_mcnemar": 0.5
+   },
+   "gpt-4o-mini/python_icontract/full_vs_testing": {
+    "n_tasks": 77,
+    "a": 0.987012987012987,
+    "b": 0.9783549783549785,
+    "diff": 0.00865800865800866,
+    "ci95": [
+     0.0,
+     0.025974025974025976
+    ],
+    "p_wilcoxon": 0.31731050786291415,
+    "mcnemar_a_only": 2,
+    "mcnemar_b_only": 0,
+    "p_mcnemar": 0.5
+   }
+  }
+ },
+ "proof_gap_ambiguity": {
+  "gpt-4o-mini/dafny": {
+   "failed_verifications": 486,
+   "with_all_tests_passing": 191,
+   "share": 0.393
+  },
+  "gpt-4o-mini/python_icontract": {
+   "failed_verifications": 24,
+   "with_all_tests_passing": 19,
+   "share": 0.792
+  }
+ },
+ "ablation": [
+  {
+   "language": "dafny",
+   "variant": "full system",
+   "correct_mean": 68.0,
+   "correct_sd": 2.7,
+   "delta": 0.0,
+   "ci_lo": null,
+   "ci_hi": null,
+   "p_wilcoxon": null
+  },
+  {
+   "language": "dafny",
+   "variant": "no_normalizer",
+   "correct_mean": 61.0,
+   "correct_sd": 1.3,
+   "delta": -6.9,
+   "ci_lo": -11.7,
+   "ci_hi": -2.6,
+   "p_wilcoxon": 0.0098,
+   "false_success": 0.0,
+   "spec_intact": 99.6,
+   "cost_per_run": 0.00083
+  },
+  {
+   "language": "dafny",
+   "variant": "no_router",
+   "correct_mean": 64.9,
+   "correct_sd": 2.2,
+   "delta": -3.0,
+   "ci_lo": -6.5,
+   "ci_hi": 0.4,
+   "p_wilcoxon": 0.2512,
+   "false_success": 0.0,
+   "spec_intact": 100.0,
+   "cost_per_run": 0.00079
+  },
+  {
+   "language": "dafny",
+   "variant": "no_guard",
+   "correct_mean": 68.0,
+   "correct_sd": 2.7,
+   "delta": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "p_wilcoxon": 1.0,
+   "false_success": 0.0,
+   "spec_intact": 100.0,
+   "cost_per_run": 0.00078
+  },
+  {
+   "language": "dafny",
+   "variant": "no_stagnation",
+   "correct_mean": 66.7,
+   "correct_sd": 3.3,
+   "delta": -1.3,
+   "ci_lo": -3.0,
+   "ci_hi": 0.0,
+   "p_wilcoxon": 0.1025,
+   "false_success": 0.0,
+   "spec_intact": 99.6,
+   "cost_per_run": 0.00078
+  },
+  {
+   "language": "dafny",
+   "variant": "no_dev_fixes",
+   "correct_mean": 61.5,
+   "correct_sd": 1.5,
+   "delta": -6.5,
+   "ci_lo": -10.8,
+   "ci_hi": -2.6,
+   "p_wilcoxon": 0.0107,
+   "false_success": 0.0,
+   "spec_intact": 100.0,
+   "cost_per_run": 0.00083
+  },
+  {
+   "language": "dafny",
+   "variant": "no_test_channel",
+   "correct_mean": 63.2,
+   "correct_sd": 2.0,
+   "delta": -4.8,
+   "ci_lo": -9.1,
+   "ci_hi": -0.9,
+   "p_wilcoxon": 0.081,
+   "false_success": 0.0,
+   "spec_intact": 100.0,
+   "cost_per_run": 0.00079
+  },
+  {
+   "language": "dafny",
+   "variant": "no_verifier_channel",
+   "correct_mean": 56.3,
+   "correct_sd": 2.7,
+   "delta": -11.7,
+   "ci_lo": -17.7,
+   "ci_hi": -6.1,
+   "p_wilcoxon": 0.0018,
+   "false_success": 26.8,
+   "spec_intact": 100.0,
+   "cost_per_run": 0.00052
+  },
+  {
+   "language": "python_icontract",
+   "variant": "full system",
+   "correct_mean": 98.7,
+   "correct_sd": 0.0,
+   "delta": 0.0,
+   "ci_lo": null,
+   "ci_hi": null,
+   "p_wilcoxon": null
+  },
+  {
+   "language": "python_icontract",
+   "variant": "no_test_channel",
+   "correct_mean": 98.7,
+   "correct_sd": 0.0,
+   "delta": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "p_wilcoxon": 1.0,
+   "false_success": 0.0,
+   "spec_intact": 100.0,
+   "cost_per_run": 0.00021
+  },
+  {
+   "language": "python_icontract",
+   "variant": "no_verifier_channel",
+   "correct_mean": 97.8,
+   "correct_sd": 0.7,
+   "delta": -0.9,
+   "ci_lo": -2.6,
+   "ci_hi": 0.0,
+   "p_wilcoxon": 0.3173,
+   "false_success": 2.2,
+   "spec_intact": 100.0,
+   "cost_per_run": 0.00019
+  }
+ ],
+ "reliability": {
+  "single_shot": {
+   "runs": 462,
+   "runs_with_guard_block": 0,
+   "false_success": 0,
+   "final_spec_violations": 0,
+   "strategy_switches": 0,
+   "runs_with_switch": 0,
+   "solved_after_switch": 0,
+   "tool_seconds_share": 0.0
+  },
+  "testing_only": {
+   "runs": 462,
+   "runs_with_guard_block": 0,
+   "false_success": 67,
+   "final_spec_violations": 0,
+   "strategy_switches": 101,
+   "runs_with_switch": 56,
+   "solved_after_switch": 9,
+   "tool_seconds_share": 0.323
+  },
+  "verifier_only": {
+   "runs": 462,
+   "runs_with_guard_block": 1,
+   "false_success": 0,
+   "final_spec_violations": 0,
+   "strategy_switches": 93,
+   "runs_with_switch": 74,
+   "solved_after_switch": 10,
+   "tool_seconds_share": 0.589
+  },
+  "specloop_full": {
+   "runs": 462,
+   "runs_with_guard_block": 1,
+   "false_success": 0,
+   "final_spec_violations": 0,
+   "strategy_switches": 80,
+   "runs_with_switch": 60,
+   "solved_after_switch": 9,
+   "tool_seconds_share": 0.663
+  },
+  "no_normalizer": {
+   "runs": 231,
+   "runs_with_guard_block": 2,
+   "false_success": 0,
+   "final_spec_violations": 1,
+   "strategy_switches": 84,
+   "runs_with_switch": 62,
+   "solved_after_switch": 5,
+   "tool_seconds_share": 0.63
+  },
+  "no_router": {
+   "runs": 231,
+   "runs_with_guard_block": 1,
+   "false_success": 0,
+   "final_spec_violations": 0,
+   "strategy_switches": 81,
+   "runs_with_switch": 60,
+   "solved_after_switch": 9,
+   "tool_seconds_share": 0.583
+  },
+  "no_guard": {
+   "runs": 231,
+   "runs_with_guard_block": 0,
+   "false_success": 0,
+   "final_spec_violations": 0,
+   "strategy_switches": 70,
+   "runs_with_switch": 53,
+   "solved_after_switch": 5,
+   "tool_seconds_share": 0.56
+  },
+  "no_stagnation": {
+   "runs": 231,
+   "runs_with_guard_block": 1,
+   "false_success": 0,
+   "final_spec_violations": 1,
+   "strategy_switches": 0,
+   "runs_with_switch": 0,
+   "solved_after_switch": 0,
+   "tool_seconds_share": 0.551
+  },
+  "no_dev_fixes": {
+   "runs": 231,
+   "runs_with_guard_block": 0,
+   "false_success": 0,
+   "final_spec_violations": 0,
+   "strategy_switches": 86,
+   "runs_with_switch": 64,
+   "solved_after_switch": 5,
+   "tool_seconds_share": 0.534
+  }
+ },
+ "e2": [
+  {
+   "model": "gpt-4o-mini",
+   "language": "dafny",
+   "tasks": 77,
+   "samples": 231,
+   "pass_at_1_tests": 69.3,
+   "cannot_compile": 26.4,
+   "verified_at_1": 49.8,
+   "correct_at_1": 49.8,
+   "verina_lean_pass_reported": 44.0,
+   "verina_lean_cannot_compile_reported": 54.9
+  },
+  {
+   "model": "gpt-4o-mini",
+   "language": "python_icontract",
+   "tasks": 77,
+   "samples": 231,
+   "pass_at_1_tests": 98.7,
+   "cannot_compile": 0.0,
+   "verified_at_1": 97.0,
+   "correct_at_1": 94.8,
+   "verina_lean_pass_reported": 44.0,
+   "verina_lean_cannot_compile_reported": 54.9
+  }
+ ],
+ "failures": [
+  {
+   "model_language": "gpt-4o-mini/dafny",
+   "category": "does not compile",
+   "count": 40,
+   "share": 54.1
+  },
+  {
+   "model_language": "gpt-4o-mini/dafny",
+   "category": "proof gap: invariants too weak",
+   "count": 24,
+   "share": 32.4
+  },
+  {
+   "model_language": "gpt-4o-mini/dafny",
+   "category": "proof gap: invariants only in comments",
+   "count": 3,
+   "share": 4.1
+  },
+  {
+   "model_language": "gpt-4o-mini/dafny",
+   "category": "termination not proved",
+   "count": 2,
+   "share": 2.7
+  },
+  {
+   "model_language": "gpt-4o-mini/dafny",
+   "category": "verifier timeout",
+   "count": 2,
+   "share": 2.7
+  },
+  {
+   "model_language": "gpt-4o-mini/dafny",
+   "category": "wrong behaviour (fails tests)",
+   "count": 2,
+   "share": 2.7
+  },
+  {
+   "model_language": "gpt-4o-mini/dafny",
+   "category": "proof gap: no loop invariants",
+   "count": 1,
+   "share": 1.4
+  },
+  {
+   "model_language": "gpt-4o-mini/python_icontract",
+   "category": "counterexample on untested input",
+   "count": 3,
+   "share": 100.0
+  }
+ ],
+ "cases": [
+  {
+   "kind": "success",
+   "run_id": "E3_proposed:specloop_full__gpt-4o-mini:vb_016_dafny:s0"
+  },
+  {
+   "kind": "success",
+   "run_id": "E3_proposed:specloop_full__gpt-4o-mini:vb_033_python:s0"
+  },
+  {
+   "kind": "failure",
+   "run_id": "E3_proposed:specloop_full__gpt-4o-mini:vb_009_dafny:s0"
+  },
+  {
+   "kind": "failure",
+   "run_id": "E3_proposed:specloop_full__gpt-4o-mini:vb_086_dafny:s2"
+  }
+ ],
+ "guard_stress": {
+  "dafny/tamper": {
+   "n": 591,
+   "guard_rejects": 591,
+   "n_verified_check": 591,
+   "verifier_accepts": 529,
+   "verifier_accepts_and_guard_misses": 0
+  },
+  "dafny/benign": {
+   "n": 194,
+   "guard_rejects": 0,
+   "n_verified_check": 194,
+   "verifier_accepts": 194,
+   "verifier_accepts_and_guard_misses": 194
+  },
+  "dafny/add_comments": {
+   "n": 97,
+   "guard_rejects": 0,
+   "n_verified_check": 97,
+   "verifier_accepts": 97
+  },
+  "dafny/assume_false": {
+   "n": 97,
+   "guard_rejects": 97,
+   "n_verified_check": 97,
+   "verifier_accepts": 97
+  },
+  "dafny/axiom_lemma": {
+   "n": 97,
+   "guard_rejects": 97,
+   "n_verified_check": 97,
+   "verifier_accepts": 97
+  },
+  "dafny/drop_ensures": {
+   "n": 97,
+   "guard_rejects": 97,
+   "n_verified_check": 97,
+   "verifier_accepts": 67
+  },
+  "dafny/edit_spec_helper": {
+   "n": 9,
+   "guard_rejects": 9,
+   "n_verified_check": 9,
+   "verifier_accepts": 7
+  },
+  "dafny/reformat_header": {
+   "n": 97,
+   "guard_rejects": 0,
+   "n_verified_check": 97,
+   "verifier_accepts": 97
+  },
+  "dafny/requires_false": {
+   "n": 97,
+   "guard_rejects": 97,
+   "n_verified_check": 97,
+   "verifier_accepts": 97
+  },
+  "dafny/verify_false": {
+   "n": 97,
+   "guard_rejects": 97,
+   "n_verified_check": 97,
+   "verifier_accepts": 97
+  },
+  "dafny/weaken_ensures": {
+   "n": 97,
+   "guard_rejects": 97,
+   "n_verified_check": 97,
+   "verifier_accepts": 67
+  },
+  "python_icontract/tamper": {
+   "n": 485,
+   "guard_rejects": 485,
+   "n_verified_check": 100,
+   "verifier_accepts": 100,
+   "verifier_accepts_and_guard_misses": 0
+  },
+  "python_icontract/benign": {
+   "n": 194,
+   "guard_rejects": 0,
+   "n_verified_check": 40,
+   "verifier_accepts": 40,
+   "verifier_accepts_and_guard_misses": 40
+  },
+  "python_icontract/add_comments": {
+   "n": 97,
+   "guard_rejects": 0,
+   "n_verified_check": 20,
+   "verifier_accepts": 20
+  },
+  "python_icontract/crosshair_off": {
+   "n": 97,
+   "guard_rejects": 97,
+   "n_verified_check": 20,
+   "verifier_accepts": 20
+  },
+  "python_icontract/drop_ensure": {
+   "n": 97,
+   "guard_rejects": 97,
+   "n_verified_check": 20,
+   "verifier_accepts": 20
+  },
+  "python_icontract/patch_icontract": {
+   "n": 97,
+   "guard_rejects": 97,
+   "n_verified_check": 20,
+   "verifier_accepts": 20
+  },
+  "python_icontract/reformat_ast": {
+   "n": 97,
+   "guard_rejects": 0,
+   "n_verified_check": 20,
+   "verifier_accepts": 20
+  },
+  "python_icontract/require_false": {
+   "n": 97,
+   "guard_rejects": 97,
+   "n_verified_check": 20,
+   "verifier_accepts": 20
+  },
+  "python_icontract/weaken_ensure": {
+   "n": 97,
+   "guard_rejects": 97,
+   "n_verified_check": 20,
+   "verifier_accepts": 20
+  }
+ },
+ "equivalence": {
+  "total_inputs": 3698,
+  "total_agree": 3698,
+  "tasks": 97
+ },
+ "total_cost_usd": 1.65
+}

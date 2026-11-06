@@ -1,0 +1,9 @@
+model_language,category,count,share
+gpt-4o-mini/dafny,does not compile,40,54.1
+gpt-4o-mini/dafny,proof gap: invariants too weak,24,32.4
+gpt-4o-mini/dafny,proof gap: invariants only in comments,3,4.1
+gpt-4o-mini/dafny,termination not proved,2,2.7
+gpt-4o-mini/dafny,verifier timeout,2,2.7
+gpt-4o-mini/dafny,wrong behaviour (fails tests),2,2.7
+gpt-4o-mini/dafny,proof gap: no loop invariants,1,1.4
+gpt-4o-mini/python_icontract,counterexample on untested input,3,100.0

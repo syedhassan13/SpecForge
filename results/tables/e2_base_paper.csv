@@ -1,0 +1,3 @@
+model,language,tasks,samples,pass_at_1_tests,cannot_compile,verified_at_1,correct_at_1,verina_lean_pass_reported,verina_lean_cannot_compile_reported
+gpt-4o-mini,dafny,77,231,69.3,26.4,49.8,49.8,44.0,54.9
+gpt-4o-mini,python_icontract,77,231,98.7,0.0,97.0,94.8,44.0,54.9

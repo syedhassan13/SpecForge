@@ -1,0 +1,11 @@
+\begin{tabular}{llrrrr}
+\toprule
+Model & Configuration & \multicolumn{2}{c}{Dafny} & \multicolumn{2}{c}{Python} \\
+ & & Correct & Verified & Correct & Verified \\
+\midrule
+gpt-4o-mini & Single-shot & 46.8$\pm$1.3 & 46.8 & 96.5$\pm$0.7 & 96.5 \\
+gpt-4o-mini & Testing-only (E1) & 56.3$\pm$2.7 & 56.3 & 97.8$\pm$0.7 & 97.8 \\
+gpt-4o-mini & Verifier-only & 63.2$\pm$2.0 & 63.2 & 98.7$\pm$0.0 & 98.7 \\
+gpt-4o-mini & SpecLoop (E3) & 68.0$\pm$2.7 & 68.0 & 98.7$\pm$0.0 & 98.7 \\
+\bottomrule
+\end{tabular}
