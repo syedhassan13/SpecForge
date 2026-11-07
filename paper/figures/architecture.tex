@@ -1,0 +1,33 @@
+\begin{tikzpicture}[
+  font=\scriptsize,
+  box/.style={draw=black!70, rounded corners=2pt, align=center, minimum height=0.62cm, inner sep=2pt, fill=white},
+  gap/.style={box, fill=black!12, line width=0.7pt},
+  arr/.style={-{Stealth[length=1.6mm]}, black!75},
+  fb/.style={-{Stealth[length=1.6mm]}, black!75, dashed}
+]
+\node[box, minimum width=1.5cm] (task) at (0,0) {Task\\ $d$, $S_L$};
+\node[box, minimum width=1.5cm] (gen) at (1.95,0) {\textsc{Generate}\\ (LLM)};
+\node[gap, minimum width=1.4cm] (guard) at (4.05,0.95) {Spec\\ guard};
+\node[box, minimum width=1.4cm] (ver) at (4.05,0) {Verifier\\ Dafny / CrossHair};
+\node[box, minimum width=1.4cm] (tst) at (4.05,-0.95) {Visible\\ tests $T_v$};
+\node[gap, minimum width=1.45cm] (norm) at (6.2,0.35) {Normaliser\\ (Gap 1)};
+\node[gap, minimum width=1.45cm] (route) at (6.2,-0.75) {Router\\ (Gap 2)};
+\node[box, minimum width=1.5cm] (rep) at (3.0,-2.1) {\textsc{Repair} (LLM)\\ patch / rewrite};
+\node[box, minimum width=1.4cm] (stag) at (5.6,-2.1) {Stagnation\\ monitor};
+\node[box, minimum width=1.5cm, fill=black!4] (orc) at (0.6,-2.1) {Oracle: guard +\\ verifier + $T_v\cup T_h$};
+
+\draw[arr] (task) -- (gen);
+\draw[arr] (gen.east) -- ++(0.25,0) |- (guard.west);
+\draw[arr] (gen.east) -- (ver.west);
+\draw[arr] (gen.east) -- ++(0.25,0) |- (tst.west);
+\draw[arr] (ver.east) -- (norm.west);
+\draw[arr] (norm.south) -- (route.north);
+\draw[arr] (tst.east) -- (route.west);
+\draw[arr] (guard.east) -| ([xshift=4mm]norm.east) |- (route.east);
+\draw[arr] (route.south) |- (stag.east);
+\draw[arr] (stag.west) -- (rep.east);
+\draw[fb] (rep.north) -- node[left, pos=0.55, font=\tiny] {new candidate} ++(0,0.7) -| (gen.south);
+\draw[arr] (gen.south west) -- node[left, font=\tiny, align=right] {stop} (orc.north);
+\node[font=\tiny, black!60] at (4.05,1.5) {\textsc{Check} (tools chosen by mode; Gap 3 = verifier channel)};
+\draw[black!40, dotted, rounded corners] (3.25,-1.35) rectangle (4.85,1.35);
+\end{tikzpicture}

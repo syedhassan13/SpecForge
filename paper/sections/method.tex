@@ -1,0 +1,55 @@
+\section{Problem Formulation}
+\label{sec:problem}
+
+A task is a tuple $t = (d, S_L, T)$ where $d$ is a natural-language description, $S_L$ is a specification written in language $L \in \{\textsc{Dafny}, \textsc{Py}\}$, and $T$ is a list of input/output tests. For Dafny, $S_L$ is a method header with \texttt{requires} and \texttt{ensures} clauses plus any helper predicates; for Python it is a function signature decorated with iContract \texttt{require}/\texttt{ensure} conditions. In both cases the body is empty. We split $T$ into a visible part $T_v$ (the first $\lceil |T|/2 \rceil$ tests) and a held-out part $T_h$.
+
+An agent receives $d$ and $S_L$ and must return a complete program $P$. It may call a set of tools $F \subseteq \{\textit{verifier}, \textit{tests}\}$ on intermediate candidates, where \textit{tests} runs only $T_v$, and it may check at most $K = 5$ candidates. The four agent configurations we compare differ only in $F$: single-shot ($K = 1$), testing-only ($F = \{\textit{tests}\}$), verifier-only ($F = \{\textit{verifier}\}$), and SpecLoop ($F = \{\textit{verifier}, \textit{tests}\}$ plus the routing described in Section~\ref{sec:system}).
+
+A final program is \emph{correct} when three conditions hold together:
+\begin{equation}
+\mathrm{Correct}(P) \iff \mathrm{Intact}(P, S_L) \land \mathrm{Verified}_L(P) \land \mathrm{Pass}(P, T_v \cup T_h).
+\end{equation}
+$\mathrm{Intact}$ is decided by the integrity guard (Section~\ref{sec:guard}), $\mathrm{Verified}$ by \texttt{dafny verify} or by CrossHair, and $\mathrm{Pass}$ by running all tests. The first condition matters because a verifier only checks the specification that is in the file it receives. VERINA's CodeGen metric corresponds to $\mathrm{Pass}$ alone, and we report it separately for the base-paper comparison.
+
+The three research questions follow the gaps fixed in Phase~1, with the Gap~3 question rewritten after supervisor feedback so that it matches the gap itself:
+
+\textbf{RQ1 (Gap 1).} Under the same agent loop and the same tasks, does the specification language change how often the agent produces correct code? \emph{H1a:} Dafny reaches a higher verification rate than Python/iContract with CrossHair. \emph{H1b:} Python reaches a higher first-attempt test pass rate.
+
+\textbf{RQ2 (Gap 2).} Does feedback that combines verifier and test results give higher correctness than either source alone? \emph{H2:} SpecLoop is at least 5 percentage points (pp) more correct than the better of verifier-only and testing-only.
+
+\textbf{RQ3 (Gap 3).} VERINA has no testing-only baseline, so it cannot say what a verifier adds beyond the tests an agent would normally use. How large is that gain? \emph{H3:} the verifier-only agent is at least 10~pp more correct than the testing-only agent. As a secondary question we check whether the gain holds for more than one model.
+
+\section{Proposed System}
+\label{sec:system}
+
+Fig.~\ref{fig:arch} shows SpecLoop. It is a small state machine around an LLM: \textsc{Generate} produces a first candidate, \textsc{Check} calls tools, \textsc{Route} turns tool output into feedback, and \textsc{Repair} asks for a new candidate. The loop stops when every check of the current configuration passes or after $K$ candidates. Every model call uses structured output, a JSON object with an \texttt{analysis} field, a \texttt{strategy} field (\texttt{patch} or \texttt{rewrite}) and the full program, so the model's stated reasoning and repair decision are recorded with each step. All four configurations share the same system prompt and the same first prompt. Since model responses are cached by request, a given task, model and seed produce the same first candidate in every configuration, and differences between configurations come only from the feedback.
+
+\begin{figure}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{figures/architecture.tex}}
+\caption{SpecLoop architecture. Shaded boxes are the gap-specific components, each of which can be switched off. The oracle is outside the agent and judges every candidate in the same way.}
+\label{fig:arch}
+\end{figure}
+
+\subsection{Tools and environment}
+The agent works against two real toolchains. For Dafny it calls \texttt{dafny verify} (Dafny 4.11 with its bundled Z3~\cite{demoura2008z3}, 20\,s per verification condition) and, for tests, compiles the program together with a generated \texttt{Main} method to Python and runs it. For Python it runs CrossHair~\cite{crosshair} in iContract mode (6\,s per condition) and executes the tests with contracts enabled, so a violated postcondition shows up as a failing test. Test cases are stored once in a language-neutral JSON form and rendered into both languages, so the two versions of a task see exactly the same inputs and expected outputs. Tool results are memoised by program hash, so resubmitting an identical program does not cost another verifier run.
+
+\subsection{Gap 1 component: diagnostic normaliser}
+Dafny and CrossHair report problems in very different shapes. Dafny gives a file position, a message such as ``a postcondition could not be proved on this return path'' and a separate ``related location'' that points at the clause. CrossHair reports the line of the violated contract and a concrete call. Neither output is easy for a model to use directly, because both refer to line numbers in a file the model never sees. The normaliser maps both into one taxonomy (\texttt{syntax}, \texttt{resolution}, \texttt{postcondition}, \texttt{invariant\_entry}, \texttt{invariant\_maintained}, \texttt{termination}, \texttt{index\_bounds}, \texttt{counterexample}, \texttt{exception}, \texttt{timeout}), quotes the offending source line and the specification clause involved, and adds a one-line explanation of each kind. With this in place, one agent loop runs unchanged on both languages. With the component off, the model receives the raw tool output with temporary paths removed, which is what the Phase~1 prototype did.
+
+\subsection{Gap 2 component: feedback router}
+The router starts from one observation. A Dafny error such as ``postcondition could not be proved'' is ambiguous, since Dafny reports it both when the program is wrong and when the program is right but the loop invariants are missing. Tests can separate the two cases cheaply. The router therefore classifies every failed check:
+\textsc{spec\_tamper} (the guard fired), \textsc{syntax} (does not compile), \textsc{logic\_bug} (a visible test fails or CrossHair produced a counterexample), and \textsc{proof\_gap} (all visible tests pass but verification fails). Each class comes with a different instruction. For a logic bug the model is told to fix the algorithm first and is shown failing tests before verifier messages. For a proof gap it is told to keep the algorithm and strengthen loop invariants, \texttt{decreases} clauses or assertions. For a compile error the model sees only the compile errors. With the router off, SpecLoop pastes the verifier output and the test output one after the other, as the Phase~1 combined agent did.
+
+\subsection{Gap 3 component: verifier feedback channel}
+Gap~3 is about the verifier signal itself, so its component is just the verifier channel in \textsc{Check}. Removing it turns SpecLoop into the testing-only agent, which is our E1 baseline and the configuration VERINA does not have.
+
+\subsection{Specification integrity guard}
+\label{sec:guard}
+A program that edits its own specification can be ``verified'' and still be wrong. The guard compares each candidate with the original specification before any tool runs. For Dafny it strips comments, normalises whitespace and requires the target method header (signature and every \texttt{requires}/\texttt{ensures} clause) and every other declaration from the specification file to appear unchanged. It also rejects \texttt{assume}, \texttt{\{:axiom\}}, \texttt{\{:verify false\}}, \texttt{\{:only\}}, \texttt{\{:extern\}} and \texttt{decreases *}, and any Dafny warning about bodyless lemmas. For Python it compares abstract syntax trees, so formatting does not matter, and requires identical decorators, signature, imports and helper definitions. CrossHair directive comments, assignments to the \texttt{icontract} module, \texttt{eval}/\texttt{exec} and access to \texttt{sys.modules} are rejected as well. A rejected candidate is not verified at all. The model is told exactly what it changed and has to restore it. Even when the in-loop guard is switched off, the oracle applies the same guard to every final program, so no configuration can gain correctness by cheating.
+
+\subsection{Stagnation monitor}
+In early development runs the loop often got stuck. The model resubmitted an identical program, or produced new programs that failed in exactly the same way. The monitor fingerprints each failure (class, diagnostic kinds and lines, failing test indices) and, when an identical program is resubmitted or the same fingerprint appears twice in a row, switches the next call to a \emph{rewrite}: the prompt asks for a fresh approach and the temperature is raised from 0.2 to 0.6.
+
+\subsection{Observability}
+Each run writes a trajectory with state transitions, every LLM call (tokens, the model's analysis and strategy, the program), every tool call (input hash, status, diagnostics, time), the routed feedback and its class, and each stop or strategy decision. The oracle also gives a verdict for every candidate, and these per-candidate verdicts let us compute correctness after $k$ attempts for every $k \le K$ from a single run.

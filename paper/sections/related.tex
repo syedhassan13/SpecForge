@@ -1,0 +1,37 @@
+\section{Related Work}
+\label{sec:related}
+
+\textbf{Benchmarks for verifiable code generation.}
+VERINA~\cite{ye2026verina} is the base paper of this work. It contains 189 Lean~4 tasks (108 in VERINA-BASIC, 81 in VERINA-ADV), each with a description, a reference implementation, a formal pre- and postcondition, and positive and negative tests. It scores code generation (CodeGen), specification generation (SpecGen) and proof generation (ProofGen) separately and in combination; o3, the best general model, reaches 72.6\%, 52.3\% and 4.9\%. On VERINA-BASIC, GPT-4.1 reaches 69.8\% CodeGen pass@1 and GPT-4o-mini 44.0\%, and most failures are programs that do not compile in Lean (27.4\% and 54.9\% of samples). The authors also try iterative proof refinement with Lean compiler messages, which lifts ProofGen to at most 20.1\% after 64 rounds. CLEVER~\cite{thakur2025clever} adapts 161 HumanEval problems to Lean. The model first writes a specification and proves it equivalent to a hidden reference specification, then writes an implementation and proves it correct. Its best configuration solves 1 of 161 problems end to end. DafnyBench~\cite{loughridge2025dafnybench} contains more than 750 Dafny programs and asks the model to fill in the hints (loop invariants, assertions) a program needs to verify. With ten attempts and verifier messages GPT-4o reaches 59.3\% and Claude~3 Opus 67.8\%. MBPP-DFY~\cite{misu2024dafnysynthesis} and CloverBench~\cite{sun2024clover} are the Dafny datasets that VERINA-BASIC was translated from. Misu et al.~\cite{misu2024dafnysynthesis} report that GPT-4 produces verified Dafny methods for 58\% of 178 MBPP problems, but only with a retrieval-augmented chain-of-thought prompt (10\% with a signature-only prompt). All of these benchmarks use one verification language, so they cannot tell how much a result depends on that choice.
+
+\textbf{LLMs with program verifiers.}
+AlphaVerus~\cite{aggarwal2025alphaverus} translates Dafny programs into Verus, repairs them with a tree search guided by verifier errors (Treefinement) and filters out candidates that game the specification. It raises verified rates on HumanEval-Verus and MBPP-Verus without fine-tuning. AutoVerus~\cite{yang2025autoverus} uses a team of LLM agents for Verus proofs and proves over 90\% of the 150 tasks in Verus-Bench, and SAFE~\cite{chen2025safe} improves Rust proof generation through self-evolution. Laurel~\cite{mugnier2025laurel} generates helper assertions for Dafny, Lemur~\cite{wu2024lemur} generates invariants with a verifier in the loop, Baldur~\cite{first2023baldur} and COPRA~\cite{thakur2024copra} target interactive provers, and Chakraborty et al.~\cite{chakraborty2025fstar} show that retrieval helps proof synthesis in F$^\star$. All of them use verifier feedback, but none compares it with test feedback for the same agent or runs the same loop in two specification languages.
+
+\textbf{Specifications and tests.}
+SpecGen~\cite{ma2025specgen}, AutoSpec~\cite{wen2024autospec} and nl2postcond~\cite{endres2024nl2postcond} generate formal specifications or postconditions with LLMs. TOGLL~\cite{hossain2025togll} generates Java test oracles that kill 1,023 mutants EvoSuite misses, yet fewer mutants than EvoSuite overall, so generated oracles help but are not complete. Wang et al.~\cite{wang2025errors} studied 557 incorrect HumanEval solutions from six LLMs and found that most errors span several lines of code and often need multi-hunk fixes, the kind of semantic error that a small test suite can let through. Shefer et al.~\cite{shefer2025mainstream} are, as far as we know, the closest to our Gap~1: they compare how well an LLM writes verified code in Dafny, Nagini (Python) and Verus, with up to five rounds of verifier feedback and a final check against the reference specification. They do not compare verifier feedback with test feedback, and they have no testing-only agent, which is the comparison our Gaps~2 and~3 need.
+
+\textbf{Feedback-driven coding agents.}
+Self-Debugging~\cite{chen2024selfdebug}, Reflexion~\cite{shinn2023reflexion} and LDB~\cite{zhong2024ldb} improve code by feeding execution results back to the model, Self-Refine~\cite{madaan2023selfrefine} uses the model's own critique, CodeT~\cite{chen2023codet} uses generated tests to rank samples, and ReAct~\cite{yao2023react} and SWE-agent~\cite{yang2024sweagent} interleave reasoning with tool calls. For code the external signal is almost always test execution, so our testing-only agent, a direct instance of this family, is the baseline VERINA lacks.
+
+Table~\ref{tab:positioning} summarises how our study differs from the closest work. What is new is the controlled design: one agent, two specification languages with probe-checked equivalent specifications, and four feedback configurations that differ in exactly one signal.
+
+\begin{table}[t]
+\centering
+\caption{Positioning against the closest work. FB = feedback source used inside the loop (V = verifier, C = compiler, T = tests).}
+\label{tab:positioning}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lcccc}
+\toprule
+Work & Languages & FB & Test-only baseline & Spec guard \\
+\midrule
+VERINA~\cite{ye2026verina} & Lean & C (proofs only) & no & sorry check \\
+CLEVER~\cite{thakur2025clever} & Lean & C & no & yes \\
+DafnyBench~\cite{loughridge2025dafnybench} & Dafny & V & no & yes \\
+AlphaVerus~\cite{aggarwal2025alphaverus} & Verus & V & no & filter \\
+AutoVerus~\cite{yang2025autoverus} & Verus & V & no & filter \\
+Shefer et al.~\cite{shefer2025mainstream} & Dafny, Py, Rust & V & no & yes \\
+\textbf{SpecLoop (ours)} & Dafny, Py & V, T, V+T & yes & yes \\
+\bottomrule
+\end{tabular}
+\end{table}

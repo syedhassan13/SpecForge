@@ -1,0 +1,42 @@
+\section{Introduction}
+\label{sec:intro}
+
+LLM coding agents are now good at producing code that looks right, and a short test suite usually agrees. The trouble is that tests only sample the input space. Errors made by LLMs tend to be semantic and spread over several lines~\cite{wang2025errors}, and a handful of tests can let them through. A formal specification checked by a verifier closes that gap in principle: if the program is proved against its postcondition, it is correct for every input that satisfies the precondition. This is the idea behind \emph{verifiable code generation}, where a model has to produce code together with the proof that it meets a formal specification.
+
+VERINA~\cite{ye2026verina}, our base paper, is the most complete benchmark we know of for this task. It gives 189 Lean~4 problems with descriptions, reference implementations, specifications and tests. It evaluates code, specification and proof generation separately and together. The proof results are weak: the best general model passes 72.6\% of tasks on code generation but proves only 4.9\%. On the 108 easier VERINA-BASIC tasks, GPT-4o-mini passes 44.0\% and more than half of its programs do not even compile in Lean.
+
+Three parts of VERINA's design leave questions open for anyone who wants to build such an agent. We fixed these as our research gaps in Phase~1 of the project.
+\emph{Gap~1:} VERINA uses one language, Lean. Most failures are Lean compile errors, so it is unclear how much of the difficulty comes from verifiable code generation itself and how much from the language. No study compares specification languages on the same tasks under the same agent loop.
+\emph{Gap~2:} VERINA evaluates code in a single shot. Its only loop is proof refinement driven by Lean compiler messages, and its tests are used for scoring, never as feedback. Agents that use verifier feedback (for example~\cite{aggarwal2025alphaverus,yang2025autoverus,loughridge2025dafnybench}) also treat testing as a separate measurement. Whether verifier and test feedback work better together than apart has not been measured.
+\emph{Gap~3:} there is no testing-only baseline. A practitioner already has tests, so the useful question is what a verifier adds on top of them, and VERINA's design cannot answer it.
+
+To answer them we ran a controlled study. We re-expressed VERINA-BASIC in Dafny~\cite{leino2010dafny} and in Python with iContract contracts checked by CrossHair~\cite{crosshair}, and kept \NTASKS{} tasks whose two versions pass a set of equivalence checks. We then built SpecLoop, an agent whose feedback sources can be switched on and off one at a time. We ran it on both languages with three seeds under one fixed budget. Table~\ref{tab:gaps} lists each gap together with the evidence for it, our approach and how we measure it.
+
+\begin{table*}[t]
+\centering
+\caption{Research gaps (fixed in Phase 1), supporting evidence, our approach and how each is measured.}
+\label{tab:gaps}
+\footnotesize
+\begin{tabular}{p{0.16\textwidth}p{0.25\textwidth}p{0.26\textwidth}p{0.25\textwidth}}
+\toprule
+Gap & Evidence in the literature & Our approach (component) & Measurement \\
+\midrule
+G1: no controlled comparison of specification languages under one loop &
+VERINA and CLEVER use Lean only~\cite{ye2026verina,thakur2025clever}; DafnyBench and MBPP-DFY use Dafny only~\cite{loughridge2025dafnybench,misu2024dafnysynthesis}; Shefer et al.\ compare languages but without a test baseline~\cite{shefer2025mainstream} &
+Same tasks in Dafny and Python/iContract with probe-checked equivalent specs; diagnostic normaliser so one loop runs on both &
+Paired (by task) correctness, verified rate and first-attempt test pass rate; Wilcoxon and McNemar tests (E4) \\
+G2: verifier and test feedback never combined &
+Verifier-driven repair in AlphaVerus, AutoVerus, DafnyBench, VERINA refinement~\cite{aggarwal2025alphaverus,yang2025autoverus,loughridge2025dafnybench,ye2026verina}; test-driven repair in Self-Debug, Reflexion, LDB~\cite{chen2024selfdebug,shinn2023reflexion,zhong2024ldb} &
+Test channel added to the verifier loop, and a router that uses test outcomes to tell a wrong program from a missing proof &
+Correctness of SpecLoop vs.\ verifier-only and testing-only (E4); router ablation (E5) \\
+G3: no testing-only baseline &
+VERINA reports single-shot and proof-refinement numbers only~\cite{ye2026verina}; no paper in our review compares a verifier loop with a test loop on the same agent &
+Verifier feedback channel, compared with an identical agent that only sees tests &
+Correctness gain of verifier-only over testing-only, and false-success rate of the testing-only agent (E1, E4) \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Each gap becomes one research question (Section~\ref{sec:problem}). In short, we find the following. First, the specification language matters more than any feedback signal we tried. Under VERINA's own protocol and with the same model, the share of programs that pass all tests goes from \R{etwo.verina.pass}\% in Lean to \R{etwo.dafny.pass}\% in Dafny and \R{etwo.python.pass}\% in Python, mostly because far fewer programs fail to compile. Python stays ahead of Dafny in every agent configuration (\R{python.specloop_full.correct}\% against \R{dafny.specloop_full.correct}\% for the full agent). Second, the verifier adds real value over a test-driven loop: on Dafny, verifier-only feedback is \R{gap3.dafny.verifier_vs_testing.diff}~pp more correct than testing-only feedback, and the testing-only agent stops with an unverified program it believes is finished in \R{dafny.testing_only.falsesuccess}\% of its runs. Third, tests and verifier work best together. In \R{ambig.dafny.share}\% of failed Dafny verifications the program already passed every test, which means the code was right and only the proof was missing. SpecLoop uses the tests to recognise these cases and is the most accurate configuration (\R{gap2.dafny.full_vs_verifier.diff}~pp over verifier-only), although the gain is smaller than we hypothesised.
+
+Our contributions are: (1) SpecLoop-VB, \NTASKS{} paired Dafny/Python versions of VERINA-BASIC tasks with verified references, admitted only after spec probes and differential testing; (2) an agent in which each feedback source and each support component can be removed independently, with an integrity guard that we stress-test against tampering; (3) a controlled evaluation of the three gaps, with repeated runs, paired statistics, ablations, a cost analysis and a failure analysis; and (4) all code, data, trajectories and an LLM response cache that reproduces every number in this paper without new API calls.
