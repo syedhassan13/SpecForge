@@ -87,7 +87,7 @@ Copy `.env.example` to `.env` and fill it in. `.env` is git ignored.
 
 **Budget.** `experiments.run` has `--budget` (default 2.0 USD). It counts money already spent in earlier runs and stops launching new runs once the cap is reached.
 
-**LLM cache.** Every LLM response is stored in `cache/llm_cache.sqlite`, keyed by a hash of the full request (model, messages, temperature, seed, sample index, schema). The cache is not committed because it is large. It is provided as a release asset named `llm_cache.sqlite` on the GitHub repository. Put it at `cache/llm_cache.sqlite` and the experiments can be replayed exactly with `--offline`, with no API key and no cost (only the Dafny and CrossHair runs happen locally). Without the cache, the same commands call the API and cost real money (capped by `--budget`), and the model's answers will not be identical to ours.
+**LLM cache.** Every LLM response is stored in `cache/llm_cache.sqlite`, keyed by a hash of the full request (model, messages, temperature, seed, sample index, schema). The cache is committed in the repository (`cache/llm_cache.sqlite`, about 5 MB), so the experiments can be replayed exactly with `--offline`, with no API key and no cost (only the Dafny and CrossHair runs happen locally). Without the cache, the same commands call the API and cost real money (capped by `--budget`), and the model's answers will not be identical to ours.
 
 ## How to run
 
@@ -281,7 +281,7 @@ SpecForge/
 ├── paper/                    LaTeX sections and figures
 ├── results/                  raw/, tables/, figures/, cases/, summary.json
 ├── logs/                     trajectories/ and run logs
-├── cache/                    llm_cache.sqlite (not committed, see release asset)
+├── cache/                    llm_cache.sqlite: every model response, for offline replay
 ├── tests/                    test_pipeline.py
 ├── run_baseline.py               Phase 1 entry point, now a thin wrapper that runs E1
 ├── docs/phase1/                  Phase 1 report source and the original 7 tasks (kept for reference)

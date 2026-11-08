@@ -14,8 +14,10 @@ build/
 # raw downloads (recreate with data/scripts/download_data.py)
 data/raw/
 
-# LLM response cache is shipped separately as a release asset (large)
-cache/
+# caches: only the LLM response cache is committed (it makes every run replayable offline);
+# the tool-result cache is rebuilt locally
+cache/*
+!cache/llm_cache.sqlite
 
 # LaTeX build files
 paper/*.aux
