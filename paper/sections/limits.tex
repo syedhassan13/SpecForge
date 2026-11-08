@@ -1,0 +1,14 @@
+\section{Limitations and Threats to Validity}
+\label{sec:limits}
+
+\textbf{One model.} The API budget for the whole project was 2~USD, so every experiment uses GPT-4o-mini. This keeps the base-paper comparison exact, since VERINA reports the same checkpoint, but it leaves RQ3's secondary question (does the gain hold across models) open. A stronger model might make fewer compile errors and more proof gaps, which would shift the weight between components. The agent works with any OpenAI-compatible endpoint, and the cache makes adding a model cheap.
+
+\textbf{Unequal verifiers.} Dafny proves the postcondition for all inputs, while CrossHair only searches for a counterexample for a fixed time per condition, a weaker guarantee. Its time-based search also explores less on a loaded machine, and our runs used all 16 cores. Part of the RQ1 gap is therefore a gap between guarantees, which is why we report the test pass rate next to the verified rate throughout.
+
+\textbf{Specification equivalence.} Shared tests, spec probes and differential testing support the equivalence of each Dafny/Python pair but do not prove it. Some Dafny specifications were reformulated so that the verifier could decide the probes, three tasks keep a documented probe exemption, and a few tasks fix an output length that VERINA's Lean postcondition left open.
+
+\textbf{Tasks.} VERINA-BASIC tasks are small and drawn from MBPP and textbook algorithms, so they are likely in the training data. Python is near the ceiling partly for this reason, which leaves little room for differences in its half of RQ2 and RQ3 and is why E5 runs on Dafny only. VERINA-ADV was out of scope because most of its types have no direct Python/iContract counterpart.
+
+\textbf{Statistics and design decisions.} Three seeds at temperature 0.2 give limited variance estimates, and we do not correct for multiple comparisons. Configurations share their first candidate, which lowers variance but means differences come only from tasks the first attempt does not solve. Development decisions rested on 20 tasks and one seed, where each change moved one or two tasks; E5 re-measures every kept component on the test split.
+
+\textbf{Base-paper comparison.} E2 reproduces VERINA's protocol, not its code: prompts are rewritten for Dafny and Python, we draw 3 samples per task instead of 5, the worked examples come from our development split, and VERINA's Lean numbers are taken from the paper.

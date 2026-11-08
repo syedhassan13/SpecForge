@@ -1,0 +1,77 @@
+\section{Results}
+\label{sec:results}
+
+Table~\ref{tab:main} gives the main results on the 77 test tasks in each language. Every configuration starts from the same first candidate for a given task and seed, so the single-shot row is also the starting point of every loop.
+
+\begin{table}[t]
+\centering
+\caption{Main results on the test split (GPT-4o-mini, 77 tasks per language, 3 seeds). Correct = spec intact, verified and all tests pass (mean $\pm$ s.d.\ over seeds, \%). Ver = verified, Tests = passes all tests (visible and held-out).}
+\label{tab:main}
+\footnotesize
+\setlength{\tabcolsep}{3.2pt}
+\begin{tabular}{lccc|ccc}
+\toprule
+ & \multicolumn{3}{c|}{Dafny} & \multicolumn{3}{c}{Python/iContract} \\
+Configuration & Correct & Ver & Tests & Correct & Ver & Tests \\
+\midrule
+Single-shot (E1) & \R{dafny.single_shot.correct}$\pm$\R{dafny.single_shot.correctsd} & \R{dafny.single_shot.verified} & \R{dafny.single_shot.tests} & \R{python.single_shot.correct}$\pm$\R{python.single_shot.correctsd} & \R{python.single_shot.verified} & \R{python.single_shot.tests} \\
+Testing-only (E1) & \R{dafny.testing_only.correct}$\pm$\R{dafny.testing_only.correctsd} & \R{dafny.testing_only.verified} & \R{dafny.testing_only.tests} & \R{python.testing_only.correct}$\pm$\R{python.testing_only.correctsd} & \R{python.testing_only.verified} & \R{python.testing_only.tests} \\
+Verifier-only (E4) & \R{dafny.verifier_only.correct}$\pm$\R{dafny.verifier_only.correctsd} & \R{dafny.verifier_only.verified} & \R{dafny.verifier_only.tests} & \R{python.verifier_only.correct}$\pm$\R{python.verifier_only.correctsd} & \R{python.verifier_only.verified} & \R{python.verifier_only.tests} \\
+SpecLoop (E3) & \textbf{\R{dafny.specloop_full.correct}}$\pm$\R{dafny.specloop_full.correctsd} & \R{dafny.specloop_full.verified} & \R{dafny.specloop_full.tests} & \R{python.specloop_full.correct}$\pm$\R{python.specloop_full.correctsd} & \R{python.specloop_full.verified} & \R{python.specloop_full.tests} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsection{Comparison with the base paper (E1, E2)}
+Table~\ref{tab:e2} puts VERINA's reported numbers next to our reproduction of its protocol. With the same model and the same tasks, moving from Lean to Dafny raises the share of samples that pass all tests from \R{etwo.verina.pass}\% to \R{etwo.dafny.pass}\%, and moving to Python raises it to \R{etwo.python.pass}\%. Most of the difference is compilation: \R{etwo.verina.nocompile}\% of VERINA's GPT-4o-mini programs do not compile in Lean, against \R{etwo.dafny.nocompile}\% in Dafny and \R{etwo.python.nocompile}\% in Python. VERINA's CodeGen metric does not ask for a proof, though. Once we also require the program to verify, Dafny falls to \R{etwo.dafny.correct}\%, which is close to the Lean pass rate, while Python stays at \R{etwo.python.correct}\%. Our own single-shot prompt (temperature 0.2, no worked examples) gives \R{dafny.single_shot.correct}\% on Dafny, in the same range as the 2-shot protocol.
+
+\begin{table}[t]
+\centering
+\caption{Base paper vs.\ reproduction (GPT-4o-mini, single attempt). VERINA numbers are \emph{reported} (Lean, Table~9 of~\cite{ye2026verina}); Dafny and Python are \emph{reproduced} with VERINA's protocol on our versions of the same tasks (E2, 3 samples per task).}
+\label{tab:e2}
+\footnotesize
+\begin{tabular}{lcccc}
+\toprule
+Setting & Pass@1 & No compile & Verified@1 & Correct@1 \\
+\midrule
+VERINA, Lean (reported) & \R{etwo.verina.pass} & \R{etwo.verina.nocompile} & n/a & n/a \\
+E2, Dafny (reproduced) & \R{etwo.dafny.pass} & \R{etwo.dafny.nocompile} & \R{etwo.dafny.verified} & \R{etwo.dafny.correct} \\
+E2, Python (reproduced) & \R{etwo.python.pass} & \R{etwo.python.nocompile} & \R{etwo.python.verified} & \R{etwo.python.correct} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{RQ1: specification language (Gap 1)}
+The language effect is larger than any feedback effect we measured. Paired by task, Python/iContract is ahead of Dafny in every configuration, from \R{gap1.single_shot.correct.diff}~pp for single-shot generation (95\% CI [\R{gap1.single_shot.correct.lo}, \R{gap1.single_shot.correct.hi}], Wilcoxon \emph{p}~\R{gap1.single_shot.correct.p}) to \R{gap1.specloop_full.correct.diff}~pp for SpecLoop (\emph{p}~\R{gap1.specloop_full.correct.p}). Out of 231 matched task-seed pairs under SpecLoop, Dafny is correct where Python is not in only \R{gap1.specloop_full.correct.aonly} cases, and the reverse happens \R{gap1.specloop_full.correct.bonly} times.
+
+H1a predicted the opposite of what we found: Dafny's verification rate is lower, not higher (\R{dafny.specloop_full.verified}\% against \R{python.specloop_full.verified}\% under SpecLoop). H1b holds: the first candidate passes all tests for \R{dafny.single_shot.tests}\% of Dafny instances and \R{python.single_shot.tests}\% of Python instances (\emph{p}~\R{gap1.first_attempt_tests_ok.p}). Two things drive the gap. Dafny programs fail to compile far more often (Table~\ref{tab:e2}), and even a Dafny program that computes the right answers still needs loop invariants strong enough for the verifier. Under testing-only feedback \R{dafny.testing_only.tests}\% of Dafny programs pass every test but only \R{dafny.testing_only.verified}\% verify. In Python the two rates are almost the same, partly because CrossHair gives a weaker, bounded guarantee (Section~\ref{sec:limits}). For a team that only needs contracts checked to this standard, Python with iContract is the far easier target. For a team that needs a proof, Dafny delivers one for roughly two thirds of these small tasks after feedback, which is still well above what VERINA reports for proofs in Lean.
+
+\subsection{RQ2: combining verifier and test feedback (Gap 2)}
+On Dafny, SpecLoop is the best configuration. It is \R{gap2.dafny.full_vs_verifier.diff}~pp above the verifier-only agent (95\% CI [\R{gap2.dafny.full_vs_verifier.lo}, \R{gap2.dafny.full_vs_verifier.hi}]; McNemar \emph{p}~\R{gap2.dafny.full_vs_verifier.pm}, Wilcoxon \emph{p}~\R{gap2.dafny.full_vs_verifier.p}) and \R{gap2.dafny.full_vs_testing.diff}~pp above the testing-only agent (\emph{p}~\R{gap2.dafny.full_vs_testing.p}). Against the verifier-only agent it wins on \R{gap2.dafny.full_vs_verifier.aonly} task-seed pairs and loses on \R{gap2.dafny.full_vs_verifier.bonly}. The gain over the better single-source agent is just under the 5~pp we set in H2, and the two tests disagree on significance at $\alpha = 0.05$. We therefore count H2 as partly supported. On Python all three loops sit at the ceiling and the differences are zero or within one task.
+
+The verifier-only runs show why tests help. Of the \R{ambig.dafny.fails} failed Dafny verifications in those runs, \R{ambig.dafny.prooffails} (\R{ambig.dafny.share}\%) were on programs that already passed every test, visible and held-out. For these programs the verifier's message (usually ``a postcondition could not be proved'') was correct but misleading: the code was right and only the proof was missing, yet the agent had no way to know that. SpecLoop's router uses the visible tests to label such cases \textsc{proof\_gap} and asks for stronger invariants instead of a new algorithm. This is also why the combined loop needs fewer model calls than the verifier-only loop (\R{dafny.specloop_full.calls} vs.\ \R{dafny.verifier_only.calls} per run).
+
+\subsection{RQ3: what the verifier adds over tests (Gap 3)}
+The testing-only agent is the baseline VERINA does not have. On Dafny it improves on single-shot generation (\R{dafny.testing_only.correct}\% against \R{dafny.single_shot.correct}\%), which shows that test feedback alone is useful. Adding the verifier channel raises correctness by a further \R{gap3.dafny.verifier_vs_testing.diff}~pp (verifier-only against testing-only, 95\% CI [\R{gap3.dafny.verifier_vs_testing.lo}, \R{gap3.dafny.verifier_vs_testing.hi}], \emph{p}~\R{gap3.dafny.verifier_vs_testing.p}), and by \R{gap3.dafny.full_vs_testing.diff}~pp when tests are kept as well (SpecLoop against testing-only). The gain is significant but smaller than the 10~pp we predicted in H3, so H3 is partly supported.
+
+The more important difference is in what the agents believe when they stop. The testing-only agent stops as soon as its visible tests pass, and in \R{dafny.testing_only.falsesuccess}\% of its Dafny runs (\R{rel.testing_only.falsesuccess} runs over both languages) it stopped with a program that the oracle rejects. In every one of these runs the program passed all tests, including the held-out ones, but did not verify, so the agent had no signal that anything was missing. No run of an agent with verifier feedback ended this way. In other words, a test-driven agent cannot tell the user how reliable its answer is, while an agent that sees the verifier can. With only one model in our budget (Section~\ref{sec:limits}), we could not test whether this gain changes with model strength.
+
+\subsection{Gap-resolution summary}
+Table~\ref{tab:gapres} summarises the three gaps.
+
+\begin{table*}[t]
+\centering
+\caption{Gap-resolution table (Dafny unless noted; Python is at ceiling for every configuration). $\Delta$ in percentage points with 95\% bootstrap CI and Wilcoxon $p$ over tasks.}
+\label{tab:gapres}
+\footnotesize
+\begin{tabular}{p{0.06\textwidth}p{0.2\textwidth}p{0.15\textwidth}p{0.17\textwidth}p{0.22\textwidth}p{0.11\textwidth}}
+\toprule
+Gap & Method / component & Metric & Base paper result & Our result & Addressed? \\
+\midrule
+Gap 1 & Same tasks in Dafny and Python/iContract (probe-checked specs); multi-backend verification with the diagnostic normaliser & CodeGen pass@1; correctness & Lean: \R{etwo.verina.pass}\% pass@1, \R{etwo.verina.nocompile}\% do not compile (reported) & Pass@1 Dafny \R{etwo.dafny.pass}\%, Python \R{etwo.python.pass}\%; SpecLoop correct Dafny \R{dafny.specloop_full.correct}\%, Python \R{python.specloop_full.correct}\% ($\Delta$ \R{gap1.specloop_full.correct.diff}, \emph{p}~\R{gap1.specloop_full.correct.p}) & Fully (H1a refuted, H1b supported) \\
+Gap 2 & Test channel + feedback router (\textsc{logic\_bug} vs.\ \textsc{proof\_gap}) & Correctness vs.\ best single source & Not studied (single-shot only) & SpecLoop \R{dafny.specloop_full.correct}\% vs.\ verifier-only \R{dafny.verifier_only.correct}\% ($\Delta$ \R{gap2.dafny.full_vs_verifier.diff} [\R{gap2.dafny.full_vs_verifier.lo}, \R{gap2.dafny.full_vs_verifier.hi}], McNemar \emph{p}~\R{gap2.dafny.full_vs_verifier.pm}) & Partially (gain below 5~pp target) \\
+Gap 3 & Verifier feedback channel vs.\ identical testing-only agent & Correctness gain; false-success rate & No testing-only baseline & $\Delta$ \R{gap3.dafny.verifier_vs_testing.diff} [\R{gap3.dafny.verifier_vs_testing.lo}, \R{gap3.dafny.verifier_vs_testing.hi}], \emph{p}~\R{gap3.dafny.verifier_vs_testing.p}; false success \R{dafny.testing_only.falsesuccess}\% vs.\ 0\% & Partially (gain below 10~pp target; one model) \\
+\bottomrule
+\end{tabular}
+\end{table*}
